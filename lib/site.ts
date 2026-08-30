@@ -95,6 +95,7 @@ export const skills: Skill[] = [
 ];
 
 export const contact = {
+  title: "Work with me",
   /* The channel to point people at first. */
   primary: {
     label: "Join the Discord",

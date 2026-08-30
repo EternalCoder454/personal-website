@@ -4,7 +4,7 @@ export default function Contact() {
   return (
     <section className="card contact" aria-labelledby="contact-label">
       <h2 className="contact__title" id="contact-label">
-        Contact me
+        {contact.title}
       </h2>
       <div className="contact__actions">
         <a
