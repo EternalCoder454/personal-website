@@ -3,8 +3,8 @@ import { bandFor, skills } from "@/lib/site";
 export default function Skills() {
   return (
     <section className="card card--flush" aria-labelledby="experience-label">
-      <h2 className="card__header" id="experience-label">
-        Experiences
+      <h2 className="card__header card__header--center" id="experience-label">
+        My Experiences
       </h2>
 
       <ul className="skills">

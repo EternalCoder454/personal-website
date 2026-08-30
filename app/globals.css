@@ -365,6 +365,8 @@ body {
   padding: 8px 24px 8px;
 }
 
+.card__header--center { text-align: center; }
+
 /* ---------- clock ---------- */
 
 .clock { text-align: center; }
@@ -1196,13 +1198,14 @@ body {
   color: var(--md-on-surface);
 }
 
+/* The button spans the card instead of sitting marooned in the middle of it.
+   A second button (email) would share the row evenly. */
 .contact__actions {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   gap: 8px;
   margin-top: 16px;
 }
+.contact__actions .button { flex: 1 1 0; }
 
 .button__icon {
   font-size: calc(18px * var(--ui));
