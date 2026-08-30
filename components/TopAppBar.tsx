@@ -5,13 +5,24 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { profile } from "@/lib/site";
 import { Ripples, useRipples } from "./Ripple";
+import ThemeToggle from "./ThemeToggle";
 
 const LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/gallery", label: "Gallery" },
+  { href: "/", label: "Home", icon: "home" },
+  { href: "/gallery", label: "Gallery", icon: "photo_library" },
 ];
 
-function NavLink({ href, label, active }: { href: string; label: string; active: boolean }) {
+function NavLink({
+  href,
+  label,
+  icon,
+  active,
+}: {
+  href: string;
+  label: string;
+  icon: string;
+  active: boolean;
+}) {
   const { drops, onPointerDown, clear } = useRipples();
 
   return (
@@ -21,6 +32,9 @@ function NavLink({ href, label, active }: { href: string; label: string; active:
       aria-current={active ? "page" : undefined}
       onPointerDown={onPointerDown}
     >
+      <span className="icon nav__icon" aria-hidden="true">
+        {icon}
+      </span>
       {label}
       <Ripples drops={drops} clear={clear} />
     </Link>
@@ -59,7 +73,7 @@ export default function TopAppBar() {
   return (
     <header className={classes}>
       <span className="top-app-bar__title" aria-hidden={isHome && !scrolledPast}>
-        {profile.name}
+        {profile.brand}
       </span>
       <nav className="nav" aria-label="Primary">
         {LINKS.map((link) => (
@@ -67,10 +81,12 @@ export default function TopAppBar() {
             key={link.href}
             href={link.href}
             label={link.label}
+            icon={link.icon}
             active={pathname === link.href}
           />
         ))}
       </nav>
+      <ThemeToggle />
     </header>
   );
 }

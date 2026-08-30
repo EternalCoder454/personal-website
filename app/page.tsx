@@ -1,10 +1,12 @@
 import { Clock, TimeZoneChip } from "@/components/Clock";
 import Socials from "@/components/Socials";
 import Skills from "@/components/Skills";
+import Footer from "@/components/Footer";
 import { profile } from "@/lib/site";
 
-export default function Home() {  return (
-    <main className="content content--split">
+export default function Home() {
+  return (
+    <main className="content content--split" id="main">
       <div className="column">
         <section className="hero">
           <div className="hero__avatar">
@@ -36,9 +38,7 @@ export default function Home() {  return (
         <Skills />
       </div>
 
-      <footer className="footer">
-        {profile.name} · {new Date().getFullYear()}
-      </footer>
+      <Footer />
     </main>
   );
 }

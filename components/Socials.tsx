@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { socials, type Social } from "@/lib/site";
+import { socials, isCopySocial, type CopySocial, type LinkSocial } from "@/lib/site";
 import SocialIcon from "./SocialIcon";
 import { Ripples, useRipples } from "./Ripple";
 
@@ -23,7 +23,7 @@ async function copyText(text: string) {
   if (!ok) throw new Error("copy rejected");
 }
 
-function LinkRow({ social }: { social: Social }) {
+function LinkRow({ social }: { social: LinkSocial }) {
   const { drops, onPointerDown, clear } = useRipples();
 
   return (
@@ -54,7 +54,7 @@ function CopyRow({
   social,
   announce,
 }: {
-  social: Social;
+  social: CopySocial;
   announce: (message: string) => void;
 }) {
   const { drops, onPointerDown, clear } = useRipples();
@@ -64,7 +64,7 @@ function CopyRow({
   useEffect(() => () => clearTimeout(timer.current), []);
 
   const handleClick = async () => {
-    const value = social.copy!;
+    const value = social.copy;
 
     try {
       await copyText(value);
@@ -130,7 +130,7 @@ export default function Socials() {
         </h2>
         <ul className="list">
           {socials.map((social) =>
-            social.copy ? (
+            isCopySocial(social) ? (
               <CopyRow key={social.name} social={social} announce={announce} />
             ) : (
               <LinkRow key={social.name} social={social} />

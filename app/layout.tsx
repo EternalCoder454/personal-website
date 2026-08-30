@@ -6,6 +6,20 @@ import TopAppBar from "@/components/TopAppBar";
 import { profile, siteUrl } from "@/lib/site";
 import "./globals.css";
 
+/* Runs before first paint, so a stored light theme is applied without the
+   page flashing dark first. No stored value means dark, which is what bare
+   :root already is. */
+const THEME_INIT = `
+try {
+  var t = localStorage.getItem("theme");
+  if (t === "light" || t === "dark") {
+    document.documentElement.dataset.theme = t;
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.setAttribute("content", t === "light" ? "#fef7ff" : "#141218");
+  }
+} catch (e) {}
+`;
+
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
@@ -31,14 +45,16 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  /* colorScheme is set in CSS instead, so it follows the chosen theme
+     rather than being pinned to dark. */
   themeColor: "#141218",
-  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={roboto.variable}>
+    <html lang="en" className={roboto.variable} suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         {/* next/font/google has no icon fonts, so this stays a plain link. It
             only supplies the @font-face - our own .icon class does the styling,
             so their stylesheet can never override our layout.
@@ -55,6 +71,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        <a className="skip-link" href="#main">
+          Skip to content
+        </a>
         <TopAppBar />
         {children}
         <Analytics />

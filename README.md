@@ -13,7 +13,7 @@ app/robots.ts           /robots.txt
 app/page.tsx            home - profile, socials, clock, experiences
 app/gallery/page.tsx    gallery - Pixel Art and Builds
 app/globals.css         M3 tokens + every component style
-components/             TopAppBar, Clock, Socials, Skills, Gallery, Ripple
+components/             TopAppBar, ThemeToggle, Clock, Socials, Skills, Gallery
 lib/site.ts             all the content - edit this, not the components
 public/pfp.png          avatar
 public/gallery/         gallery images
@@ -77,11 +77,22 @@ every glyph out of its circle. Their sheet now only supplies the `@font-face`.
 **Gallery images use plain `<img>`, not `next/image`.** The optimiser resamples,
 which blurs exactly the hard edges that make pixel art pixel art.
 
+**Theme is dark by default, light is opt-in.** An inline script in the layout
+applies a stored choice before first paint, so light never flashes dark first.
+The toggle writes `data-theme` on `<html>` and localStorage directly instead of
+holding React state - state would mean the server rendering one icon and the
+client swapping it on hydration. CSS picks the icon from the same attribute.
+
+**Entrance animations are on the cards, never on `.content` or `.column`.** A
+transform makes an element the containing block for its fixed-position
+descendants, which would tear the snackbar and the lightbox out of the viewport.
+
 **The clock uses `useSyncExternalStore`, not `useEffect` + `setState`.** It reads a
 value that changes outside React, which is exactly what that hook is for; the server
 snapshot returns null so the first paint is the placeholder and hydration matches.
-Setting state directly in an effect causes cascading renders, and the React lint
-rule flags it.
+Ticks are scheduled to the next whole second rather than every 1000ms, which
+would drift and eventually skip a second, and one timer is shared so the clock
+and the timezone chip never disagree.
 
 **Security headers and `poweredByHeader: false` live in `next.config.ts`.** HSTS is
 scoped to Vercel, since it means nothing over plain HTTP locally.

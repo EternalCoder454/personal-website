@@ -11,6 +11,9 @@ export function useRipples() {
   const [drops, setDrops] = useState<Drop[]>([]);
 
   const onPointerDown = useCallback((event: PointerEvent<HTMLElement>) => {
+    /* Right- and middle-click also fire pointerdown; neither should ripple. */
+    if (event.button !== 0) return;
+
     const rect = event.currentTarget.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height) * 2;
     setDrops((current) => [

@@ -14,7 +14,7 @@ export default function Message({
   children?: ReactNode;
 }) {
   return (
-    <main className="content">
+    <main className="content" id="main">
       <section className="card message">
         <span className="icon message__icon" aria-hidden="true">
           {icon}

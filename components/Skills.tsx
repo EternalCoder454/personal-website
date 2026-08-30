@@ -8,11 +8,11 @@ export default function Skills() {
       </h2>
 
       <ul className="skills">
-        {skills.map((skill) => (
+        {skills.map((skill, index) => (
           <li
             className="skill"
             key={skill.name}
-            style={{ "--level": skill.level } as React.CSSProperties}
+            style={{ "--level": skill.level, "--index": index } as React.CSSProperties}
           >
             <span className="skill__icon icon" aria-hidden="true">
               {skill.icon}

@@ -2,27 +2,47 @@
 
 /* Vercel sets VERCEL_PROJECT_PRODUCTION_URL in production. Used for
    metadataBase, the sitemap, and robots.txt. */
-export const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : "http://localhost:3000";
+/* NEXT_PUBLIC_SITE_URL wins, because VERCEL_PROJECT_PRODUCTION_URL can resolve
+   to the *.vercel.app domain rather than a custom one - which would put the
+   wrong host in the sitemap and every og:image. */
+export const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000");
 
 export const TIMEZONE = "America/Los_Angeles";
 export const TZ_LABEL = "Pacific Time";
 
 export const profile = {
   name: "EternalHell",
+  /* Shown in the top bar. The hero keeps the personal name. */
+  brand: "Eterneon",
   tagline: "Founder · Eterneon Studios",
   location: "United States",
   avatar: "/pfp.png",
 };
 
-export type Social = {
+type SocialBase = {
   name: string;
   handle: string;
   icon: "bluesky" | "discord" | "reddit";
-  href?: string;
-  copy?: string;
 };
+
+/* Either a link or a copy-to-clipboard row, never both and never neither.
+   As two optional fields this compiled fine but allowed an entry with no
+   href, which renders an anchor nothing can click or focus. */
+export type Social =
+  | (SocialBase & { href: string; copy?: never })
+  | (SocialBase & { copy: string; href?: never });
+
+export type CopySocial = Extract<Social, { copy: string }>;
+export type LinkSocial = Extract<Social, { href: string }>;
+
+/* A plain truthiness check narrows the copy branch but leaves the link branch
+   as the full union, so the choice is spelled out as a predicate. */
+export const isCopySocial = (social: Social): social is CopySocial =>
+  social.copy !== undefined;
 
 export const socials: Social[] = [
   {
@@ -36,6 +56,12 @@ export const socials: Social[] = [
     handle: "eternalhellttv",
     icon: "discord",
     copy: "eternalhellttv",
+  },
+  {
+    name: "Discord Server",
+    handle: "discord.gg/Xaz3QQA8fg",
+    icon: "discord",
+    href: "https://discord.gg/Xaz3QQA8fg",
   },
   {
     name: "Reddit",
