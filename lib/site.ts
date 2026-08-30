@@ -88,7 +88,7 @@ export function bandFor(level: number) {
 export type Skill = { name: string; level: number; icon: string };
 
 export const skills: Skill[] = [
-  { name: "Pixel Artist", level: 1, icon: "palette" },
+  { name: "Pixel Artist", level: 3, icon: "palette" },
   { name: "Minecraft Builder", level: 4, icon: "construction" },
   { name: "Leadership", level: 2, icon: "groups" },
   { name: "Web Designer", level: 5, icon: "web" },

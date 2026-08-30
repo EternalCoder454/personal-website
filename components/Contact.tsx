@@ -2,8 +2,8 @@ import { contact } from "@/lib/site";
 
 export default function Contact() {
   return (
-    <section className="card contact" aria-labelledby="contact-label">
-      <h2 className="contact__title" id="contact-label">
+    <section className="card card--flush contact" aria-labelledby="contact-label">
+      <h2 className="card__header" id="contact-label">
         {contact.title}
       </h2>
       <div className="contact__actions">

@@ -363,9 +363,8 @@ body {
   letter-spacing: 0.15px;
   color: var(--md-on-surface-variant);
   padding: 8px 24px 8px;
+  text-align: center;
 }
-
-.card__header--center { text-align: center; }
 
 /* ---------- clock ---------- */
 
@@ -1189,21 +1188,14 @@ body {
 
 /* ---------- contact ---------- */
 
-.contact { text-align: center; }
-
-.contact__title {
-  font-size: calc(22px * var(--ui));
-  line-height: calc(28px * var(--ui));
-  font-weight: 400;
-  color: var(--md-on-surface);
-}
-
 /* The button spans the card instead of sitting marooned in the middle of it.
    A second button (email) would share the row evenly. */
+/* Matches the inset of a list row, so the button lines up with the rows in
+   the cards above it rather than sitting on its own rhythm. */
 .contact__actions {
   display: flex;
   gap: 8px;
-  margin-top: 16px;
+  padding: 8px 24px 16px;
 }
 .contact__actions .button { flex: 1 1 0; }
 
