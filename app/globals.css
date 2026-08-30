@@ -1186,23 +1186,8 @@ body {
   .skill__meter { grid-column: 1 / -1; }
 }
 
-/* ---------- contact ---------- */
-
 /* The button spans the card instead of sitting marooned in the middle of it.
    A second button (email) would share the row evenly. */
-/* Matches the inset of a list row, so the button lines up with the rows in
-   the cards above it rather than sitting on its own rhythm. */
-.contact__actions {
-  display: flex;
-  gap: 8px;
-  padding: 8px 24px 16px;
-}
-.contact__actions .button { flex: 1 1 0; }
-
-.button__icon {
-  font-size: calc(18px * var(--ui));
-  margin-right: 8px;
-}
 
 /* ---------- columns end level with each other ---------- */
 
