@@ -101,7 +101,9 @@ for image uploads, Vercel Blob.
 ### First-time setup
 
 1. **Database** - Vercel > Storage > Neon Postgres. Copy the connection string.
-2. **Blob** - Vercel > Storage > Blob. Copy the read/write token.
+2. **Blob** - Vercel > Storage > Blob, created with **public** access. Gallery
+   images are shown on a public page, so a private store will upload fine and
+   then serve 403 to visitors.
 3. Copy `.env.example` to `.env.local` and fill in `DATABASE_URL`,
    `BLOB_READ_WRITE_TOKEN`, and a `BETTER_AUTH_SECRET`
    (`openssl rand -base64 32`).
@@ -112,6 +114,11 @@ npm run auth:migrate   # Better Auth tables
 npm run migrate        # content tables + seeds the current skills
 npm run seed:admin     # prints a generated password once
 ```
+
+`auth:migrate` goes through Better Auth's programmatic `getMigrations` rather
+than the standalone `@better-auth/cli`. The CLI is published separately and lags
+the library; running the two out of step produces a schema that is quietly
+missing columns the library expects.
 
 `seed:admin` prints the password to your terminal and nowhere else. Copy it,
 sign in at `/panel/login`, and treat it as temporary.

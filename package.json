@@ -10,7 +10,7 @@
     "pretypecheck": "next typegen",
     "typecheck": "tsc --noEmit",
     "migrate": "node --env-file-if-exists=.env.local scripts/migrate.mjs",
-    "auth:migrate": "npx --yes @better-auth/cli@latest migrate",
+    "auth:migrate": "tsx --env-file-if-exists=.env.local scripts/auth-migrate.ts",
     "seed:admin": "tsx --env-file-if-exists=.env.local scripts/seed-admin.ts"
   },
   "dependencies": {
