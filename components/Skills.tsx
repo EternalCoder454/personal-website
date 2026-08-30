@@ -1,7 +1,6 @@
-import { bandFor } from "@/lib/site";
-import type { SkillRow } from "@/lib/content";
+import { bandFor, skills } from "@/lib/site";
 
-export default function Skills({ skills }: { skills: SkillRow[] }) {
+export default function Skills() {
   return (
     <section className="card card--flush" aria-labelledby="experience-label">
       <h2 className="card__header" id="experience-label">
@@ -12,7 +11,7 @@ export default function Skills({ skills }: { skills: SkillRow[] }) {
         {skills.map((skill) => (
           <li
             className="skill"
-            key={skill.id}
+            key={skill.name}
             style={{ "--level": skill.level } as React.CSSProperties}
           >
             <span className="skill__icon icon" aria-hidden="true">
