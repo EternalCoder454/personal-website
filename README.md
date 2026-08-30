@@ -13,6 +13,13 @@ app/robots.ts           /robots.txt
 app/page.tsx            home - profile, socials, clock, experiences
 app/gallery/page.tsx    gallery - Pixel Art and Builds
 app/globals.css         M3 tokens + every component style
+app/panel/              admin panel (guarded) + login
+app/api/auth/[...all]/  Better Auth handler
+lib/auth.ts             auth config - password, social, 2FA
+lib/db.ts               postgres pool
+lib/content.ts          reads content, falls back to site.ts defaults
+lib/guard.ts            admin check used by pages AND every server action
+scripts/                schema, migrations, admin seed
 components/             TopAppBar, Clock, Socials, Skills, Gallery, Ripple
 lib/site.ts             all the content - edit this, not the components
 public/pfp.png          avatar
@@ -85,6 +92,48 @@ rule flags it.
 
 **Security headers and `poweredByHeader: false` live in `next.config.ts`.** HSTS is
 scoped to Vercel, since it means nothing over plain HTTP locally.
+
+## Panel
+
+`/panel` edits experiences and gallery pieces. It needs a Postgres database and,
+for image uploads, Vercel Blob.
+
+### First-time setup
+
+1. **Database** - Vercel > Storage > Neon Postgres. Copy the connection string.
+2. **Blob** - Vercel > Storage > Blob. Copy the read/write token.
+3. Copy `.env.example` to `.env.local` and fill in `DATABASE_URL`,
+   `BLOB_READ_WRITE_TOKEN`, and a `BETTER_AUTH_SECRET`
+   (`openssl rand -base64 32`).
+4. Create the tables and the admin account:
+
+```bash
+npm run auth:migrate   # Better Auth tables
+npm run migrate        # content tables + seeds the current skills
+npm run seed:admin     # prints a generated password once
+```
+
+`seed:admin` prints the password to your terminal and nowhere else. Copy it,
+sign in at `/panel/login`, and treat it as temporary.
+
+### The three stages
+
+**Password** is on now. **Social login** turns itself on as soon as
+`GITHUB_CLIENT_ID`/`SECRET` or `DISCORD_CLIENT_ID`/`SECRET` are set - the buttons
+appear on the login form on their own. **2FA** is set up from the Security card
+in the panel. Once social and 2FA both work, set `emailAndPassword.enabled` to
+`false` in `lib/auth.ts` and the password path is gone.
+
+### Notes
+
+Content reads fall back to the defaults in `lib/site.ts` when the database is
+unreachable, so an outage degrades the site instead of breaking it.
+
+The public pages stay statically prerendered; saving in the panel calls
+`revalidatePath`, which regenerates them. Static speed, immediate updates.
+
+`lib/guard.ts` is re-checked inside **every** server action. Server actions are
+public HTTP endpoints - a guarded page alone would not protect them.
 
 ## Deploy
 

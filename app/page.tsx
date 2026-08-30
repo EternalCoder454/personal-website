@@ -2,8 +2,11 @@ import { Clock, TimeZoneChip } from "@/components/Clock";
 import Socials from "@/components/Socials";
 import Skills from "@/components/Skills";
 import { profile } from "@/lib/site";
+import { getSkills } from "@/lib/content";
 
-export default function Home() {
+export default async function Home() {
+  const skills = await getSkills();
+
   return (
     <main className="content content--split">
       <div className="column">
@@ -34,7 +37,7 @@ export default function Home() {
 
       <div className="column">
         <Clock />
-        <Skills />
+        <Skills skills={skills} />
       </div>
 
       <footer className="footer">

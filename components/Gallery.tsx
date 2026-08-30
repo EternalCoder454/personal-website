@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { gallery, type Piece } from "@/lib/site";
+import type { Piece } from "@/lib/site";
+import type { Section } from "@/lib/content";
 
 /* Plain <img>, not next/image: these are pixel art, and the image optimiser
    resamples, which blurs exactly the edges that make them what they are. */
@@ -61,7 +62,7 @@ function Lightbox({ piece, onClose }: { piece: Piece; onClose: () => void }) {
   );
 }
 
-export default function Gallery() {
+export default function Gallery({ sections }: { sections: Section[] }) {
   const [open, setOpen] = useState<Piece | null>(null);
   const opener = useRef<HTMLButtonElement | null>(null);
 
@@ -72,13 +73,13 @@ export default function Gallery() {
 
   return (
     <>
-      {gallery.map((section) => (
+      {sections.map((section) => (
         <section
-          key={section.title}
+          key={section.slug}
           className="card card--flush"
-          aria-labelledby={`${section.title}-label`}
+          aria-labelledby={`${section.slug}-label`}
         >
-          <h2 className="card__header" id={`${section.title}-label`}>
+          <h2 className="card__header" id={`${section.slug}-label`}>
             {section.title}
           </h2>
 

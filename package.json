@@ -8,21 +8,29 @@
     "start": "next start",
     "lint": "eslint .",
     "pretypecheck": "next typegen",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "migrate": "node --env-file-if-exists=.env.local scripts/migrate.mjs",
+    "auth:migrate": "npx --yes @better-auth/cli@latest migrate",
+    "seed:admin": "tsx --env-file-if-exists=.env.local scripts/seed-admin.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
+    "@vercel/blob": "^2.8.0",
     "@vercel/speed-insights": "^2.0.0",
+    "better-auth": "^1.7.2",
     "next": "^16.3.3",
+    "pg": "^8.23.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.3.3",
+    "tsx": "^4.23.13",
     "typescript": "^5.7.0"
   }
 }
