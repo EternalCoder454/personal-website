@@ -1,6 +1,7 @@
 import { Clock, TimeZoneChip } from "@/components/Clock";
 import Socials from "@/components/Socials";
 import Skills from "@/components/Skills";
+import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import { profile } from "@/lib/site";
 
@@ -36,6 +37,7 @@ export default function Home() {
       <div className="column">
         <Clock />
         <Skills />
+        <Contact />
       </div>
 
       <Footer />

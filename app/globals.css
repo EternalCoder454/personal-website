@@ -55,6 +55,11 @@
 
   --md-scrim: rgba(0, 0, 0, 0.72);
 
+  /* One multiplier for the whole UI. Every font size, line height and icon
+     box is expressed against it, so a wider window scales all of them
+     together instead of a hand-picked few drifting out of step. */
+  --ui: 1;
+
   /* Dark is the default, so it lives on bare :root and needs no attribute.
      A visitor with no stored choice gets dark whatever their OS prefers. */
   color-scheme: dark;
@@ -113,7 +118,7 @@ body {
   font-family: "Material Symbols Rounded";
   font-weight: normal;
   font-style: normal;
-  font-size: 20px;
+  font-size: calc(20px * var(--ui));
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;
@@ -148,8 +153,8 @@ body {
 }
 
 .top-app-bar__title {
-  font-size: 22px;
-  line-height: 28px;
+  font-size: calc(22px * var(--ui));
+  line-height: calc(28px * var(--ui));
   font-weight: 400;
   color: var(--md-on-surface);
   opacity: 0;
@@ -181,13 +186,13 @@ body {
   overflow: hidden;
   display: flex;
   align-items: center;
-  height: 40px;
+  height: calc(40px * var(--ui));
   padding: 0 16px;
   border-radius: var(--md-shape-full);
   color: var(--md-on-surface-variant);
   text-decoration: none;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
   font-weight: 500;
   letter-spacing: 0.1px;
   -webkit-tap-highlight-color: transparent;
@@ -265,8 +270,8 @@ body {
 }
 
 .hero__avatar {
-  width: 112px;
-  height: 112px;
+  width: calc(112px * var(--ui));
+  height: calc(112px * var(--ui));
   border-radius: var(--md-shape-full);
   overflow: hidden;
   background: var(--md-surface-container-highest);
@@ -290,15 +295,15 @@ body {
   place-items: center;
   background: var(--md-primary-container);
   color: var(--md-on-primary-container);
-  font-size: 48px;
+  font-size: calc(48px * var(--ui));
 }
 .hero__avatar--fallback img { display: none; }
 .hero__avatar--fallback::after { content: "E"; }
 
 .hero__name {
   margin-top: 20px;
-  font-size: 36px;
-  line-height: 44px;
+  font-size: calc(36px * var(--ui));
+  line-height: calc(44px * var(--ui));
   font-weight: 400;
   letter-spacing: 0;
   color: var(--md-on-surface);
@@ -306,8 +311,8 @@ body {
 
 .hero__supporting {
   margin-top: 4px;
-  font-size: 16px;
-  line-height: 24px;
+  font-size: calc(16px * var(--ui));
+  line-height: calc(24px * var(--ui));
   letter-spacing: 0.5px;
   color: var(--md-on-surface-variant);
 }
@@ -326,19 +331,19 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 32px;
+  height: calc(32px * var(--ui));
   padding: 0 16px 0 12px;
   border: 1px solid var(--md-outline-variant);
   border-radius: var(--md-shape-s);
   background: transparent;
   color: var(--md-on-surface);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
   font-weight: 500;
   letter-spacing: 0.1px;
 }
 .chip__icon {
-  font-size: 18px;
+  font-size: calc(18px * var(--ui));
   color: var(--md-primary);
 }
 
@@ -352,8 +357,8 @@ body {
 .card--flush { padding: 8px 0 8px; }
 
 .card__header {
-  font-size: 16px;
-  line-height: 24px;
+  font-size: calc(16px * var(--ui));
+  line-height: calc(24px * var(--ui));
   font-weight: 500;
   letter-spacing: 0.15px;
   color: var(--md-on-surface-variant);
@@ -365,8 +370,8 @@ body {
 .clock { text-align: center; }
 
 .clock__label {
-  font-size: 12px;
-  line-height: 16px;
+  font-size: calc(12px * var(--ui));
+  line-height: calc(16px * var(--ui));
   font-weight: 500;
   letter-spacing: 0.5px;
   color: var(--md-on-surface-variant);
@@ -376,8 +381,8 @@ body {
 /* tabular figures so it doesn't jitter each second */
 .clock__time {
   margin-top: 8px;
-  font-size: 45px;
-  line-height: 52px;
+  font-size: calc(45px * var(--ui));
+  line-height: calc(52px * var(--ui));
   font-weight: 400;
   letter-spacing: 0;
   color: var(--md-primary);
@@ -386,15 +391,15 @@ body {
 
 .clock__date {
   margin-top: 8px;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
   letter-spacing: 0.25px;
   color: var(--md-on-surface);
 }
 .clock__meta {
   margin-top: 2px;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
   letter-spacing: 0.25px;
   color: var(--md-on-surface-variant);
 }
@@ -411,7 +416,7 @@ body {
   gap: 16px;
   width: 100%;
   /* well over the 48px touch minimum */
-  min-height: 72px;
+  min-height: calc(72px * var(--ui));
   padding: 8px 24px;
   border: none;
   background: transparent;
@@ -448,15 +453,15 @@ body {
 
 .list-item__leading {
   position: relative;
-  flex: 0 0 40px;
-  height: 40px;
+  flex: 0 0 calc(40px * var(--ui));
+  height: calc(40px * var(--ui));
   display: grid;
   place-items: center;
   border-radius: var(--md-shape-full);
   background: var(--md-primary-container);
   color: var(--md-on-primary-container);
 }
-.list-item__leading svg { width: 22px; height: 22px; }
+.list-item__leading svg { width: calc(22px * var(--ui)); height: calc(22px * var(--ui)); }
 
 .list-item__text {
   position: relative;
@@ -466,15 +471,15 @@ body {
 }
 
 .list-item__headline {
-  font-size: 16px;
-  line-height: 24px;
+  font-size: calc(16px * var(--ui));
+  line-height: calc(24px * var(--ui));
   letter-spacing: 0.15px;
   color: var(--md-on-surface);
 }
 
 .list-item__supporting {
-  font-size: 14px;
-  line-height: 20px;
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
   letter-spacing: 0.25px;
   color: var(--md-on-surface-variant);
   overflow: hidden;
@@ -490,13 +495,13 @@ body {
   align-items: center;
   gap: 4px;
   color: var(--md-on-surface-variant);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
   font-weight: 500;
   letter-spacing: 0.1px;
   white-space: nowrap;
 }
-.list-item__trailing .icon { font-size: 18px; }
+.list-item__trailing .icon { font-size: calc(18px * var(--ui)); }
 .list-item__trailing--done { color: var(--md-primary); }
 
 /* ---------- skills ---------- */
@@ -508,12 +513,12 @@ body {
   align-items: center;
   gap: 16px;
   padding: 12px 24px;
-  min-height: 64px;
+  min-height: calc(64px * var(--ui));
 }
 
 .skill__icon {
-  flex: 0 0 40px;
-  height: 40px;
+  flex: 0 0 calc(40px * var(--ui));
+  height: calc(40px * var(--ui));
   display: grid;
   place-items: center;
   border-radius: var(--md-shape-full);
@@ -530,16 +535,16 @@ body {
 }
 
 .skill__name {
-  font-size: 16px;
-  line-height: 24px;
+  font-size: calc(16px * var(--ui));
+  line-height: calc(24px * var(--ui));
   letter-spacing: 0.15px;
   color: var(--md-on-surface);
 }
 
 /* own line so long levels never crowd the name */
 .skill__meta {
-  font-size: 12px;
-  line-height: 16px;
+  font-size: calc(12px * var(--ui));
+  line-height: calc(16px * var(--ui));
   letter-spacing: 0.4px;
   color: var(--md-on-surface-variant);
 }
@@ -577,8 +582,8 @@ body {
 .icon-button {
   position: relative;
   flex: none;
-  width: 40px;
-  height: 40px;
+  width: calc(40px * var(--ui));
+  height: calc(40px * var(--ui));
   display: grid;
   place-items: center;
   border: none;
@@ -622,8 +627,8 @@ body {
 .footer {
   margin-top: 8px;
   text-align: center;
-  font-size: 12px;
-  line-height: 16px;
+  font-size: calc(12px * var(--ui));
+  line-height: calc(16px * var(--ui));
   letter-spacing: 0.4px;
   color: var(--md-on-surface-variant);
 }
@@ -645,8 +650,8 @@ body {
   background: var(--md-inverse-surface);
   color: var(--md-inverse-on-surface);
   box-shadow: var(--md-elevation-3);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
   letter-spacing: 0.25px;
   opacity: 0;
   transform: translateY(12px) scale(0.96);
@@ -676,7 +681,7 @@ body {
   .card--flush { padding: 8px 0; }
   .list-item { padding-left: 16px; padding-right: 16px; gap: 12px; }
   .card__header { padding-left: 16px; padding-right: 16px; }
-  .clock__time { font-size: 40px; line-height: 48px; }
+  .clock__time { font-size: calc(40px * var(--ui)); line-height: calc(48px * var(--ui)); }
 }
 
 /* ---------- gallery ---------- */
@@ -734,8 +739,8 @@ body {
 .piece__caption {
   margin-top: 8px;
   padding: 0 4px;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
   letter-spacing: 0.25px;
   color: var(--md-on-surface-variant);
 }
@@ -751,9 +756,9 @@ body {
 }
 
 .empty__icon {
-  font-size: 40px;
-  width: 72px;
-  height: 72px;
+  font-size: calc(40px * var(--ui));
+  width: calc(72px * var(--ui));
+  height: calc(72px * var(--ui));
   display: grid;
   place-items: center;
   border-radius: var(--md-shape-full);
@@ -763,8 +768,8 @@ body {
 
 .empty__title {
   margin-top: 16px;
-  font-size: 16px;
-  line-height: 24px;
+  font-size: calc(16px * var(--ui));
+  line-height: calc(24px * var(--ui));
   font-weight: 500;
   letter-spacing: 0.15px;
   color: var(--md-on-surface);
@@ -772,8 +777,8 @@ body {
 
 .empty__text {
   margin-top: 4px;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
   letter-spacing: 0.25px;
   color: var(--md-on-surface-variant);
 }
@@ -826,8 +831,8 @@ body {
 
 .lightbox__caption {
   margin-top: 16px;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
   letter-spacing: 0.25px;
   color: var(--md-on-surface);
 }
@@ -848,9 +853,9 @@ body {
 }
 
 .message__icon {
-  font-size: 40px;
-  width: 72px;
-  height: 72px;
+  font-size: calc(40px * var(--ui));
+  width: calc(72px * var(--ui));
+  height: calc(72px * var(--ui));
   display: grid;
   place-items: center;
   border-radius: var(--md-shape-full);
@@ -860,8 +865,8 @@ body {
 
 .message__title {
   margin-top: 20px;
-  font-size: 22px;
-  line-height: 28px;
+  font-size: calc(22px * var(--ui));
+  line-height: calc(28px * var(--ui));
   font-weight: 400;
   color: var(--md-on-surface);
 }
@@ -869,8 +874,8 @@ body {
 .message__text {
   margin-top: 8px;
   max-width: 30ch;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
   letter-spacing: 0.25px;
   color: var(--md-on-surface-variant);
 }
@@ -891,15 +896,15 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
+  height: calc(40px * var(--ui));
   padding: 0 24px;
   border: none;
   border-radius: var(--md-shape-full);
   cursor: pointer;
   text-decoration: none;
   font-family: inherit;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
   font-weight: 500;
   letter-spacing: 0.1px;
   -webkit-tap-highlight-color: transparent;
@@ -947,7 +952,7 @@ body {
   border-radius: var(--md-shape-full);
   background: var(--md-primary);
   color: var(--md-on-primary);
-  font-size: 14px;
+  font-size: calc(14px * var(--ui));
   font-weight: 500;
   text-decoration: none;
   transform: translateY(-200%);
@@ -1060,7 +1065,7 @@ body {
 .nav__link { color: var(--md-on-surface); }
 
 .nav__icon {
-  font-size: 18px;
+  font-size: calc(18px * var(--ui));
   margin-right: 8px;
 }
 
@@ -1112,14 +1117,17 @@ body {
   .top-app-bar { grid-template-columns: 1fr auto 1fr; }
 }
 
+
 /* ==================================================================
    Large windows
-   M3 keeps going past the expanded class. At 928px a 1920px display
-   is only 48% used, which reads as an empty page rather than a
-   centred one, so the layout steps up rather than capping early.
+   Width alone is not enough: at 928px a 1920px display is under half
+   used, and on a 4K panel the whole UI also has to grow or it reads
+   as tiny. --ui scales type and icon boxes together; max-width
+   handles the column.
    ================================================================== */
 
 @media (min-width: 1200px) {
+  :root { --ui: 1.05; }
   .content--split,
   .content--wide {
     max-width: 1080px;
@@ -1128,45 +1136,84 @@ body {
 }
 
 @media (min-width: 1600px) {
+  :root { --ui: 1.12; }
   .content--split,
   .content--wide {
-    max-width: 1240px;
+    max-width: 1280px;
     gap: 32px;
   }
-
-  /* The hero grows with the layout, otherwise it looks marooned in the
-     middle of a much wider column. */
-  .hero__avatar {
-    width: 132px;
-    height: 132px;
-  }
-  .hero__name {
-    font-size: 44px;
-    line-height: 52px;
-  }
-  .hero__supporting {
-    font-size: 17px;
-  }
-
-  .clock__time {
-    font-size: 52px;
-    line-height: 60px;
-  }
-}
-
-@media (min-width: 1600px) {
-  /* Wider columns make the rows look thin, so they gain height with the
-     layout. .card--flush keeps its 8px padding - the last row's corner
-     radius is derived from it. */
   .card { padding: 28px; }
-  .list-item { min-height: 80px; }
-  .skill { min-height: 76px; }
-  .card__header { padding-top: 12px; padding-bottom: 12px; }
 }
 
-@media (min-width: 1800px) {
+@media (min-width: 2000px) {
+  :root { --ui: 1.25; }
   .content--split,
   .content--wide {
-    max-width: 1360px;
+    max-width: 1560px;
+    gap: 36px;
   }
+  .card { padding: 32px; }
+}
+
+/* Typical 4K, unscaled or at 125%. */
+@media (min-width: 2600px) {
+  :root { --ui: 1.45; }
+  .content--split,
+  .content--wide {
+    max-width: 1960px;
+    gap: 44px;
+  }
+  .card { padding: 40px; }
+}
+
+/* ---------- skill rows use the width they are given ---------- */
+
+/* Stacked on a phone, where the name and the level would collide. Wider than
+   that the level moves to the right edge, which is where the empty space was. */
+@media (min-width: 600px) {
+  .skill__body {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    column-gap: 16px;
+  }
+  .skill__name { grid-column: 1; }
+  .skill__meta {
+    grid-column: 2;
+    justify-self: end;
+  }
+  .skill__meter { grid-column: 1 / -1; }
+}
+
+/* ---------- contact ---------- */
+
+.contact { text-align: center; }
+
+.contact__title {
+  font-size: calc(22px * var(--ui));
+  line-height: calc(28px * var(--ui));
+  font-weight: 400;
+  color: var(--md-on-surface);
+}
+
+.contact__text {
+  margin: 8px auto 0;
+  max-width: 42ch;
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
+  letter-spacing: 0.25px;
+  color: var(--md-on-surface-variant);
+}
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.button__icon {
+  font-size: calc(18px * var(--ui));
+  margin-right: 8px;
 }

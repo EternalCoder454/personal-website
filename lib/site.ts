@@ -26,7 +26,7 @@ export const profile = {
 type SocialBase = {
   name: string;
   handle: string;
-  icon: "bluesky" | "discord" | "reddit";
+  icon: "bluesky" | "discord" | "reddit" | "youtube";
 };
 
 /* Either a link or a copy-to-clipboard row, never both and never neither.
@@ -52,10 +52,10 @@ export const socials: Social[] = [
     href: "https://bsky.app/profile/eternalhell.bsky.social",
   },
   {
-    name: "Discord",
-    handle: "eternalhellttv",
-    icon: "discord",
-    copy: "eternalhellttv",
+    name: "YouTube",
+    handle: "@eternalhellttv",
+    icon: "youtube",
+    href: "https://www.youtube.com/@eternalhellttv",
   },
   {
     name: "Discord Server",
@@ -94,6 +94,18 @@ export const skills: Skill[] = [
   { name: "Web Designer", level: 5, icon: "web" },
 ];
 
+export const contact = {
+  /* The channel to point people at first. */
+  primary: {
+    label: "Join the Discord",
+    href: "https://discord.gg/Xaz3QQA8fg",
+    icon: "forum",
+  },
+  text: "The Discord server is the quickest way to reach me. Bluesky messages work too.",
+  /* Add an address here to show an email button as well, e.g. "me@example.com". */
+  email: "",
+};
+
 /* Drop an image in public/gallery/<folder>/ and add a line to pieces. */
 export type Piece = { src: string; alt: string; caption: string };
 
@@ -107,7 +119,7 @@ export type GallerySection = {
 export const gallery: GallerySection[] = [
   {
     title: "Pixel Art",
-    icon: "grid_on",
+    icon: "palette",
     emptyText: "Pixel art will show up here.",
     pieces: [
       // { src: "/gallery/pixel-art/my-sprite.png", alt: "Short description", caption: "My sprite" },
@@ -115,7 +127,7 @@ export const gallery: GallerySection[] = [
   },
   {
     title: "Builds",
-    icon: "castle",
+    icon: "construction",
     emptyText: "Interiors and exteriors will show up here.",
     pieces: [
       // { src: "/gallery/builds/my-build.png", alt: "Short description", caption: "My build" },

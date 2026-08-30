@@ -13,7 +13,7 @@ app/robots.ts           /robots.txt
 app/page.tsx            home - profile, socials, clock, experiences
 app/gallery/page.tsx    gallery - Pixel Art and Builds
 app/globals.css         M3 tokens + every component style
-components/             TopAppBar, ThemeToggle, Clock, Socials, Skills, Gallery
+components/             TopAppBar, ThemeToggle, Clock, Socials, Skills, Contact, Gallery
 lib/site.ts             all the content - edit this, not the components
 public/pfp.png          avatar
 public/gallery/         gallery images
@@ -76,6 +76,15 @@ every glyph out of its circle. Their sheet now only supplies the `@font-face`.
 
 **Gallery images use plain `<img>`, not `next/image`.** The optimiser resamples,
 which blurs exactly the hard edges that make pixel art pixel art.
+
+**The whole UI scales from one variable.** `--ui` in `:root` multiplies every
+font size, line height and icon box, and steps up at 1200/1600/2000/2600px. Sizes
+were previously bumped rule by rule at one breakpoint, which is how half of them
+ended up out of step with the rest.
+
+**Brand icon viewBoxes are measured, not assumed.** Reddit's antenna pushes its
+bounding box up, so its mark renders 0.47 units high in a plain `0 0 24 24` box.
+Its viewBox is offset by exactly that. Check `getBBox()` before adding an icon.
 
 **Theme is dark by default, light is opt-in.** An inline script in the layout
 applies a stored choice before first paint, so light never flashes dark first.
