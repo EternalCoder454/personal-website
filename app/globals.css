@@ -1043,8 +1043,17 @@ body {
   padding: 0 12px;
 }
 
-.top-app-bar__title { justify-self: start; }
-.nav { justify-self: center; }
+/* Placed explicitly. Hiding the title with display:none removes it from the
+   grid, and without fixed columns the nav and toggle both shift one column
+   left - the nav ends up against the edge instead of centred. */
+.top-app-bar__title {
+  grid-column: 1;
+  justify-self: start;
+}
+.nav {
+  grid-column: 2;
+  justify-self: center;
+}
 
 /* Inactive items were on-surface-variant, which reads as disabled next to
    the filled pill of the current page. */
@@ -1065,7 +1074,10 @@ body {
 
 /* ---------- theme toggle ---------- */
 
-.theme-toggle { justify-self: end; }
+.theme-toggle {
+  grid-column: 3;
+  justify-self: end;
+}
 
 /* The icon shows the theme you would switch to. Driven entirely by the
    data-theme attribute, so it is right on the very first paint. */
@@ -1098,4 +1110,63 @@ body {
    grid, so the nav stays centred and the toggle stays on the right. */
 @media (max-width: 520px) {
   .top-app-bar { grid-template-columns: 1fr auto 1fr; }
+}
+
+/* ==================================================================
+   Large windows
+   M3 keeps going past the expanded class. At 928px a 1920px display
+   is only 48% used, which reads as an empty page rather than a
+   centred one, so the layout steps up rather than capping early.
+   ================================================================== */
+
+@media (min-width: 1200px) {
+  .content--split,
+  .content--wide {
+    max-width: 1080px;
+    gap: 28px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .content--split,
+  .content--wide {
+    max-width: 1240px;
+    gap: 32px;
+  }
+
+  /* The hero grows with the layout, otherwise it looks marooned in the
+     middle of a much wider column. */
+  .hero__avatar {
+    width: 132px;
+    height: 132px;
+  }
+  .hero__name {
+    font-size: 44px;
+    line-height: 52px;
+  }
+  .hero__supporting {
+    font-size: 17px;
+  }
+
+  .clock__time {
+    font-size: 52px;
+    line-height: 60px;
+  }
+}
+
+@media (min-width: 1600px) {
+  /* Wider columns make the rows look thin, so they gain height with the
+     layout. .card--flush keeps its 8px padding - the last row's corner
+     radius is derived from it. */
+  .card { padding: 28px; }
+  .list-item { min-height: 80px; }
+  .skill { min-height: 76px; }
+  .card__header { padding-top: 12px; padding-bottom: 12px; }
+}
+
+@media (min-width: 1800px) {
+  .content--split,
+  .content--wide {
+    max-width: 1360px;
+  }
 }
