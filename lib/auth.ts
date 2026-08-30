@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { username, twoFactor } from "better-auth/plugins";
 import { pool } from "./db";
-import { profile } from "./site";
+import { profile, siteUrl } from "./site";
 
 /* The one account allowed into /panel. Compared against the session user's
    username, so a second user existing would still not get in. */
@@ -10,6 +10,11 @@ export const ADMIN_USERNAME = "eternalhell";
 export const auth = betterAuth({
   appName: profile.name,
   database: pool,
+
+  /* Derived from VERCEL_PROJECT_PRODUCTION_URL in production, localhost in
+     development, so BETTER_AUTH_URL never has to be set by hand. */
+  baseURL: process.env.BETTER_AUTH_URL ?? siteUrl,
+  trustedOrigins: [siteUrl],
 
   emailAndPassword: {
     /* Stage 1. Once social login and 2FA are set up, flip this to false and
