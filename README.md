@@ -5,6 +5,11 @@ Deployed on Vercel.
 
 ```
 app/layout.tsx          shell, fonts, metadata, analytics
+app/not-found.tsx       404
+app/error.tsx           per-route error boundary
+app/global-error.tsx    boundary for failures in the layout itself
+app/sitemap.ts          /sitemap.xml
+app/robots.ts           /robots.txt
 app/page.tsx            home - profile, socials, clock, experiences
 app/gallery/page.tsx    gallery - Pixel Art and Builds
 app/globals.css         M3 tokens + every component style
@@ -21,8 +26,17 @@ npm install
 npm run dev
 ```
 
-Then open <http://localhost:3000>. `npm run build` produces the production build;
-both pages are fully static.
+Then open <http://localhost:3000>.
+
+| script | |
+| --- | --- |
+| `npm run dev` | dev server |
+| `npm run build` | production build |
+| `npm run lint` | eslint |
+| `npm run typecheck` | `tsc --noEmit`, after regenerating route types |
+
+`pretypecheck` runs `next typegen` first. Without it, deleting a route leaves stale
+generated types in `.next/types` and the typecheck fails on a file you no longer have.
 
 ## Editing content
 
@@ -63,8 +77,14 @@ every glyph out of its circle. Their sheet now only supplies the `@font-face`.
 **Gallery images use plain `<img>`, not `next/image`.** The optimiser resamples,
 which blurs exactly the hard edges that make pixel art pixel art.
 
-**The clock only renders after mount.** A live time rendered on the server would
-not match what the client renders a moment later.
+**The clock uses `useSyncExternalStore`, not `useEffect` + `setState`.** It reads a
+value that changes outside React, which is exactly what that hook is for; the server
+snapshot returns null so the first paint is the placeholder and hydration matches.
+Setting state directly in an effect causes cascading renders, and the React lint
+rule flags it.
+
+**Security headers and `poweredByHeader: false` live in `next.config.ts`.** HSTS is
+scoped to Vercel, since it means nothing over plain HTTP locally.
 
 ## Deploy
 

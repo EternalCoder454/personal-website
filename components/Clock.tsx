@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { TIMEZONE, TZ_LABEL } from "@/lib/site";
 
 const timeFmt = new Intl.DateTimeFormat("en-US", {
@@ -27,18 +27,23 @@ function zoneAbbr(now: Date) {
   return zoneFmt.formatToParts(now).find((p) => p.type === "timeZoneName")?.value ?? "";
 }
 
-/* The clock only starts after mount. Rendering a live time on the server
-   would not match what the client renders a moment later. */
+const subscribe = (onChange: () => void) => {
+  const id = setInterval(onChange, 1000);
+  return () => clearInterval(id);
+};
+
+/* Whole seconds, so the snapshot is stable between reads within a tick -
+   returning a fresh Date each call would loop forever. */
+const getSnapshot = () => Math.floor(Date.now() / 1000);
+
+/* Null on the server, so the first paint is the placeholder and hydration
+   matches. useSyncExternalStore is the right primitive for reading a value
+   that changes outside React. */
+const getServerSnapshot = () => null;
+
 function useNow() {
-  const [now, setNow] = useState<Date | null>(null);
-
-  useEffect(() => {
-    setNow(new Date());
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  return now;
+  const seconds = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  return seconds === null ? null : new Date(seconds * 1000);
 }
 
 export function Clock() {

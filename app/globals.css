@@ -796,3 +796,96 @@ body {
 @keyframes lightbox-in {
   from { opacity: 0; transform: scale(0.94); }
 }
+
+/* ---------- message screens (404, errors) ---------- */
+
+.message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px 24px;
+}
+
+.message__icon {
+  font-size: 40px;
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--md-shape-full);
+  background: var(--md-surface-container-high);
+  color: var(--md-on-surface-variant);
+}
+
+.message__title {
+  margin-top: 20px;
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 400;
+  color: var(--md-on-surface);
+}
+
+.message__text {
+  margin-top: 8px;
+  max-width: 30ch;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.25px;
+  color: var(--md-on-surface-variant);
+}
+
+.message__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+/* ---------- buttons ---------- */
+
+.button {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 24px;
+  border: none;
+  border-radius: var(--md-shape-full);
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity var(--md-duration-short) var(--md-easing-standard);
+}
+.button:hover::before { opacity: var(--md-state-hover); }
+.button:focus-visible::before { opacity: var(--md-state-focus); }
+.button:focus-visible {
+  outline: 3px solid var(--md-primary);
+  outline-offset: 2px;
+}
+
+.button--filled {
+  background: var(--md-primary);
+  color: var(--md-on-primary);
+}
+
+.button--tonal {
+  background: var(--md-secondary-container);
+  color: var(--md-on-secondary-container);
+}

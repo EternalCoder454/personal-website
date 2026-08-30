@@ -1,5 +1,11 @@
 /* Everything you'd want to edit lives in this file. */
 
+/* Vercel sets VERCEL_PROJECT_PRODUCTION_URL in production. Used for
+   metadataBase, the sitemap, and robots.txt. */
+export const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3000";
+
 export const TIMEZONE = "America/Los_Angeles";
 export const TZ_LABEL = "Pacific Time";
 
