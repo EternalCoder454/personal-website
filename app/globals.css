@@ -1217,3 +1217,25 @@ body {
   font-size: calc(18px * var(--ui));
   margin-right: 8px;
 }
+
+/* ---------- columns end level with each other ---------- */
+
+/* The two columns hold different content, so left to themselves they finish
+   at different heights and the card bottoms sit ragged against each other.
+   Stretching them and letting the last card take up the slack squares off
+   the bottom edge.
+   `section:last-of-type` rather than `:last-child`: Socials renders the
+   snackbar as its final sibling, and that is a div, so this skips it. */
+@media (min-width: 905px) {
+  .content--split { align-items: stretch; }
+
+  .column > section:last-of-type { flex: 1 1 auto; }
+
+  /* Contact centres its own content, so the extra height reads as breathing
+     room rather than a gap under the button. */
+  .contact {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
