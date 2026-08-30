@@ -6,8 +6,6 @@ export default function Contact() {
       <h2 className="contact__title" id="contact-label">
         Contact me
       </h2>
-      <p className="contact__text">{contact.text}</p>
-
       <div className="contact__actions">
         <a
           className="button button--filled"

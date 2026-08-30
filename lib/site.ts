@@ -101,7 +101,6 @@ export const contact = {
     href: "https://discord.gg/Xaz3QQA8fg",
     icon: "forum",
   },
-  text: "The Discord server is the quickest way to reach me. Bluesky messages work too.",
   /* Add an address here to show an email button as well, e.g. "me@example.com". */
   email: "",
 };

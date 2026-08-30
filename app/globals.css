@@ -1196,21 +1196,12 @@ body {
   color: var(--md-on-surface);
 }
 
-.contact__text {
-  margin: 8px auto 0;
-  max-width: 42ch;
-  font-size: calc(14px * var(--ui));
-  line-height: calc(20px * var(--ui));
-  letter-spacing: 0.25px;
-  color: var(--md-on-surface-variant);
-}
-
 .contact__actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
 .button__icon {
@@ -1229,13 +1220,7 @@ body {
 @media (min-width: 905px) {
   .content--split { align-items: stretch; }
 
-  .column > section:last-of-type { flex: 1 1 auto; }
-
-  /* Contact centres its own content, so the extra height reads as breathing
-     room rather than a gap under the button. */
-  .contact {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+  /* Slack goes into the gutter between cards, not inside one. Stretching the
+     last card instead left an obvious dead band under the final row. */
+  .column { justify-content: space-between; }
 }
