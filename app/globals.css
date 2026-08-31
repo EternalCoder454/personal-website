@@ -270,8 +270,8 @@ body {
 }
 
 .hero__avatar {
-  width: calc(112px * var(--ui));
-  height: calc(112px * var(--ui));
+  width: calc(168px * var(--ui));
+  height: calc(168px * var(--ui));
   border-radius: var(--md-shape-full);
   overflow: hidden;
   background: var(--md-surface-container-highest);
