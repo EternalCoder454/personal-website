@@ -11,10 +11,11 @@ app/global-error.tsx    boundary for failures in the layout itself
 app/sitemap.ts          /sitemap.xml
 app/robots.ts           /robots.txt
 app/page.tsx            home - profile, socials, clock, experiences
-app/gallery/page.tsx    gallery - Pixel Art and Builds
+app/gallery/page.tsx    gallery index - one tile per category
+app/gallery/[category]/ one page per category, prerendered from lib/site.ts
 app/globals.css         M3 tokens + every component style
 components/             TopAppBar, ThemeToggle, Clock, Socials, Skills, Contact,
-                        Gallery, LiquidBackground
+                        GalleryGrid, LiquidBackground
 lib/site.ts             all the content - edit this, not the components
 public/pfp.png          avatar
 public/gallery/         gallery images
@@ -55,15 +56,17 @@ is derived from the number, so there is nothing to keep in sync:
 | --- | --- | --- | --- | --- |
 | Beginner | Intermediate | Advanced | Expert | Master |
 
-**Add a gallery piece.** Drop the image in `public/gallery/pixel-art/` or
-`public/gallery/builds/`, then add a line to that section's `pieces`:
+**Add a gallery piece.** Drop the image in `public/gallery/<slug>/`, then add a
+line to that section's `pieces`:
 
 ```ts
 { src: "/gallery/builds/spawn.png", alt: "Spawn area", caption: "Spawn" }
 ```
 
-Each section tracks its own state, so one can be full while the other still shows
-"Nothing here yet". Both share one lightbox.
+**Add a category.** Add a section to `gallery` with a `slug`, and make
+`public/gallery/<slug>/`. The route, the index tile, the icon subset and the
+sitemap all derive from that one entry - there is no second list to update.
+An empty category still gets a page, showing its `emptyText`.
 
 Icon names come from [Material Symbols](https://fonts.google.com/icons). Check a
 name at 20px before committing to it - plenty of them are illegible that small.
@@ -90,6 +93,16 @@ every glyph out of its circle. Their sheet now only supplies the `@font-face`.
 
 **Gallery images use plain `<img>`, not `next/image`.** The optimiser resamples,
 which blurs exactly the hard edges that make pixel art pixel art.
+
+**Category pages are prerendered, and only the known slugs exist.**
+`generateStaticParams` emits one page per section and `dynamicParams = false`
+turns anything else into a 404 rather than an empty gallery. The index is a
+server component; only the tile grid inside a category ships JavaScript, because
+only the lightbox needs it.
+
+**Category tiles hover with `scale`, not `transform`.** The entrance animation
+already animates `transform`, and with `animation-fill-mode: both` the two fight
+over the same value. `scale` is an independent property, so they do not.
 
 **The whole UI scales from one variable.** `--ui` in `:root` multiplies every
 font size, line height and icon box, and steps up at 1200/1600/2000/2600px. Sizes
@@ -166,4 +179,4 @@ once deployed - they collect nothing in local development.
 
 `lib/site.ts` can be edited straight from github.com, on a phone or a laptop.
 Commit and Vercel redeploys in about a minute. Gallery images can be dragged into
-`public/gallery/pixel-art/` or `public/gallery/builds/` the same way.
+`public/gallery/<slug>/` the same way.

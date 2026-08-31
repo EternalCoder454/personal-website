@@ -675,7 +675,128 @@ body {
   .card--flush { padding: 8px 0; }
   .list-item { padding-left: 16px; padding-right: 16px; gap: 12px; }
   .card__header { padding-left: 16px; padding-right: 16px; }
+  .categories { padding-left: 16px; padding-right: 16px; }
+  .section-head { padding-left: 8px; padding-right: 8px; }
   .clock__time { font-size: calc(40px * var(--ui)); line-height: calc(48px * var(--ui)); }
+}
+
+/* ---------- gallery categories ---------- */
+
+/* A back arrow beside the title, so the header keeps its own left padding. */
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 16px 0 16px;
+}
+.section-head__back { text-decoration: none; }
+.section-head__title { padding-left: 4px; }
+
+ /* Fixed counts, not auto-fill: with exactly three tiles auto-fill reserves a
+    fourth empty track, and auto-fit stretches them to half the screen. */
+.categories {
+  display: grid;
+  /* Two up on a phone: full-width tiles made three links into three screens
+     of scrolling. */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 8px 24px 16px;
+}
+@media (min-width: 600px) {
+  .categories { grid-template-columns: repeat(3, 1fr); }
+}
+
+.category {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--md-shape-l);
+  background: var(--md-surface-container-high);
+  color: var(--md-on-surface);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  /* `scale`, not `transform`: the entrance animation owns transform. */
+  transition: scale var(--md-duration-short) var(--md-easing-standard);
+}
+.category:hover { scale: 1.02; }
+.category:focus-visible {
+  outline: 3px solid var(--md-primary);
+  outline-offset: 2px;
+}
+
+.category::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--md-on-surface);
+  opacity: 0;
+  transition: opacity var(--md-duration-short) var(--md-easing-standard);
+  pointer-events: none;
+}
+.category:hover::after { opacity: var(--md-state-hover); }
+.category:focus-visible::after { opacity: var(--md-state-focus); }
+
+.category__cover {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: var(--md-surface-container-highest);
+}
+/* Absolute, or a tall cover image resolves height:100% to auto and stretches
+   the box past its aspect ratio - which leaves tiles in a row uneven. */
+.category__cover img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  image-rendering: pixelated;
+}
+.category__glyph {
+  font-size: calc(44px * var(--ui));
+  color: var(--md-primary);
+}
+
+.category__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px 0;
+}
+.category__title {
+  font-size: calc(16px * var(--ui));
+  line-height: calc(24px * var(--ui));
+  font-weight: 500;
+  letter-spacing: 0.15px;
+}
+.category__blurb {
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
+  letter-spacing: 0.25px;
+  color: var(--md-on-surface-variant);
+}
+
+/* margin-top:auto keeps the count on the floor when blurbs wrap unevenly. */
+.category__meta {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 12px 14px 16px;
+  color: var(--md-on-surface-variant);
+  font-size: calc(14px * var(--ui));
+  line-height: calc(20px * var(--ui));
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+.category__meta .icon {
+  margin-left: auto;
+  font-size: calc(20px * var(--ui));
 }
 
 /* ---------- gallery ---------- */
@@ -992,7 +1113,8 @@ body {
 
 /* ---------- gallery tiles ---------- */
 
-.piece {
+.piece,
+.category {
   animation: enter-rise 380ms var(--md-easing-emphasized) both;
   animation-delay: calc(120ms + var(--index, 0) * 45ms);
 }

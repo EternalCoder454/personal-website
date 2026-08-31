@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { gallery, type Piece } from "@/lib/site";
+import { createPortal } from "react-dom";
+import type { GallerySection, Piece } from "@/lib/site";
 
 /* Plain <img>, not next/image: these are pixel art, and the image optimiser
    resamples, which blurs exactly the edges that make them what they are. */
@@ -81,7 +82,7 @@ function Lightbox({ piece, onClose }: { piece: Opened; onClose: () => void }) {
     };
   }, [dismiss]);
 
-  return (
+  return createPortal(
     <div
       className={`lightbox${closing ? " lightbox--closing" : ""}`}
       ref={dialogRef}
@@ -118,11 +119,12 @@ function Lightbox({ piece, onClose }: { piece: Opened; onClose: () => void }) {
         />
         <figcaption className="lightbox__caption">{piece.caption}</figcaption>
       </figure>
-    </div>
+    </div>,
+    document.body
   );
 }
 
-export default function Gallery() {
+export default function GalleryGrid({ section }: { section: GallerySection }) {
   const [open, setOpen] = useState<Opened | null>(null);
   const opener = useRef<HTMLButtonElement | null>(null);
 
@@ -131,53 +133,41 @@ export default function Gallery() {
     opener.current?.focus();
   }, []);
 
+  if (section.pieces.length === 0) {
+    return <EmptyState icon={section.icon} text={section.emptyText} />;
+  }
+
   return (
     <>
-      {gallery.map((section) => (
-        <section
-          key={section.title}
-          className="card card--flush"
-          aria-labelledby={`${section.title}-label`}
-        >
-          <h2 className="card__header" id={`${section.title}-label`}>
-            {section.title}
-          </h2>
-
-          {section.pieces.length > 0 ? (
-            <div className="gallery">
-              {section.pieces.map((piece, index) => (
-                <figure
-                  className="piece"
-                  key={piece.src}
-                  style={{ "--index": index } as React.CSSProperties}
-                >
-                  <button
-                    className="piece__button"
-                    type="button"
-                    aria-label={`Open ${piece.caption}`}
-                    onClick={(event) => {
-                      const button = event.currentTarget;
-                      const img = button.querySelector("img");
-                      opener.current = button;
-                      setOpen({
-                        ...piece,
-                        width: img?.naturalWidth ?? 0,
-                        height: img?.naturalHeight ?? 0,
-                      });
-                    }}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={piece.src} alt={piece.alt} loading="lazy" />
-                  </button>
-                  <figcaption className="piece__caption">{piece.caption}</figcaption>
-                </figure>
-              ))}
-            </div>
-          ) : (
-            <EmptyState icon={section.icon} text={section.emptyText} />
-          )}
-        </section>
-      ))}
+      <div className="gallery">
+        {section.pieces.map((piece, index) => (
+          <figure
+            className="piece"
+            key={piece.src}
+            style={{ "--index": index } as React.CSSProperties}
+          >
+            <button
+              className="piece__button"
+              type="button"
+              aria-label={`Open ${piece.caption}`}
+              onClick={(event) => {
+                const button = event.currentTarget;
+                const img = button.querySelector("img");
+                opener.current = button;
+                setOpen({
+                  ...piece,
+                  width: img?.naturalWidth ?? 0,
+                  height: img?.naturalHeight ?? 0,
+                });
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={piece.src} alt={piece.alt} loading="lazy" />
+            </button>
+            <figcaption className="piece__caption">{piece.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
 
       {open && <Lightbox piece={open} onClose={close} />}
     </>

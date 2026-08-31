@@ -12,6 +12,11 @@ const LINKS = [
   { href: "/gallery", label: "Gallery", icon: "photo_library" },
 ];
 
+/* Gallery stays lit on its category pages. "/" is exact, or it would match
+   every route. */
+const isActive = (pathname: string, href: string) =>
+  href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+
 function NavLink({
   href,
   label,
@@ -82,7 +87,7 @@ export default function TopAppBar() {
             href={link.href}
             label={link.label}
             icon={link.icon}
-            active={pathname === link.href}
+            active={isActive(pathname, link.href)}
           />
         ))}
       </nav>

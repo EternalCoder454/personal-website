@@ -102,34 +102,54 @@ export const contact = {
   email: "eternalhell@eterneon.net",
 };
 
-/* Drop an image in public/gallery/<folder>/ and add a line to pieces. */
+/* Drop an image in public/gallery/<slug>/ and add a line to pieces. */
 export type Piece = { src: string; alt: string; caption: string };
 
+/* One category = one page at /gallery/<slug>. Add a section here and the
+   route, the index tile and the sitemap all follow. */
 export type GallerySection = {
+  slug: string;
   title: string;
   icon: string;
+  blurb: string;
   emptyText: string;
   pieces: Piece[];
 };
 
 export const gallery: GallerySection[] = [
   {
+    slug: "builds",
+    title: "Builds",
+    icon: "construction",
+    blurb: "Minecraft interiors and exteriors.",
+    emptyText: "Interiors and exteriors will show up here.",
+    pieces: [
+      // { src: "/gallery/builds/my-build.png", alt: "Short description", caption: "My build" },
+    ],
+  },
+  {
+    slug: "pixel-art",
     title: "Pixel Art",
     icon: "palette",
+    blurb: "Sprites, tiles and icons.",
     emptyText: "Pixel art will show up here.",
     pieces: [
       // { src: "/gallery/pixel-art/my-sprite.png", alt: "Short description", caption: "My sprite" },
     ],
   },
   {
-    title: "Builds",
-    icon: "construction",
-    emptyText: "Interiors and exteriors will show up here.",
+    slug: "websites",
+    title: "Websites",
+    icon: "web",
+    blurb: "Interfaces and front-end work.",
+    emptyText: "Sites and interfaces will show up here.",
     pieces: [
-      // { src: "/gallery/builds/my-build.png", alt: "Short description", caption: "My build" },
+      // { src: "/gallery/websites/my-site.png", alt: "Short description", caption: "My site" },
     ],
   },
 ];
+
+export const sectionFor = (slug: string) => gallery.find((s) => s.slug === slug);
 
 /* Material Symbols is 362KB unsubsetted. Requesting only these drops it to 4KB.
    Content icons are derived, so adding a skill cannot leave a glyph rendering
@@ -138,6 +158,7 @@ export const gallery: GallerySection[] = [
 const CHROME_ICONS = [
   "home", "photo_library", "light_mode", "dark_mode", "public", "schedule",
   "open_in_new", "mail", "content_copy", "check", "close", "explore_off", "error",
+  "arrow_back", "chevron_right",
 ];
 
 export const iconNames = [
