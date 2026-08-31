@@ -130,3 +130,21 @@ export const gallery: GallerySection[] = [
     ],
   },
 ];
+
+/* Material Symbols is 362KB unsubsetted. Requesting only these drops it to 4KB.
+   Content icons are derived, so adding a skill cannot leave a glyph rendering
+   as its own name. Chrome icons are listed by hand - some only appear in a
+   state the build never sees. */
+const CHROME_ICONS = [
+  "home", "photo_library", "light_mode", "dark_mode", "public", "schedule",
+  "open_in_new", "mail", "content_copy", "check", "close", "explore_off", "error",
+];
+
+export const iconNames = [
+  ...new Set([
+    ...CHROME_ICONS,
+    ...skills.map((s) => s.icon),
+    ...gallery.map((g) => g.icon),
+    contact.primary.icon,
+  ]),
+].sort();

@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import TopAppBar from "@/components/TopAppBar";
 import LiquidBackground from "@/components/LiquidBackground";
-import { profile, siteUrl, socials, skills, verification } from "@/lib/site";
+import { profile, siteUrl, socials, skills, verification, iconNames } from "@/lib/site";
 import "./globals.css";
 
 /* Runs before first paint so a stored theme never flashes. */
@@ -80,10 +80,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Supplies only the @font-face; .icon does the styling.
             display=block stops ligature names flashing as text. */}
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        {/* eslint-disable-next-line @next/next/google-font-display, @next/next/no-page-custom-font */}
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=block"
+          href={`https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=${iconNames.join(",")}&display=block`}
         />
         <script
           type="application/ld+json"

@@ -105,6 +105,11 @@ is `summary_large_image`, which is what makes an embed a wide card rather than a
 small square. Do not put `openGraph.images` back in the metadata - an explicit
 list overrides the generated card.
 
+**The icon font is subsetted.** Material Symbols is 362KB unsubsetted; the
+`icon_names` list in `lib/site.ts` brings it to 4KB. Content icons are derived
+from the skills and gallery config, so adding one cannot leave a glyph rendering
+as its own name - but a new *chrome* icon must be added to CHROME_ICONS by hand.
+
 **The background is a quarter-resolution canvas, blurred by CSS.** Four soft
 blobs drift and are nudged by the cursor. Drawing at a quarter of the viewport
 and letting a 72px blur hide the resolution costs almost nothing - it measures
