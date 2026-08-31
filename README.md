@@ -87,6 +87,18 @@ ended up out of step with the rest.
 bounding box up, so its mark renders 0.47 units high in a plain `0 0 24 24` box.
 Its viewBox is offset by exactly that. Check `getBBox()` before adding an icon.
 
+**There is no per-search-engine SEO.** Startpage and Ecosia serve Google's and
+Bing's results, and DuckDuckGo is largely Bing's index - so the engines worth
+thinking about are Google, Bing and Brave, and all three read the same standard
+signals. What actually helps is verifying ownership in Google Search Console and
+Bing Webmaster Tools; paste those codes into `verification` in `lib/site.ts`.
+
+**robots.txt blocks training crawlers, not search crawlers.** AI bots that fetch
+a page to answer a question about you (OAI-SearchBot, Claude-SearchBot and the
+user-initiated agents) are deliberately still allowed - blocking those removes
+the site from AI search results rather than out of training sets. None of it
+stops a scraper that does not identify itself.
+
 **The share card is generated, not a static file.** `app/opengraph-image.tsx`
 renders a 1200x630 PNG at build time and every route inherits it. `twitter.card`
 is `summary_large_image`, which is what makes an embed a wide card rather than a

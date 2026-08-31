@@ -11,6 +11,15 @@ export const siteUrl =
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : "http://localhost:3000");
 
+/* Paste the codes from Google Search Console and Bing Webmaster Tools here to
+   verify ownership. Bing's verification also covers DuckDuckGo and Ecosia,
+   which serve Bing's index rather than crawling separately. Leave blank and
+   no tag is emitted. */
+export const verification = {
+  google: "",
+  bing: "",
+};
+
 export const TIMEZONE = "America/Los_Angeles";
 export const TZ_LABEL = "Pacific Time";
 

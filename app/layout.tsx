@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import TopAppBar from "@/components/TopAppBar";
 import LiquidBackground from "@/components/LiquidBackground";
-import { profile, siteUrl } from "@/lib/site";
+import { profile, siteUrl, socials, skills, verification } from "@/lib/site";
 import "./globals.css";
 
 /* Runs before first paint, so a stored light theme is applied without the
@@ -36,14 +36,19 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: profile.name,
+    /* A bare name ranks for nothing. The default carries what the site is
+       actually about; inner pages still read "Gallery · EternalHell". */
+    default: `${profile.name} - Pixel Art, Minecraft Builds & Web Design`,
     template: `%s · ${profile.name}`,
   },
-  description: "Founder of Eterneon Studios. Socials, current time, and gallery.",
+  description:
+    "Pixel art, Minecraft builds and web design by EternalHell, founder of Eterneon Studios. Commissions open.",
+  alternates: { canonical: "/" },
   icons: { icon: profile.avatar },
   openGraph: {
     title: profile.name,
-    description: "Founder of Eterneon Studios.",
+    description:
+      "Pixel art, Minecraft builds and web design by EternalHell, founder of Eterneon Studios.",
     type: "website",
     siteName: profile.brand,
     url: siteUrl,
@@ -53,12 +58,28 @@ export const metadata: Metadata = {
   /* summary_large_image is what turns the embed into a wide card instead of
      a small square thumbnail. */
   twitter: { card: "summary_large_image", title: profile.name },
+  verification: {
+    ...(verification.google ? { google: verification.google } : {}),
+    ...(verification.bing ? { other: { "msvalidate.01": verification.bing } } : {}),
+  },
 };
 
 export const viewport: Viewport = {
   /* colorScheme is set in CSS instead, so it follows the chosen theme
      rather than being pinned to dark. */
   themeColor: "#141218",
+};
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  url: siteUrl,
+  image: `${siteUrl}${profile.avatar}`,
+  jobTitle: "Founder",
+  worksFor: { "@type": "Organization", name: profile.brand },
+  knowsAbout: skills.map((s) => s.name),
+  sameAs: socials.map((s) => s.href).filter(Boolean),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -79,6 +100,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=block"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
         />
       </head>
       <body>
