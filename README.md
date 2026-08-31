@@ -68,6 +68,19 @@ Each section tracks its own state, so one can be full while the other still show
 Icon names come from [Material Symbols](https://fonts.google.com/icons). Check a
 name at 20px before committing to it - plenty of them are illegible that small.
 
+## Toolchain ceiling
+
+Kept as current as the ecosystem allows. Two upgrades are blocked, both by
+`eslint-config-next@16.3.3`, not by anything in this project:
+
+- **TypeScript 7** - `typescript-eslint@8.68` declares `typescript <6.1.0` and
+  throws on load with TS 7. TS 6.0.3 is the newest that works.
+- **ESLint 10** - the bundled `eslint-plugin-react` still calls
+  `context.getFilename()`, removed in ESLint 10.
+
+Retry both when a newer `eslint-config-next` ships. `npm run lint` failing
+immediately on start is the symptom.
+
 ## Notes
 
 **Icons use our own `.icon` class, not Google's `.material-symbols-rounded`.**
