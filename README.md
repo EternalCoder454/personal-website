@@ -13,7 +13,8 @@ app/robots.ts           /robots.txt
 app/page.tsx            home - profile, socials, clock, experiences
 app/gallery/page.tsx    gallery - Pixel Art and Builds
 app/globals.css         M3 tokens + every component style
-components/             TopAppBar, ThemeToggle, Clock, Socials, Skills, Contact, Gallery
+components/             TopAppBar, ThemeToggle, Clock, Socials, Skills, Contact,
+                        Gallery, LiquidBackground
 lib/site.ts             all the content - edit this, not the components
 public/pfp.png          avatar
 public/gallery/         gallery images
@@ -85,6 +86,17 @@ ended up out of step with the rest.
 **Brand icon viewBoxes are measured, not assumed.** Reddit's antenna pushes its
 bounding box up, so its mark renders 0.47 units high in a plain `0 0 24 24` box.
 Its viewBox is offset by exactly that. Check `getBBox()` before adding an icon.
+
+**The background is a quarter-resolution canvas, blurred by CSS.** Four soft
+blobs drift and are nudged by the cursor. Drawing at a quarter of the viewport
+and letting a 72px blur hide the resolution costs almost nothing - it measures
+160fps - and it stops entirely when the tab is hidden or motion is reduced.
+
+**The intro is plain markup, not a client component.** It is in the first paint,
+so there is no flash of the page before it appears, and it dismisses through a
+CSS animation rather than JavaScript - a script failure cannot leave the site
+covered by it. The once-per-visit check rides along in the same inline script as
+the theme, so a repeat load never replays it.
 
 **Theme is dark by default, light is opt-in.** An inline script in the layout
 applies a stored choice before first paint, so light never flashes dark first.

@@ -104,12 +104,16 @@ html {
   scroll-behavior: smooth;
 }
 
+html {
+  background: var(--md-surface);
+  transition: background-color var(--md-duration-medium) var(--md-easing-standard);
+}
+
 body {
   min-height: 100dvh;
-  background: var(--md-surface);
+  background: transparent;
   color: var(--md-on-surface);
-  transition: background-color var(--md-duration-medium) var(--md-easing-standard),
-              color var(--md-duration-medium) var(--md-easing-standard);
+  transition: color var(--md-duration-medium) var(--md-easing-standard);
   font-family: var(--font-roboto), Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -1203,4 +1207,74 @@ body {
   /* Slack goes into the gutter between cards, not inside one. Stretching the
      last card instead left an obvious dead band under the final row. */
   .column { justify-content: space-between; }
+}
+
+/* ==================================================================
+   Liquid background
+   Quarter-resolution canvas, blurred by CSS. The blur is what makes
+   the low resolution invisible and the shapes read as fluid.
+   ================================================================== */
+
+.liquid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  filter: blur(72px) saturate(130%);
+  opacity: 0.55;
+  transition: opacity var(--md-duration-medium) var(--md-easing-standard);
+}
+
+/* Far lighter on a light surface, where the same strength would look muddy. */
+:root[data-theme="light"] .liquid {
+  opacity: 0.28;
+  filter: blur(80px) saturate(120%);
+}
+
+/* ==================================================================
+   Intro
+   ================================================================== */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: var(--md-surface);
+  animation: intro-out 420ms var(--md-easing-standard) 780ms forwards;
+}
+
+.intro__mark {
+  font-size: calc(40px * var(--ui));
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--md-on-surface);
+  animation: intro-mark 620ms var(--md-easing-emphasized) both;
+}
+
+@keyframes intro-mark {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+}
+
+/* visibility, not just opacity, so it stops catching clicks once gone */
+@keyframes intro-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* Already played this visit, or motion is unwanted - skip it entirely. */
+:root[data-intro="seen"] .intro { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro { display: none; }
+  .liquid { display: none; }
 }

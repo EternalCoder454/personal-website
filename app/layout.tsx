@@ -3,6 +3,7 @@ import { Roboto } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import TopAppBar from "@/components/TopAppBar";
+import LiquidBackground from "@/components/LiquidBackground";
 import { profile, siteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -10,6 +11,11 @@ import "./globals.css";
    page flashing dark first. No stored value means dark, which is what bare
    :root already is. */
 const THEME_INIT = `
+try {
+  /* Play the intro once per visit, not on every reload. */
+  if (sessionStorage.getItem("intro")) document.documentElement.dataset.intro = "seen";
+  else sessionStorage.setItem("intro", "1");
+} catch (e) {}
 try {
   var t = localStorage.getItem("theme");
   if (t === "light" || t === "dark") {
@@ -71,6 +77,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        {/* Plain markup, not a client component: it is in the first paint and
+            its dismissal is a CSS animation, so a JS failure cannot leave the
+            site covered by it. */}
+        <div className="intro" aria-hidden="true">
+          <span className="intro__mark">{profile.brand}</span>
+        </div>
+
+        <LiquidBackground />
+
         <a className="skip-link" href="#main">
           Skip to content
         </a>
