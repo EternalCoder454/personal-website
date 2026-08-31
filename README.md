@@ -87,6 +87,12 @@ ended up out of step with the rest.
 bounding box up, so its mark renders 0.47 units high in a plain `0 0 24 24` box.
 Its viewBox is offset by exactly that. Check `getBBox()` before adding an icon.
 
+**The share card is generated, not a static file.** `app/opengraph-image.tsx`
+renders a 1200x630 PNG at build time and every route inherits it. `twitter.card`
+is `summary_large_image`, which is what makes an embed a wide card rather than a
+small square. Do not put `openGraph.images` back in the metadata - an explicit
+list overrides the generated card.
+
 **The background is a quarter-resolution canvas, blurred by CSS.** Four soft
 blobs drift and are nudged by the cursor. Drawing at a quarter of the viewport
 and letting a 72px blur hide the resolution costs almost nothing - it measures

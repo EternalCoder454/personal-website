@@ -45,9 +45,14 @@ export const metadata: Metadata = {
     title: profile.name,
     description: "Founder of Eterneon Studios.",
     type: "website",
-    images: [profile.avatar],
+    siteName: profile.brand,
+    url: siteUrl,
+    /* No images here on purpose: app/opengraph-image.tsx supplies it, and an
+       explicit list would override the generated card. */
   },
-  twitter: { card: "summary" },
+  /* summary_large_image is what turns the embed into a wide card instead of
+     a small square thumbnail. */
+  twitter: { card: "summary_large_image", title: profile.name },
 };
 
 export const viewport: Viewport = {
