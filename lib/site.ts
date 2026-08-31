@@ -58,12 +58,6 @@ export const socials: Social[] = [
     href: "https://www.youtube.com/@eternalhellttv",
   },
   {
-    name: "Discord Server",
-    handle: "discord.gg/Xaz3QQA8fg",
-    icon: "discord",
-    href: "https://discord.gg/Xaz3QQA8fg",
-  },
-  {
     name: "Reddit",
     handle: "u/EternalHellTTV",
     icon: "reddit",
