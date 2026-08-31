@@ -1278,3 +1278,13 @@ body {
   .intro { display: none; }
   .liquid { display: none; }
 }
+
+/* The two-column layout only exists from here up, and so does the need to
+   balance it. A hero large enough to level the columns on desktop would eat
+   a phone screen, so the bump is scoped to where it matters. */
+@media (min-width: 905px) {
+  .hero__avatar {
+    width: calc(238px * var(--ui));
+    height: calc(238px * var(--ui));
+  }
+}

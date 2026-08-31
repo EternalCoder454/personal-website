@@ -97,7 +97,7 @@ export const contact = {
     icon: "forum",
   },
   /* Add an address here to show an email button as well, e.g. "me@example.com". */
-  email: "",
+  email: "eternalhell@eterneon.net",
 };
 
 /* Drop an image in public/gallery/<folder>/ and add a line to pieces. */
