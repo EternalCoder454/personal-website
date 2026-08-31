@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-/* Shared shell for the 404 and error screens. */
+/* Shell for the 404 and error screens. */
 export default function Message({
   icon,
   title,

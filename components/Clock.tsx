@@ -27,14 +27,8 @@ function zoneAbbr(now: Date) {
   return zoneFmt.formatToParts(now).find((p) => p.type === "timeZoneName")?.value ?? "";
 }
 
-/* One timer for every consumer.
- *
- * setInterval(1000) drifts: it fires 1000ms after the last callback, not on
- * the second boundary, so the display eventually skips or repeats a second.
- * Each tick is instead scheduled to land just after the next whole second,
- * which keeps the digits changing exactly when they should. Sharing the timer
- * also keeps the clock and the timezone chip from disagreeing by a second.
- */
+/* One shared timer aligned to the next whole second. setInterval(1000)
+   drifts and eventually skips one. */
 const listeners = new Set<() => void>();
 let timer: ReturnType<typeof setTimeout> | undefined;
 
@@ -58,13 +52,10 @@ function subscribe(onChange: () => void) {
   };
 }
 
-/* Whole seconds, so the snapshot is stable between reads within a tick -
-   returning a fresh Date each call would loop forever. */
+/* Stable within a tick; a fresh Date each call would loop forever. */
 const getSnapshot = () => Math.floor(Date.now() / 1000);
 
-/* Null on the server, so the first paint is the placeholder and hydration
-   matches. useSyncExternalStore is the right primitive for reading a value
-   that changes outside React. */
+/* Null on the server so hydration matches the placeholder. */
 const getServerSnapshot = () => null;
 
 function useNow() {

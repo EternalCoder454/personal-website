@@ -2,19 +2,16 @@
 
 /* Vercel sets VERCEL_PROJECT_PRODUCTION_URL in production. Used for
    metadataBase, the sitemap, and robots.txt. */
-/* NEXT_PUBLIC_SITE_URL wins, because VERCEL_PROJECT_PRODUCTION_URL can resolve
-   to the *.vercel.app domain rather than a custom one - which would put the
-   wrong host in the sitemap and every og:image. */
+/* NEXT_PUBLIC_SITE_URL wins: VERCEL_PROJECT_PRODUCTION_URL can resolve to the
+   *.vercel.app domain. */
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ||
   (process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : "http://localhost:3000");
 
-/* Paste the codes from Google Search Console and Bing Webmaster Tools here to
-   verify ownership. Bing's verification also covers DuckDuckGo and Ecosia,
-   which serve Bing's index rather than crawling separately. Leave blank and
-   no tag is emitted. */
+/* Google Search Console and Bing Webmaster codes. Bing also covers DuckDuckGo
+   and Ecosia. Blank emits no tag. */
 export const verification = {
   google: "",
   bing: "",
@@ -38,9 +35,7 @@ type SocialBase = {
   icon: "bluesky" | "discord" | "reddit" | "youtube";
 };
 
-/* Either a link or a copy-to-clipboard row, never both and never neither.
-   As two optional fields this compiled fine but allowed an entry with no
-   href, which renders an anchor nothing can click or focus. */
+/* A link or a copy row, never both and never neither. */
 export type Social =
   | (SocialBase & { href: string; copy?: never })
   | (SocialBase & { copy: string; href?: never });
@@ -48,8 +43,7 @@ export type Social =
 export type CopySocial = Extract<Social, { copy: string }>;
 export type LinkSocial = Extract<Social, { href: string }>;
 
-/* A plain truthiness check narrows the copy branch but leaves the link branch
-   as the full union, so the choice is spelled out as a predicate. */
+/* Truthiness narrows only the copy branch, hence the predicate. */
 export const isCopySocial = (social: Social): social is CopySocial =>
   social.copy !== undefined;
 
@@ -74,8 +68,7 @@ export const socials: Social[] = [
   },
 ];
 
-/* Levels run 1-10. The band name is derived, so the number is the only
-   thing to keep up to date. */
+/* Levels run 1-10; the band name is derived. */
 const BANDS = [
   { upTo: 2, name: "Beginner" },
   { upTo: 4, name: "Intermediate" },

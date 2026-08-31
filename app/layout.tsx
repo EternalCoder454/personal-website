@@ -7,12 +7,9 @@ import LiquidBackground from "@/components/LiquidBackground";
 import { profile, siteUrl, socials, skills, verification } from "@/lib/site";
 import "./globals.css";
 
-/* Runs before first paint, so a stored light theme is applied without the
-   page flashing dark first. No stored value means dark, which is what bare
-   :root already is. */
+/* Runs before first paint so a stored theme never flashes. */
 const THEME_INIT = `
 try {
-  /* Play the intro once per visit, not on every reload. */
   if (sessionStorage.getItem("intro")) document.documentElement.dataset.intro = "seen";
   else sessionStorage.setItem("intro", "1");
 } catch (e) {}
@@ -36,8 +33,6 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    /* A bare name ranks for nothing. The default carries what the site is
-       actually about; inner pages still read "Gallery · EternalHell". */
     default: `${profile.name} - Pixel Art, Minecraft Builds & Web Design`,
     template: `%s · ${profile.name}`,
   },
@@ -52,11 +47,8 @@ export const metadata: Metadata = {
     type: "website",
     siteName: profile.brand,
     url: siteUrl,
-    /* No images here on purpose: app/opengraph-image.tsx supplies it, and an
-       explicit list would override the generated card. */
+    /* opengraph-image.tsx supplies it; an explicit list would override. */
   },
-  /* summary_large_image is what turns the embed into a wide card instead of
-     a small square thumbnail. */
   twitter: { card: "summary_large_image", title: profile.name },
   verification: {
     ...(verification.google ? { google: verification.google } : {}),
@@ -65,8 +57,6 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  /* colorScheme is set in CSS instead, so it follows the chosen theme
-     rather than being pinned to dark. */
   themeColor: "#141218",
 };
 
@@ -87,14 +77,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={roboto.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
-        {/* next/font/google has no icon fonts, so this stays a plain link. It
-            only supplies the @font-face - our own .icon class does the styling,
-            so their stylesheet can never override our layout.
-
-            display=block is deliberate for an icon font: with swap, the
-            ligature names ("castle", "grid_on") flash as literal text before
-            the font arrives. no-page-custom-font is a pages-router rule and
-            does not apply to a link in an App Router layout. */}
+        {/* Supplies only the @font-face; .icon does the styling.
+            display=block stops ligature names flashing as text. */}
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         {/* eslint-disable-next-line @next/next/google-font-display, @next/next/no-page-custom-font */}
         <link
@@ -107,9 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        {/* Plain markup, not a client component: it is in the first paint and
-            its dismissal is a CSS animation, so a JS failure cannot leave the
-            site covered by it. */}
+        {/* CSS-dismissed, so a JS failure cannot leave it stuck. */}
         <div className="intro" aria-hidden="true">
           <span className="intro__mark">{profile.brand}</span>
         </div>

@@ -1,13 +1,7 @@
 "use client";
 
-/* No React state on purpose.
- *
- * The theme is already applied to <html> by the inline script in the layout,
- * before first paint. Mirroring it in state would mean the server rendering
- * one icon and the client swapping to another on hydration. Reading and
- * writing the DOM directly, and letting CSS pick the icon from the same
- * data-theme attribute, keeps the button correct at every moment.
- */
+/* No React state: the inline script sets data-theme before paint, and
+   mirroring it would swap the icon on hydration. CSS picks the icon. */
 const THEME_COLOR = { dark: "#141218", light: "#fef7ff" };
 
 export default function ThemeToggle() {
@@ -23,7 +17,7 @@ export default function ThemeToggle() {
     try {
       localStorage.setItem("theme", next);
     } catch {
-      /* private mode, or storage blocked - the toggle still works for this visit */
+      /* storage blocked; the toggle still works for this visit */
     }
   }
 

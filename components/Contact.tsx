@@ -3,10 +3,8 @@
 import { contact } from "@/lib/site";
 import { Ripples, useRipples } from "./Ripple";
 
-/* Built from the same list row as Socials rather than a filled button.
-   A saturated full-width button was the only block of solid colour on the
-   page and sat at 42px against rows of 67-76px, which is what made this
-   card read as belonging to a different design. */
+/* Same list row as Socials. A filled button was the only solid-colour block
+   on the page and read as a different design. */
 function ActionRow({
   icon,
   headline,

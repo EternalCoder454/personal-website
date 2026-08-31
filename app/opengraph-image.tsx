@@ -3,14 +3,12 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { profile } from "@/lib/site";
 
-/* Generated once at build time and served as a static PNG. Applies to every
-   route that does not define its own. */
+/* Built once, inherited by every route. */
 export const alt = `${profile.name} - ${profile.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-/* Same framing as the site's avatar: a 384px window of the 450px render
-   centred on (225, 180), scaled to the 260px circle used here. */
+/* Same framing as the site avatar: a 384px window centred on (225, 180). */
 const CIRCLE = 260;
 const SCALE = CIRCLE / 384;
 const IMG = Math.round(450 * SCALE);
@@ -36,9 +34,7 @@ export default async function OpengraphImage() {
             "radial-gradient(circle at 22% 28%, #3b2a63 0%, rgba(59,42,99,0) 55%), radial-gradient(circle at 80% 76%, #4f378b 0%, rgba(79,55,139,0) 55%)",
         }}
       >
-        {/* A background rather than an <img>: Satori does not clip absolutely
-            positioned children with overflow:hidden, so the render spilled out
-            of the circle. A background is always clipped to the border box. */}
+        {/* Background, not <img>: Satori does not clip absolute children. */}
         <div
           style={{
             display: "flex",

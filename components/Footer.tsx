@@ -1,6 +1,6 @@
 import { profile } from "@/lib/site";
 
-/* Built once per deploy, which is when the year is read. */
+/* Read at build time. */
 const year = new Date().getFullYear();
 
 export default function Footer() {

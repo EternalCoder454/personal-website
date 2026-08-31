@@ -11,10 +11,8 @@ const PATHS: Record<Social["icon"], string> = {
     "M24 11.78a2.6 2.6 0 0 0-4.4-1.86 12.78 12.78 0 0 0-6.96-2.22l1.18-5.56 3.86.82a1.85 1.85 0 1 0 .2-1.1L13.5.94a.55.55 0 0 0-.65.42l-1.32 6.2a12.8 12.8 0 0 0-7.06 2.22 2.6 2.6 0 1 0-2.87 4.26 5.1 5.1 0 0 0-.06.8c0 4.06 4.73 7.35 10.55 7.35s10.55-3.29 10.55-7.35a5.1 5.1 0 0 0-.06-.79A2.6 2.6 0 0 0 24 11.78zM6.03 13.44a1.85 1.85 0 1 1 3.7 0 1.85 1.85 0 0 1-3.7 0zm10.35 4.9c-1.27 1.26-3.68 1.36-4.38 1.36-.71 0-3.12-.1-4.38-1.37a.48.48 0 0 1 .68-.68c.8.8 2.5 1.08 3.7 1.08 1.2 0 2.91-.28 3.7-1.09a.48.48 0 1 1 .68.7zm-.32-3.04a1.85 1.85 0 1 1 0-3.7 1.85 1.85 0 0 1 0 3.7z",
 };
 
-/* Measured ink centres, not guesses. Three of these sit dead centre in a
-   0 0 24 24 box; Reddit's antenna pushes its bounding box up so the mark
-   itself lands 0.47 units high, which is visible on a dense display. Its
-   viewBox is shifted by exactly that. */
+/* Reddit's antenna pushes its bbox up, so the mark sits 0.47 units high.
+   Measure with getBBox before adding an icon. */
 const VIEW_BOX: Record<Social["icon"], string> = {
   bluesky: "0 0 24 24",
   discord: "0 0 24 24",

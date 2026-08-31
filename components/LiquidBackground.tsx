@@ -2,25 +2,18 @@
 
 import { useEffect, useRef } from "react";
 
-/* A few soft blobs drifting behind the page, nudged by the cursor.
- *
- * Drawn at a quarter of the viewport size and blurred by CSS, which is what
- * keeps it cheap: the canvas is a fraction of the pixels, and the blur hides
- * the low resolution entirely. No WebGL, no per-pixel work.
- */
+/* Soft blobs nudged by the cursor. Drawn at a quarter of viewport size and
+   blurred by CSS, which hides the low resolution and keeps it cheap. */
 
 type Blob = {
-  /* where it orbits around, 0-1 of the viewport */
   hx: number;
   hy: number;
-  /* orbit radius and speed */
   rx: number;
   ry: number;
   speed: number;
   phase: number;
   size: number;
   hue: string;
-  /* current position, eased towards the target each frame */
   x: number;
   y: number;
 };
@@ -50,8 +43,7 @@ export default function LiquidBackground() {
     let frame = 0;
     let running = false;
 
-    /* Eased so the blobs lag behind the cursor rather than snapping to it,
-       which is most of what makes it read as liquid instead of attached. */
+    /* Eased, so the blobs lag behind the cursor rather than snapping. */
     const pointer = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, strength: 0 };
 
     const blobs: Blob[] = BLOBS.map((b) => ({ ...b, x: b.hx, y: b.hy }));
@@ -74,7 +66,6 @@ export default function LiquidBackground() {
         const targetX = b.hx + Math.sin(t * b.speed + b.phase) * b.rx;
         const targetY = b.hy + Math.cos(t * b.speed * 0.9 + b.phase) * b.ry;
 
-        /* Pushed away from the cursor, falling off with distance. */
         const dx = targetX - pointer.x;
         const dy = targetY - pointer.y;
         const dist = Math.hypot(dx, dy) || 0.0001;
@@ -117,7 +108,6 @@ export default function LiquidBackground() {
       cancelAnimationFrame(frame);
     }
 
-    /* Nothing runs while the tab is in the background. */
     function onVisibility() {
       if (document.hidden) stop();
       else start();

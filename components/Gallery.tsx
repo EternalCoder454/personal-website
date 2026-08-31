@@ -6,8 +6,7 @@ import { gallery, type Piece } from "@/lib/site";
 /* Plain <img>, not next/image: these are pixel art, and the image optimiser
    resamples, which blurs exactly the edges that make them what they are. */
 
-/* Carried from the thumbnail, which has already loaded, so the lightbox can
-   reserve the right box before the full image arrives instead of jumping. */
+/* From the loaded thumbnail, so the lightbox reserves the right box. */
 type Opened = Piece & { width: number; height: number };
 
 function EmptyState({ icon, text }: { icon: string; text: string }) {
@@ -29,10 +28,7 @@ function Lightbox({ piece, onClose }: { piece: Opened; onClose: () => void }) {
 
   const dismiss = useCallback(() => setClosing(true), []);
 
-  /* animationend drives the unmount so the exit is never cut short, but a
-     dialog must not depend on an event that may never arrive - animations are
-     paused in background tabs and can be disabled outright. This closes it
-     regardless once the exit has had long enough. */
+  /* Safety net: animationend never fires in a background tab. */
   useEffect(() => {
     if (!closing) return;
     const id = setTimeout(onClose, 400);
@@ -48,8 +44,7 @@ function Lightbox({ piece, onClose }: { piece: Opened; onClose: () => void }) {
         return;
       }
 
-      /* Without this, Tab walks straight out of the dialog and into the page
-         behind it, which is still there and still scrollable. */
+      /* Without this, Tab walks out of the dialog. */
       if (event.key !== "Tab") return;
       const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
         'button, [href], input, [tabindex]:not([tabindex="-1"])'
@@ -71,8 +66,7 @@ function Lightbox({ piece, onClose }: { piece: Opened; onClose: () => void }) {
 
     document.addEventListener("keydown", onKey);
 
-    /* Locking the body removes the scrollbar, which shifts the whole page
-       left by its width. Padding it back keeps everything still. */
+    /* Pad back the scrollbar width so the page does not shift. */
     const { body, documentElement } = document;
     const gap = window.innerWidth - documentElement.clientWidth;
     const prevOverflow = body.style.overflow;
@@ -95,8 +89,6 @@ function Lightbox({ piece, onClose }: { piece: Opened; onClose: () => void }) {
       aria-modal="true"
       aria-label={piece.caption || "Image"}
     >
-      {/* The scrim animates on both enter and exit, so its own animationend is
-          the signal that the exit has finished. */}
       <div
         className="lightbox__scrim"
         onClick={dismiss}
