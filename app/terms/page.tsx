@@ -99,7 +99,7 @@ export default function TermsPage() {
 
       <Section title="Advice, not counsel">
         <Para>
-          The Legal and Finance heads produce advice for a person to weigh. They are not a solicitor
+          The Legal and Finance heads produce advice for a person to weigh. They are not a lawyer
           and not an accountant, and we say so inside the product as well as here.
         </Para>
       </Section>

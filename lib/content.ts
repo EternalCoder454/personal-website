@@ -90,7 +90,7 @@ export const straight = [
   },
   {
     title: "It's advice, not counsel",
-    body: "The Legal and Finance heads help you think. They don't replace a solicitor or an accountant, and we say so inside the product too.",
+    body: "The Legal and Finance heads help you think. They do not replace a lawyer or an accountant, and we say so inside the product too.",
   },
 ];
 
