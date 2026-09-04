@@ -32,8 +32,13 @@ const RESEND_ENDPOINT = "https://api.resend.com/emails";
 async function viaResend(lead: Lead, apiKey: string): Promise<Delivery> {
   /* The from address has to sit on a domain verified in Resend. The
      panel already sends through eterneon.net, so the same key and the
-     same verified domain work here with nothing new to set up. */
-  const from = process.env.RESEND_FROM || "Eterneon beta <beta@eterneon.net>";
+     same verified domain work here with nothing new to set up.
+
+     It also points at a real mailbox on purpose. Resend will happily
+     send from an address nobody can receive, but bounces come back to
+     the From regardless of reply-to, and a From that goes nowhere means
+     a failed delivery is a failure nobody hears about. */
+  const from = process.env.RESEND_FROM || "Eterneon <hello@eterneon.net>";
   const to = process.env.WAITLIST_TO || site.contactEmail;
 
   try {

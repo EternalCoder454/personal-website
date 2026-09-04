@@ -29,7 +29,7 @@ Copy `.env.example` to `.env.local` and fill it in.
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | For production | The canonical origin. Set it explicitly: the Vercel-provided variable can resolve to a preview domain, which would put the wrong host in every canonical link, sitemap entry and share card. It is also what makes the logo in the notification email resolve, because an email needs an absolute URL. |
 | `RESEND_API_KEY` | For production | Emails each beta request to you. Same key and verified domain the panel already uses. |
-| `RESEND_FROM` | No | Sender. Must be on a domain verified in Resend. |
+| `RESEND_FROM` | No | Sender. Must be on a verified domain, and should be an address that can receive: bounces come back to the From. |
 | `WAITLIST_TO` | No | Where the notification lands. Defaults to the contact address. |
 | `WAITLIST_WEBHOOK_URL` | No | Alternative to Resend: POST the JSON anywhere. Resend wins if both are set. |
 | `NEXT_PUBLIC_TOUR_VIDEO_URL` | No | The product tour. Empty until there is a film. |
@@ -325,7 +325,8 @@ user data. It is written down rather than left to be found.
 - [ ] Point `NEXT_PUBLIC_SITE_URL` at the real domain.
 - [ ] Set `RESEND_API_KEY` on Vercel (the panel key works) and send one test
       submission through it. Check it arrives and that reply-to is the requester.
-- [ ] Confirm `eternalhell@eterneon.net` receives mail. It is the contact and privacy address on every page.
+- [ ] Confirm `hello@eterneon.net` receives mail. It is the contact address, the
+      privacy address, and the sender on the notification email.
 - [ ] Confirm the fifth-seat rule. `lib/content.ts` states that a beta tester's
       fifth seat and beyond costs $3.99 a month each, which is inferred from
       "up to three extra seats at no cost" rather than stated. If the intent was

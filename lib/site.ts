@@ -32,7 +32,7 @@ export const legal = {
   companyNumber: "",
   address: "",
   jurisdiction: "the State of California, United States",
-  privacyEmail: "eternalhell@eterneon.net",
+  privacyEmail: "hello@eterneon.net",
   lastUpdated: "3 September 2026",
 } as const;
 
@@ -136,7 +136,7 @@ export const site = {
   description:
     "Marketing, Finance, Legal, Operations and four more, as AI department heads in one private workspace. Free for life for beta testers. No credit card.",
   appUrl: "https://business.eterneon.net",
-  contactEmail: "eternalhell@eterneon.net",
+  contactEmail: "hello@eterneon.net",
   /* The kit tagline, from the horizontal lockup. */
   tagline: "Systems for small business",
 } as const;
