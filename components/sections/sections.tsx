@@ -93,11 +93,14 @@ export function Hero() {
         {/* Axis gaps only. A `gap-4` shorthand alongside a responsive
             `gap-x` resolves by stylesheet order rather than by intent,
             and the items ran together with no space at all. */}
-        <StaggerItem className="mt-16 grid max-w-[64rem] gap-x-12 gap-y-4 border-t border-outline-variant pt-7 sm:grid-cols-3">
+        {/* Short enough to sit on one line each in a third of the column.
+            The longer versions wrapped, which turned a scannable row into
+            three ragged blocks. */}
+        <StaggerItem className="mt-12 grid max-w-[52rem] gap-x-10 gap-y-3 border-t border-outline-variant pt-7 sm:grid-cols-3">
           {[
-            "Free for life if you test with us",
+            "Free for life for testers",
             "No credit card, ever",
-            "Your API key never leaves your workspace",
+            "Your API key stays yours",
           ].map((item) => (
             <p key={item} className="t-body-sm text-on-surface-variant">
               {item}

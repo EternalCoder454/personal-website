@@ -105,7 +105,7 @@ const structuredData = {
           priceCurrency: "USD",
           name: "Private beta",
           description:
-            "Free during the beta, and free for life for every workspace that tests with us, with up to four seats at no cost.",
+            "Free during the beta, and free for life for every workspace that tests with us, with up to three seats at no cost.",
           availability: "https://schema.org/PreOrder",
         },
         {

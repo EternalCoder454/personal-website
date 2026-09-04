@@ -121,10 +121,13 @@ export function Cta({ size = "large" }: { size?: "large" | "compact" }) {
       ) : null}
 
       {/* The notice belongs at the point of collection, not only in a
-          footer somebody has to go looking for. */}
+          footer somebody has to go looking for.
+
+          It used to open with "No credit card, now or ever", which the
+          trust strip 200px below already says. One line, one claim, and
+          the deletion detail lives behind the link where it belongs. */}
       <p className="t-body-sm mt-4 text-pretty text-on-surface-muted">
-        No credit card, now or ever. We use your address to send the invitation and nothing else,
-        and you can have it deleted by asking.{" "}
+        We only use your address to send your invitation.{" "}
         <Link
           href="/privacy"
           className="underline decoration-outline underline-offset-4 transition-colors duration-100 hover:text-primary hover:decoration-primary"

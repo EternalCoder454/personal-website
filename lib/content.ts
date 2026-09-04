@@ -44,16 +44,16 @@ export const capabilities = [
 
 export const beta = {
   headline: "Test it with us and you keep it. For good.",
-  body: "You pay nothing during the beta. When we launch, every workspace that tested with us stays free for life, with four seats at no cost.",
+  body: "You pay nothing during the beta. When we launch, every workspace that tested with us stays free for life, with three seats at no cost.",
   anchor: "That's the $9.99 a month, and the $3.99 a seat, that everyone else will pay.",
   caveat: "Model usage is the one exception, and always was. Your key is yours, and your provider bills you directly.",
 };
 
 /* amount and decimals drive the count-up. */
 export const costs = [
-  { amount: 0, decimals: 0, label: "Beta testers, for life. Four seats included." },
+  { amount: 0, decimals: 0, label: "Beta testers, for life. Three seats included." },
   { amount: 9.99, decimals: 2, label: "A month at launch, for everyone else." },
-  { amount: 3.99, decimals: 2, label: "Each extra seat, past the four you keep." },
+  { amount: 3.99, decimals: 2, label: "Each extra seat, past the three you keep." },
 ];
 
 export const trust = [
@@ -97,7 +97,7 @@ export const straight = [
 export const faqs = [
   {
     q: "What does the beta cost?",
-    a: "Nothing, now or later. Test with us and your workspace stays free for life with four seats. A fifth seat and beyond is $3.99 a month each, same as everyone. No credit card at any point in the beta, and when there is eventually something to pay, Stripe handles it and your card details never reach us.",
+    a: "Nothing, now or later. Test with us and your workspace stays free for life with three seats. A fourth seat and beyond is $3.99 a month each, same as everyone. No credit card at any point in the beta, and when there is eventually something to pay, Stripe handles it and your card details never reach us.",
   },
   {
     q: "Free for life is a big claim. What's the catch?",

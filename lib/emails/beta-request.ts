@@ -112,7 +112,7 @@ export function betaRequestEmail(lead: Lead) {
     {
       n: 3,
       title: "They keep it",
-      body: "A beta workspace stays free for life, with four seats at no cost.",
+      body: "A beta workspace stays free for life, with three seats at no cost.",
     },
   ];
 
@@ -221,7 +221,7 @@ export function betaRequestEmail(lead: Lead) {
     `What happens next`,
     `1. Reply to invite them. This email replies straight to them.`,
     `2. Add them to a workspace. Their address is what grants access.`,
-    `3. They keep it. A beta workspace stays free for life, with four seats.`,
+    `3. They keep it. A beta workspace stays free for life, with three seats.`,
     ``,
     `You are getting this because somebody submitted the beta form on`,
     `eterneon.net. Nothing has been sent to them and no account exists yet.`,

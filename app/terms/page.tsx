@@ -46,7 +46,7 @@ export default function TermsPage() {
       <Section title="What free for life means">
         <Para>
           If your workspace takes part in the beta, it keeps access to the panel at no charge for as
-          long as Eterneon runs it, with up to four seats included. A fifth seat and beyond is
+          long as Eterneon runs it, with up to three seats included. A fourth seat and beyond is
           charged at the standard rate. The offer attaches to the workspace rather than to a person,
           so it survives you adding and removing colleagues.
         </Para>
@@ -68,8 +68,8 @@ export default function TermsPage() {
 
       <Section title="Paying, when there is anything to pay">
         <Para>
-          Nothing is charged during the beta, and beta workspaces keep four seats free for life. If
-          you ever do owe us something, a fifth seat or beyond, billing is handled by Stripe. Card
+          Nothing is charged during the beta, and beta workspaces keep three seats free for life. If
+          you ever do owe us something, a fourth seat or beyond, billing is handled by Stripe. Card
           details go to Stripe and never reach us. You can cancel at any time, and cancelling does
           not take away the free seats the beta earned you.
         </Para>
