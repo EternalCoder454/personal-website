@@ -27,7 +27,7 @@ Copy `.env.example` to `.env.local` and fill it in.
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | For production | The canonical origin. Set it explicitly: the Vercel-provided variable can resolve to a preview domain, which would put the wrong host in every canonical link, sitemap entry and share card. |
+| `NEXT_PUBLIC_SITE_URL` | For production | The canonical origin. Set it explicitly: the Vercel-provided variable can resolve to a preview domain, which would put the wrong host in every canonical link, sitemap entry and share card. It is also what makes the logo in the notification email resolve, because an email needs an absolute URL. |
 | `RESEND_API_KEY` | For production | Emails each beta request to you. Same key and verified domain the panel already uses. |
 | `RESEND_FROM` | No | Sender. Must be on a domain verified in Resend. |
 | `WAITLIST_TO` | No | Where the notification lands. Defaults to the contact address. |
@@ -44,10 +44,24 @@ hands it to `lib/deliver.ts`, which tries two things in order:
 
 1. **Resend**, if `RESEND_API_KEY` is set. Emails you the address with the
    sender set to `RESEND_FROM` and **reply-to set to the person who asked**, so
-   answering the invitation is one reply rather than a copy and paste. The body
-   is plain text, which has no escaping to get wrong.
+   answering the invitation is one reply rather than a copy and paste. HTML and
+   a plain text alternative are both sent.
 2. **A webhook**, if `WAITLIST_WEBHOOK_URL` is set. Posts
    `{ email, receivedAt, source }` to anything that accepts a POST.
+
+The email itself is `lib/emails/beta-request.ts`, built to match the invitation
+the panel sends. Tables and inline styles throughout, because Outlook renders
+with Word's engine and drops flex, grid and stylesheets. The mark is a hosted
+PNG rather than an SVG or a data URI, both of which Gmail strips, which is why
+it needs `NEXT_PUBLIC_SITE_URL` to be a real https origin. Without one it falls
+back to initials rather than shipping a broken image. The teal square behind it
+is a cell background, so a client that blocks images still shows a brand block
+rather than a hole.
+
+The address is escaped before it reaches the markup. The endpoint's validator
+only rules out whitespace and a missing `@`, so it accepts `<`, `>`, `&` and
+`"`, and an address like `a<script>...@evil.com` would otherwise land in the
+body verbatim.
 
 Resend wins when both are set. With neither, the form logs in development and
 returns a **503 in production** telling the visitor to email instead. It fails

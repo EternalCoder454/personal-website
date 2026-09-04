@@ -1,4 +1,5 @@
 import type { Lead } from "@/lib/deliver";
+import { siteUrl } from "@/lib/site";
 
 /**
  * The email that lands when somebody asks for beta access.
@@ -36,6 +37,24 @@ const teal = "#156d7f";
 const hairline = "#e3e7e9";
 const panel = "#f4f6f7";
 
+/**
+ * The mark, as a hosted PNG.
+ *
+ * PNG rather than SVG because Gmail strips SVG entirely, and hosted
+ * rather than a data URI because Gmail strips those too. That means an
+ * absolute, publicly reachable URL is the only option that works.
+ *
+ * Which is why this returns null unless the site URL is a real https
+ * origin. With NEXT_PUBLIC_SITE_URL unset it falls back to localhost,
+ * and every email would carry an image nobody can load. Falling back to
+ * the initials keeps the block looking deliberate instead of broken.
+ */
+function markUrl(): string | null {
+  return siteUrl.startsWith("https://")
+    ? `${siteUrl}/brand/eterneon-mark-email-78.png`
+    : null;
+}
+
 function formatWhen(iso: string): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return iso;
@@ -70,6 +89,14 @@ export function betaRequestEmail(lead: Lead) {
   const mailto = `mailto:${encodeURIComponent(lead.email)}?subject=${encodeURIComponent(
     "Your Eterneon beta invitation",
   )}`;
+
+  /* Explicit width and height, and display:block so Outlook does not
+     leave a baseline gap under it. The alt is what shows when images are
+     blocked, sitting on the teal square. */
+  const url = markUrl();
+  const mark = url
+    ? `<img src="${url}" width="26" height="26" alt="Eterneon" style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;" />`
+    : "ET";
 
   const rows: Row[] = [
     {
@@ -113,9 +140,12 @@ export function betaRequestEmail(lead: Lead) {
                 <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                   <tr>
                     <td style="width:44px;vertical-align:middle;">
+                      <!-- The teal square is a cell background, not part
+                           of the image, so a client that blocks images
+                           still shows the brand block rather than a hole. -->
                       <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:44px;height:44px;background-color:${teal};border-radius:10px;">
                         <tr>
-                          <td align="center" style="font:700 15px/44px -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;color:#ffffff;letter-spacing:0.02em;">ET</td>
+                          <td align="center" height="44" style="height:44px;text-align:center;vertical-align:middle;font:700 15px/44px -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;color:#ffffff;letter-spacing:0.02em;">${mark}</td>
                         </tr>
                       </table>
                     </td>
