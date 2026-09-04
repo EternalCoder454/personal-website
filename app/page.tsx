@@ -1,46 +1,59 @@
-import { Clock, TimeZoneChip } from "@/components/Clock";
-import Socials from "@/components/Socials";
-import Skills from "@/components/Skills";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
-import { profile } from "@/lib/site";
+import {
+  Close,
+  Faq,
+  Hero,
+  Offer,
+  Problem,
+  Room,
+  Steps,
+  Straight,
+  Proof,
+  Trust,
+} from "@/components/sections/sections";
+import { SiteFooter } from "@/components/site-footer";
+import { TourProvider } from "@/components/tour";
+import { LightboxProvider } from "@/components/lightbox";
+import { MotionProvider } from "@/components/motion-provider";
+import { faqs } from "@/lib/content";
+import { siteUrl } from "@/lib/site";
 
-export default function Home() {
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": `${siteUrl}/#faq`,
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
+
+export default function HomePage() {
   return (
-    <main className="content content--split" id="main">
-      <div className="column">
-        <section className="hero">
-          <div className="hero__avatar">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={profile.avatar} alt={`${profile.name}'s avatar`} width={112} height={112} />
-          </div>
+    <MotionProvider>
+      <TourProvider>
+      <LightboxProvider>
+      <main id="main" tabIndex={-1}>
+        <Hero />
+        <Problem />
+        <Proof />
+        <Room />
+        <Steps />
+        <Offer />
+        <Trust />
+        <Straight />
+        <Faq />
+        <Close />
+      </main>
 
-          <h1 className="hero__name" id="hero-name">
-            {profile.name}
-          </h1>
-          <p className="hero__supporting">{profile.tagline}</p>
+      <SiteFooter />
 
-          <div className="chip-set">
-            <span className="chip">
-              <span className="icon chip__icon" aria-hidden="true">
-                public
-              </span>
-              {profile.location}
-            </span>
-            <TimeZoneChip />
-          </div>
-        </section>
-
-        <Socials />
-      </div>
-
-      <div className="column">
-        <Clock />
-        <Skills />
-        <Contact />
-      </div>
-
-      <Footer />
-    </main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      </LightboxProvider>
+      </TourProvider>
+    </MotionProvider>
   );
 }

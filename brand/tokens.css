@@ -1,0 +1,134 @@
+/* ==================================================================== *
+ * Eterneon brand tokens
+ *
+ * The shared source of truth for the marketing site and the panel at
+ * business.eterneon.net. Values come from the branding-eterneon kit, so
+ * this file follows the logo work rather than competing with it.
+ *
+ * History worth keeping, because it explains why this file exists: for
+ * a while there were three identities. The site ran on a sage palette
+ * with a serif, the panel ran on cyan, and the kit was being exported in
+ * cyan with Geist. Two of the three already agreed and the kit was the
+ * expensive one to change, so the site moved. If that ever gets
+ * revisited, revisit it here and let both products follow.
+ *
+ * Every ratio quoted was measured, not estimated.
+ * ==================================================================== */
+
+:root {
+  /* ---------------------------------------------------------------- *
+   * Neutral ramp, built on the kit ground.
+   *
+   * n-8 is #171A1C, the ground the kit uses on the business card and the
+   * social headers. n-10 is #1C1F22, the kit's dark ink. Two of the six
+   * steps are literal brand values rather than interpolations.
+   * ---------------------------------------------------------------- */
+  --ref-n-6: #121517;
+  --ref-n-8: #171a1c; /* kit ground, and the surface for both products */
+  --ref-n-10: #1c1f22; /* kit dark ink */
+  --ref-n-12: #22262a;
+  --ref-n-14: #292e32;
+  --ref-n-18: #31363b;
+  --ref-n-45: #737b80;
+  --ref-n-68: #a2a8ac;
+  --ref-n-91: #e7e8e9; /* kit light ink */
+
+  /* ---------------------------------------------------------------- *
+   * Primary: the kit cyan. This is the brand.
+   * ---------------------------------------------------------------- */
+  --md-sys-color-primary: #62c6da; /* 8.8:1 on the ground */
+  --md-sys-color-on-primary: #00323c; /* 7.0:1 on primary */
+  --md-sys-color-primary-container: #156d7f; /* kit deep cyan */
+  --md-sys-color-on-primary-container: #cff2f9; /* 5.0:1 on its container */
+  --md-sys-color-inverse-primary: #0e5666;
+
+  /* Secondary: the same hue with the chroma taken out, for chips,
+     selected states and anything that must not compete with primary. */
+  --md-sys-color-secondary: #a8c4cb;
+  --md-sys-color-on-secondary: #16292f;
+  --md-sys-color-secondary-container: #2c4147;
+  --md-sys-color-on-secondary-container: #c8e0e6;
+
+  /* No tertiary. The kit is cyan and neutrals, and inventing a warm
+     accent here would put a colour on screen that appears on none of
+     the printed or social assets. If one is ever needed, add it to the
+     kit first and then to this file. */
+
+  /* Error. Not in the kit, because a logo sheet has no error state.
+     Kept deliberately desaturated so it reads as a warning rather than
+     as a second brand colour. */
+  --md-sys-color-error: #e8a9a0;
+  --md-sys-color-on-error: #4a1712;
+  --md-sys-color-error-container: #45201c;
+  --md-sys-color-on-error-container: #ffdad6;
+
+  /* ---------------------------------------------------------------- *
+   * Surfaces. The panel maps its five-step container ramp here.
+   * ---------------------------------------------------------------- */
+  --md-sys-color-surface: var(--ref-n-8);
+  --md-sys-color-surface-container-lowest: var(--ref-n-6);
+  --md-sys-color-surface-container-low: var(--ref-n-10);
+  --md-sys-color-surface-container: var(--ref-n-12);
+  --md-sys-color-surface-container-high: var(--ref-n-14);
+  --md-sys-color-surface-container-highest: var(--ref-n-18);
+
+  --md-sys-color-on-surface: var(--ref-n-91); /* 14.3:1 on the ground */
+  --md-sys-color-on-surface-variant: var(--ref-n-68); /* 7.3:1 */
+
+  /* outline clears 3:1 on every ground it is used on, because a field
+     border is what identifies the control. outline-variant is a
+     decorative hairline with no floor to hold. */
+  --md-sys-color-outline: var(--ref-n-45); /* 3.5:1 on n-12 */
+  --md-sys-color-outline-variant: #2a2f33;
+
+  --md-sys-color-inverse-surface: var(--ref-n-91);
+  --md-sys-color-inverse-on-surface: #1a1d1e;
+  --md-sys-color-scrim: #000000;
+
+  /* ---------------------------------------------------------------- *
+   * The call to action
+   *
+   * The kit near-white, one step brighter than the body ink, at 16.8:1
+   * against the ground. It is the single brightest fill anywhere. On the
+   * site it is the one conversion button. In the panel it should be the
+   * one primary action per screen and nothing else. The moment a card
+   * borrows it, it stops meaning "press this".
+   * ---------------------------------------------------------------- */
+  --brand-cta: #fafafa;
+  --brand-on-cta: #171a1c;
+
+  /* ---------------------------------------------------------------- *
+   * Type
+   *
+   * Geist is the kit face. It sets the wordmark at weight 900, uppercase,
+   * -0.02em, and it carries every piece of UI. This replaces Inter in the
+   * panel.
+   *
+   * Newsreader is the one addition the kit does not speak to, and it is
+   * restricted to editorial headlines: the marketing page, a page title,
+   * an empty state, the occasional large number. It never sets UI chrome
+   * and it never sets the wordmark.
+   * ---------------------------------------------------------------- */
+  --brand-font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --brand-font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --brand-font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
+
+  /* The wordmark, whenever it is set in live text rather than placed
+     as an SVG. */
+  --brand-wordmark-weight: 900;
+  --brand-wordmark-tracking: -0.02em;
+  --brand-wordmark-transform: uppercase;
+
+  /* ---------------------------------------------------------------- *
+   * Shape
+   *
+   * Near-square, which is also what the mark does: a hard-cornered panel
+   * with one corner cut away. Material's default 12dp on everything is
+   * the clearest sign a shape scale was never chosen.
+   * ---------------------------------------------------------------- */
+  --brand-radius-xs: 2px;
+  --brand-radius-sm: 3px;
+  --brand-radius-md: 4px;
+  --brand-radius-lg: 4px;
+  --brand-radius-xl: 6px;
+}
