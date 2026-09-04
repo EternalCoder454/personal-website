@@ -83,10 +83,17 @@ export default function TermsPage() {
         </Para>
       </Section>
 
-      <Section title="Ending it">
+      <Section title="Cancelling, and refunds">
         <Para>
           You can stop at any time and ask us to delete your workspace. We can end a beta workspace
           if it is being used in a way that breaks these terms, and we will tell you why.
+        </Para>
+        <Para>
+          There are no refunds, and during the beta there is nothing to refund, because nothing is
+          charged. Once paid subscriptions begin, cancelling stops the next renewal and your
+          workspace stays open until the end of the month you have already paid for. We do not
+          refund part of a month, and we never charge you for leaving. There is no notice period
+          and no minimum term.
         </Para>
       </Section>
 
