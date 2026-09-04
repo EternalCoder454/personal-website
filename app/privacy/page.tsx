@@ -77,10 +77,10 @@ export default function PrivacyPage() {
 
       <Section title="Who else sees it">
         <Para>
-          This site runs on Vercel, which serves the page and keeps short-lived server logs.
-          Submissions from the form are passed to the tool we use to hold the invitation list.
-          Those providers act on our instructions and do not use your address for their own
-          purposes.
+          This site runs on Vercel, which serves the page and keeps short-lived server logs. When
+          you submit the form, your address is emailed to us through Resend, which is the same
+          email provider the panel uses. Both act on our instructions and do not use your address
+          for their own purposes.
         </Para>
         <Para>
           If you later become a customer, Stripe processes the payment. Your card details go to

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { site } from "@/lib/site";
-import { measure, start } from "@/lib/perf";
+import { start } from "@/lib/perf";
+import { deliver } from "@/lib/deliver";
 
 export const runtime = "nodejs";
 
@@ -126,51 +127,24 @@ export async function POST(request: Request) {
     source: "landing",
   };
 
-  const webhook = process.env.WAITLIST_WEBHOOK_URL;
+  const delivery = await deliver(payload);
 
-  if (!webhook) {
-    if (process.env.NODE_ENV === "production") {
-      /* Fail closed rather than accept a request nothing will read.
-         Losing a lead quietly is worse than telling somebody to email. */
-      console.error(
-        "[waitlist] WAITLIST_WEBHOOK_URL is not set. Rejecting the request rather than dropping it.",
-      );
-      total(false);
-      return NextResponse.json(
-        {
-          error: `This form is not connected yet. Email ${site.contactEmail} and we will pick it up from there.`,
-        },
-        { status: 503 },
-      );
-    }
-
-    console.info("[waitlist] no WAITLIST_WEBHOOK_URL set, logging instead:", payload);
-    total();
-    return NextResponse.json({ ok: true });
+  if (delivery.kind === "unconfigured") {
+    /* Fail closed rather than accept a request nothing will read. */
+    console.error(
+      "[waitlist] no RESEND_API_KEY and no WAITLIST_WEBHOOK_URL. Rejecting rather than dropping the lead.",
+    );
+    total(false);
+    return NextResponse.json(
+      {
+        error: `This form is not connected yet. Email ${site.contactEmail} and we will pick it up from there.`,
+      },
+      { status: 503 },
+    );
   }
 
-  try {
-    const response = await measure("waitlist:webhook", () =>
-      fetch(webhook, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(8000),
-      }),
-    );
-
-    if (!response.ok) {
-      console.error("[waitlist] webhook returned", response.status);
-      total(false);
-      return NextResponse.json(
-        {
-          error: `We could not record that. Email ${site.contactEmail} and we will add you by hand.`,
-        },
-        { status: 502 },
-      );
-    }
-  } catch (error) {
-    console.error("[waitlist] webhook failed", error);
+  if (delivery.kind === "failed") {
+    console.error(`[waitlist] ${delivery.via} delivery failed:`, delivery.detail);
     total(false);
     return NextResponse.json(
       {

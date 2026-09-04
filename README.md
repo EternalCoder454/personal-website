@@ -28,7 +28,10 @@ Copy `.env.example` to `.env.local` and fill it in.
 | Variable | Required | Purpose |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | For production | The canonical origin. Set it explicitly: the Vercel-provided variable can resolve to a preview domain, which would put the wrong host in every canonical link, sitemap entry and share card. |
-| `WAITLIST_WEBHOOK_URL` | For production | Where beta requests go. |
+| `RESEND_API_KEY` | For production | Emails each beta request to you. Same key and verified domain the panel already uses. |
+| `RESEND_FROM` | No | Sender. Must be on a domain verified in Resend. |
+| `WAITLIST_TO` | No | Where the notification lands. Defaults to the contact address. |
+| `WAITLIST_WEBHOOK_URL` | No | Alternative to Resend: POST the JSON anywhere. Resend wins if both are set. |
 | `NEXT_PUBLIC_TOUR_VIDEO_URL` | No | The product tour. Empty until there is a film. |
 | `NEXT_PUBLIC_TOUR_POSTER_URL` | No | Still frame shown before play. |
 | `NEXT_PUBLIC_TOUR_CAPTIONS_URL` | No | WebVTT captions for the tour. |
@@ -37,23 +40,29 @@ Copy `.env.example` to `.env.local` and fill it in.
 ### The beta request form
 
 `POST /api/waitlist` validates the submission, applies a per-IP speed bump, and
-forwards this JSON to `WAITLIST_WEBHOOK_URL`:
+hands it to `lib/deliver.ts`, which tries two things in order:
 
-```json
-{ "email": "", "receivedAt": "", "source": "landing" }
-```
+1. **Resend**, if `RESEND_API_KEY` is set. Emails you the address with the
+   sender set to `RESEND_FROM` and **reply-to set to the person who asked**, so
+   answering the invitation is one reply rather than a copy and paste. The body
+   is plain text, which has no escaping to get wrong.
+2. **A webhook**, if `WAITLIST_WEBHOOK_URL` is set. Posts
+   `{ email, receivedAt, source }` to anything that accepts a POST.
 
-Any endpoint that accepts a JSON POST works: a Zapier or Make catch hook, a
-Slack workflow, a Google Apps Script bound to a Sheet, or a route on the panel.
+Resend wins when both are set. With neither, the form logs in development and
+returns a **503 in production** telling the visitor to email instead. It fails
+closed on purpose: losing a lead quietly is worse than saying so.
 
-It fails closed. With no webhook configured, a production request returns 503
-and tells the visitor to email instead, rather than accepting a lead that
-nothing will ever read. In development it logs to the server console.
+Guards on the endpoint: JSON content type only (a cross-site form with
+`enctype="text/plain"` would otherwise post a parseable body without a
+preflight), a 4KB body cap, a hidden honeypot field, and a rate limit.
 
-Two things to know about the rate limit: it is a `Map` in one server instance,
-so the real ceiling is five requests per ten minutes times however many
-instances are warm, and it resets on deploy. That is enough for a form like
-this. Anything stricter needs shared state.
+Two things to know about the rate limit. It keys on the platform-provided
+client IP rather than the leftmost `x-forwarded-for` entry, because that entry
+is client-controlled under any proxy that appends. And it is a `Map` in one
+server instance, so the real ceiling is five requests per ten minutes times
+however many instances are warm, and it resets on deploy. That is enough for a
+form like this. Anything stricter needs shared state.
 
 ## Brand
 
@@ -78,14 +87,22 @@ app/
   opengraph-image.tsx  the 1200x630 share card
   robots.ts            search crawlers allowed, training crawlers not
   api/waitlist/        the beta request handler
+  api/perf/            private timing snapshot, behind PERF_TOKEN
 components/
-  cta.tsx              the one call to action, used twice, identical both times
+  cta.tsx              the one call to action, used three times, identical
   sections/sections.tsx  every section of the page, in order
-  site-footer.tsx      name and small print, no links
-  tour.tsx             the video overlay, its trigger and its empty state
+  motion.tsx           Reveal, Stagger, StaggerItem, CountUp
+  hero-stack.tsx       the cycling screenshot carousel
+  lightbox.tsx         click a screenshot, read it at full size
+  faq-list.tsx         the animated accordion
+  site-footer.tsx      identity, contact and the two legal links
+  tour.tsx             the video overlay, absent until there is a film
 lib/
   content.ts           every string on the page
-  site.ts              name, title, description, tour config, the site URL
+  site.ts              name, title, description, tour and screenshot config
+  deliver.ts           where a beta request goes: Resend, or a webhook
+  perf.ts              the in-process timing registry
+proxy.ts               the only hook that fires on a page view
 ```
 
 Copy changes go in `lib/content.ts`. There is no CMS and, for one page, no case
@@ -292,7 +309,8 @@ user data. It is written down rather than left to be found.
 - [ ] Name the actual processors in the privacy notice once they are chosen.
       There is a visible note on the page marking the gap.
 - [ ] Point `NEXT_PUBLIC_SITE_URL` at the real domain.
-- [ ] Set `WAITLIST_WEBHOOK_URL` and send one test submission through it.
+- [ ] Set `RESEND_API_KEY` on Vercel (the panel key works) and send one test
+      submission through it. Check it arrives and that reply-to is the requester.
 - [ ] Confirm `eternalhell@eterneon.net` receives mail. It is the contact and privacy address on every page.
 - [ ] Confirm the fifth-seat rule. `lib/content.ts` states that a beta tester's
       fifth seat and beyond costs $3.99 a month each, which is inferred from
