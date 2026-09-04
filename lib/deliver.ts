@@ -1,6 +1,7 @@
 import "server-only";
 import { start } from "@/lib/perf";
 import { site } from "@/lib/site";
+import { betaRequestEmail } from "@/lib/emails/beta-request";
 
 /**
  * Where a beta request goes.
@@ -46,22 +47,14 @@ async function viaResend(lead: Lead, apiKey: string): Promise<Delivery> {
       body: JSON.stringify({
         from,
         to: [to],
-        /* So the invitation is one reply away. Safe to interpolate: the
+        /* So the invitation is one reply away. Safe as a header: the
            address already passed a validator whose character class
-           excludes whitespace, and \s covers CR and LF, so there is no
-           header to inject here. */
+           excludes whitespace, and \s covers CR and LF, so there is
+           nothing to inject. In the body it is still escaped, because
+           that same validator does allow < and &. */
         reply_to: lead.email,
-        subject: `Beta request: ${lead.email}`,
-        /* Text only. Nothing here needs markup, and a plain body has no
-           escaping to get wrong. */
-        text: [
-          `${lead.email} asked for beta access.`,
-          ``,
-          `Received: ${lead.receivedAt}`,
-          `Source:   ${lead.source}`,
-          ``,
-          `Reply to this email to answer them directly.`,
-        ].join("\n"),
+        /* subject, html and text, from the shared template. */
+        ...betaRequestEmail(lead),
       }),
       signal: AbortSignal.timeout(8000),
     });
