@@ -43,7 +43,7 @@ export const capabilities = [
 ];
 
 export const beta = {
-  headline: "Test it during the beta and keep it free.",
+  headline: "Test it during the beta and keep it free",
   body: "You pay nothing during the beta. When we launch, every workspace that tested with us stays free for life, with three seats at no cost.",
   anchor: "That's the $9.99 a month, and the $3.99 a seat, that everyone else will pay.",
   caveat: "Model usage is the exception. You bring your own key, and your provider bills you for it directly.",

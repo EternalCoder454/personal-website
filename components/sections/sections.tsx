@@ -67,7 +67,7 @@ export function Hero() {
 
         <StaggerItem>
           <h1 className="t-display mt-6 max-w-[16ch] text-balance text-on-surface">
-            Every department head your business is missing.
+            Every department head your business is missing
           </h1>
         </StaggerItem>
 
@@ -144,7 +144,7 @@ export function Proof() {
 
   return (
     <Section>
-      <Heading>What it actually looks like.</Heading>
+      <Heading>What it actually looks like</Heading>
 
       {screenshots.length > 0 ? (
         <ul className="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
@@ -180,7 +180,7 @@ export function Proof() {
 export function Room() {
   return (
     <Section>
-      <Heading>Eight heads. One reads the other seven.</Heading>
+      <Heading>The eight heads you start with</Heading>
 
       <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
         {heads.map((head) => (
@@ -204,7 +204,7 @@ export function Room() {
 export function Steps() {
   return (
     <Section>
-      <Heading>Setup takes about twenty minutes.</Heading>
+      <Heading>Setup takes about twenty minutes</Heading>
 
       <Stagger as="ol" className="mt-14 grid gap-x-14 gap-y-12 sm:grid-cols-2">
         {steps.map((step) => (
@@ -276,7 +276,7 @@ export function Offer() {
 export function Trust() {
   return (
     <Section>
-      <Heading>Security and your data.</Heading>
+      <Heading>Security and your data</Heading>
 
       <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
         {trust.map((item) => (
@@ -297,7 +297,7 @@ export function Trust() {
 export function Straight() {
   return (
     <Section>
-      <Heading>What to know before you start.</Heading>
+      <Heading>What to know before you start</Heading>
 
       <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
         {straight.map((item) => (
@@ -318,7 +318,7 @@ export function Straight() {
 export function Faq() {
   return (
     <Section>
-      <Heading>Frequently asked questions.</Heading>
+      <Heading>Frequently asked questions</Heading>
 
       <FaqList faqs={faqs} />
     </Section>
@@ -331,7 +331,7 @@ export function Close() {
   return (
     <Section className="border-t border-outline-variant">
       <h2 className="t-display max-w-[14ch] text-balance text-on-surface">
-        Ask for a workspace.
+        Ask for a workspace
       </h2>
       <p className="t-body mt-7 max-w-[50ch] text-pretty text-on-surface-variant md:text-[18px]">
         We invite a few businesses at a time. Leave your email and we’ll send an invitation when
