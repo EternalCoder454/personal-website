@@ -58,7 +58,10 @@ const csp = [
   list("media-src 'self' blob:", mediaOrigins),
   "font-src 'self'",
   "style-src 'self' 'unsafe-inline'",
-  `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""}`,
+  /* The analytics package loads its debug build from
+     va.vercel-scripts.com in development only. In production it uses a
+     path on this domain, so that host never enters the shipped policy. */
+  `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""}`,
   `connect-src 'self'${dev ? " ws: wss:" : ""}`,
   "upgrade-insecure-requests",
 ].join("; ");

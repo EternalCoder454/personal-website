@@ -33,7 +33,7 @@ export const legal = {
   address: "",
   jurisdiction: "the State of California, United States",
   privacyEmail: "hello@eterneon.net",
-  lastUpdated: "3 September 2026",
+  lastUpdated: "5 September 2026",
 } as const;
 
 /**

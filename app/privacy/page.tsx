@@ -48,6 +48,14 @@ export default function PrivacyPage() {
           is not written to a database.
         </Para>
         <Para>
+          The site also counts page views, using Vercel Web Analytics. A view records the page you
+          looked at, where you arrived from, your browser and device type, and an approximate
+          location worked out from your connection, as far as the city. It does not record your IP
+          address. Visitors are counted using a hash of the request, which Vercel discards after
+          twenty four hours, so the same person returning the next day is a new number and cannot
+          be joined to the previous one.
+        </Para>
+        <Para>
           When performance sampling is switched on, the server times its own work: a route name
           like &ldquo;/privacy&rdquo; and a duration in milliseconds. No IP address, no browser or
           device details, no referrer and no identifier of any kind goes into it, so it cannot be
@@ -58,11 +66,12 @@ export default function PrivacyPage() {
 
       <Section title="What it does not collect">
         <Para>
-          There are no analytics on this site, no advertising pixels, and no third-party scripts
-          of any kind. Nothing runs in your browser to watch what you do, nothing is stored there:
-          no cookies are set, and nothing is written to local storage. There is no cookie banner
-          because there is nothing to consent to. The performance timings described above are the
-          server measuring itself, never you.
+          There are no advertising pixels and no trackers that follow you to other sites. The
+          page view counter described above is served from this domain rather than somebody
+          else&rsquo;s, and it is the only script here that is not part of the page itself. Nothing
+          is stored on your device: no cookies are set, and nothing is written to local storage.
+          There is no cookie banner because there is nothing on your device to consent to. The
+          performance timings above are the server measuring itself, never you.
         </Para>
       </Section>
 
@@ -77,7 +86,8 @@ export default function PrivacyPage() {
 
       <Section title="Who else sees it">
         <Para>
-          This site runs on Vercel, which serves the page and keeps short-lived server logs. When
+          This site runs on Vercel, which serves the page, keeps short-lived server logs, and
+          receives the page view counts described above. When
           you submit the form, your address is emailed to us through Resend, which is the same
           email provider the panel uses. Both act on our instructions and do not use your address
           for their own purposes.
