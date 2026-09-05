@@ -156,5 +156,11 @@ export const builder = {
     "That day job also means this doesn’t have to pay my rent. Eterneon can be $9.99 because it isn’t carrying a salary, and it won’t be abandoned because a growth target got missed.",
     "Every release is in the changelog inside the panel, and the source is published so you can read it. Your whole workspace exports in one click, as one file. And because the API key is yours, your AI access is a direct relationship with your provider that does not depend on me being here.",
   ],
-  close: "If something breaks, you email me and I answer. There is nobody to pass it to.",
+  /* Split so "email me" can carry the address. The section promises a
+     reply and then made the reader go looking for where to send it. */
+  close: {
+    lead: "If something breaks, you ",
+    link: "email me",
+    rest: " and I answer. There is nobody to pass it to.",
+  },
 };

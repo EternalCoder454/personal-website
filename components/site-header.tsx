@@ -1,4 +1,5 @@
 import { AnimatedWordmark } from "@/components/animated-wordmark";
+import Link from "next/link";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { site } from "@/lib/site";
 
@@ -27,7 +28,14 @@ export function SiteHeader() {
     <header className="sticky top-0 z-30 border-b border-outline-variant bg-surface/85 backdrop-blur-md">
       <ScrollProgress />
       <div className="shell flex items-center justify-between gap-4 py-2.5 sm:py-3">
-        <AnimatedWordmark />
+        {/* Every site makes its mark a route home and people click it
+            without thinking. It was inert, which left a reader of the
+            privacy notice with nothing at the top of the page and a
+            "Back to Eterneon" link 900px below. Same 48px box as the
+            button opposite, so the bar keeps its height. */}
+        <Link href="/" className="inline-flex min-h-[48px] items-center sm:min-h-[38px]">
+          <AnimatedWordmark />
+        </Link>
 
         {/* 48px on a phone for the tap target, tighter above it where a
             pointer does not need the room and the bar wants to stay

@@ -4,7 +4,7 @@ import { HeroStack } from "@/components/hero-stack";
 import { Zoomable } from "@/components/lightbox";
 import { CountUp, Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { FaqList } from "@/components/faq-list";
-import { hasProof, proof, screenshots } from "@/lib/site";
+import { hasProof, proof, screenshots, site } from "@/lib/site";
 import { TourFrame } from "@/components/tour";
 import {
   beta,
@@ -341,7 +341,16 @@ export function Builder() {
             {para}
           </p>
         ))}
-        <p className="t-body mt-8 text-pretty text-on-surface md:text-[18px]">{builder.close}</p>
+        <p className="t-body mt-8 text-pretty text-on-surface md:text-[18px]">
+          {builder.close.lead}
+          <a
+            href={`mailto:${site.contactEmail}`}
+            className="underline decoration-outline underline-offset-4 transition-colors duration-100 hover:text-primary hover:decoration-primary"
+          >
+            {builder.close.link}
+          </a>
+          {builder.close.rest}
+        </p>
       </div>
     </Section>
   );
