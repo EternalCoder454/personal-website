@@ -71,7 +71,7 @@ export const screenshots: Screenshot[] = [
   {
     src: "/screens/marketing.webp",
     alt: "The Marketing head answering a question about how to position a pricing tier, with its reasoning shown above the answer.",
-    caption: "Ask one head. It answers from its own corner, and shows you the thinking above the answer.",
+    caption: "Ask one head a question. You see its reasoning above the answer.",
     width: 1500,
     height: 1027,
     fullWidth: 2600,
@@ -80,7 +80,7 @@ export const screenshots: Screenshot[] = [
   {
     src: "/screens/finance.webp",
     alt: "The Finance head working out monthly revenue in a table, flagging which numbers are assumptions.",
-    caption: "It does the maths, and marks which numbers it assumed rather than quietly inventing them.",
+    caption: "It does the math and marks which numbers are assumptions rather than facts.",
     width: 1500,
     height: 1006,
     fullWidth: 2600,
@@ -89,7 +89,7 @@ export const screenshots: Screenshot[] = [
   {
     src: "/screens/engineering.webp",
     alt: "The Engineering head answering a question about release risk, with buttons to copy, save as a deliverable, or record a decision.",
-    caption: "Keep what is worth keeping. An answer becomes a task, a file, or a recorded decision.",
+    caption: "Turn an answer into a task, a file, or a recorded decision.",
     width: 1500,
     height: 1071,
     fullWidth: 2600,

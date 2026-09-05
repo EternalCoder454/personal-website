@@ -13,40 +13,40 @@ export type Head = { name: string; note: string };
 /** The seeded room. Businesses rename, rewrite, add and remove these. */
 export const heads: Head[] = [
   { name: "Chief of Staff", note: "Reads the other seven and tells you where they disagree." },
-  { name: "Marketing", note: "Positioning, campaigns, and the story you tell." },
-  { name: "Finance", note: "Pricing, margin, runway, and the maths behind a spend." },
-  { name: "Legal", note: "Contracts, terms, and where a clause will cost you." },
-  { name: "Operations", note: "Suppliers, workflow, and the week that keeps breaking." },
-  { name: "Engineering", note: "Architecture, estimates, and what a choice commits you to." },
-  { name: "Design", note: "Interfaces, brand, and what a screen is really asking." },
-  { name: "Social Media", note: "Channels that pay, and channels that only look busy." },
+  { name: "Marketing", note: "Positioning, campaigns, and how you describe what you sell." },
+  { name: "Finance", note: "Pricing, margin, runway, and the math behind a decision to spend." },
+  { name: "Legal", note: "Contracts, terms, and the clauses that could cost you money." },
+  { name: "Operations", note: "Suppliers, workflow, hiring, and the processes that keep breaking." },
+  { name: "Engineering", note: "Architecture, estimates, and the long-term cost of a technical choice." },
+  { name: "Design", note: "Interfaces, brand, and whether a screen makes sense to the person using it." },
+  { name: "Social Media", note: "Which channels are worth your time, and which ones are not." },
 ];
 
 export const problem = {
-  headline: "You can build it. You just can't price it.",
-  body: "Most owners are excellent at one or two things and improvising the rest. You know your product cold and guess at the contract. You can sell, but the cash flow model is a spreadsheet you avoid. Hiring a head of finance to answer four questions a month is absurd, so the questions go unanswered.",
-  kicker: "Eterneon is the bench you would hire if you could afford it.",
+  headline: "You know your product. The rest is guesswork.",
+  body: "Most owners are experts in one or two parts of their business and figure out the rest as they go. You might know your product inside out but have real questions about a contract. You might be good at selling and still avoid building a cash flow forecast. Hiring a finance lead to answer a few questions a month doesn’t make sense, so those questions go unanswered.",
+  kicker: "Eterneon gives you someone to ask in each of those areas, without hiring anyone.",
 };
 
 export const steps = [
   { n: "01", title: "Add your API key", body: "One key from Anthropic, OpenAI or Google. Encrypted, and never shown again." },
-  { n: "02", title: "Describe your business", body: "Ten minutes once, and the heads stop answering like a search engine." },
+  { n: "02", title: "Describe your business", body: "Spend about ten minutes writing down what your business does. Without it, the answers are generic." },
   { n: "03", title: "Ask", body: "One head in its own thread, or the whole room at once." },
   { n: "04", title: "Keep it", body: "Answers become tasks, files and decisions. Export any of it to Word." },
 ];
 
 export const capabilities = [
   "Meetings where the whole room answers at once",
-  "A shared library and a task board the heads already know about",
-  "Briefings waiting for you on Monday, and memory of what you decided",
+  "A shared library and a task board that every head can see",
+  "Scheduled briefings, and a record of the decisions you have made",
   "An internal wiki, a private inbox, and an optional calendar link",
 ];
 
 export const beta = {
-  headline: "Test it with us and you keep it. For good.",
+  headline: "Test it during the beta and keep it free.",
   body: "You pay nothing during the beta. When we launch, every workspace that tested with us stays free for life, with three seats at no cost.",
   anchor: "That's the $9.99 a month, and the $3.99 a seat, that everyone else will pay.",
-  caveat: "Model usage is the one exception, and always was. Your key is yours, and your provider bills you directly.",
+  caveat: "Model usage is the exception. You bring your own key, and your provider bills you for it directly.",
 };
 
 /* amount and decimals drive the count-up. */
@@ -59,38 +59,38 @@ export const costs = [
 export const trust = [
   {
     title: "Your data is yours alone",
-    body: "Every row is scoped to your workspace. That scoping is audited in the code and against the live database.",
+    body: "Your data is kept separate from every other business. We check that separation in the code and against the live database.",
   },
   {
-    title: "Your key never comes back out",
-    body: "AES-256-GCM encryption. Once it goes in, no browser sees it again, including yours.",
+    title: "Your API key is encrypted",
+    body: "We encrypt it with AES-256-GCM. Once you save it, it is never shown again, including to you.",
   },
   {
-    title: "Nobody gets in uninvited",
-    body: "Google sign-in only, by invitation. Remove someone and they're out on their next click.",
+    title: "Access is by invitation only",
+    body: "You sign in with Google, and only invited people can get in. Remove someone and their access ends on their next request.",
   },
   {
-    title: "Nothing happens on its own",
-    body: "Every action is proposed and waits for you. No agent goes off and does things unattended.",
+    title: "Nothing happens without your approval",
+    body: "Every action is suggested first and waits for you to approve it. Eterneon never acts on its own.",
   },
 ];
 
 export const straight = [
   {
     title: "You need an API key",
-    body: "No key, no answers. It's one signup with Anthropic, OpenAI or Google, done once.",
+    body: "Without a key, the heads can’t answer. Signing up with Anthropic, OpenAI or Google takes a few minutes, and you only do it once.",
   },
   {
     title: "Permissions hide screens, not data",
-    body: "The workspace loads as one document, so a determined person could read what the interface hides. Anyone who must not see something at all needs their own workspace.",
+    body: "The workspace loads as one document, so a determined person could read what the interface hides. Anyone who must never see something needs their own workspace.",
   },
   {
     title: "Google sign-in only",
     body: "No email and password, no SSO, no Microsoft.",
   },
   {
-    title: "It's advice, not counsel",
-    body: "The Legal and Finance heads help you think. They do not replace a lawyer or an accountant, and we say so inside the product too.",
+    title: "It is not professional advice",
+    body: "The Legal and Finance heads help you think. They don’t replace a lawyer or an accountant, and we say so inside the product too.",
   },
 ];
 
@@ -105,7 +105,7 @@ export const faqs = [
   },
   {
     q: "Does the price include the AI?",
-    a: "No, and that's the point. You bring your own API key and your provider bills you directly, with nothing added by us. We never mark up your tokens and never meter you.",
+    a: "No. You bring your own API key and your provider bills you directly, with nothing added by us. We never mark up your usage and never meter it.",
   },
   {
     q: "How long does setup take?",
@@ -113,10 +113,10 @@ export const faqs = [
   },
   {
     q: "Is my data mixed in with other businesses?",
-    a: "No. Every row is scoped to your workspace, and we audit that both in the code and against the live database.",
+    a: "No. Your data is kept separate from every other business, and we check that separation in the code and against the live database.",
   },
   {
     q: "Can I stop a colleague seeing something?",
-    a: "Yes, per person: which heads they can work with, and which of eleven areas they can open. Read the note above on what that boundary does and does not cover.",
+    a: "Yes, per person: which heads they can work with, and which of eleven areas they can open. Read the note above on what that boundary does and doesn’t cover.",
   },
 ];

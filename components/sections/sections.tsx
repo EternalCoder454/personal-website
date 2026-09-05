@@ -73,8 +73,8 @@ export function Hero() {
 
         <StaggerItem>
           <p className="t-body mt-7 max-w-[52ch] text-pretty text-on-surface-variant md:text-[18px]">
-            Marketing, Finance, Legal, Operations and four more, in one private workspace. Ask one.
-            Or put the question to the whole room and let them disagree in front of you.
+            Marketing, Finance, Legal, Operations and four more, in one private workspace. Ask one
+            of them, or ask all of them at once and see where they disagree.
           </p>
         </StaggerItem>
 
@@ -144,7 +144,7 @@ export function Proof() {
 
   return (
     <Section>
-      <Heading>See it before you ask for it.</Heading>
+      <Heading>What it actually looks like.</Heading>
 
       {screenshots.length > 0 ? (
         <ul className="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
@@ -192,7 +192,7 @@ export function Room() {
       </Stagger>
 
       <p className="t-body-sm mt-14 max-w-[58ch] text-pretty text-on-surface-muted">
-        Rename them, rewrite what they know, add your own or delete the ones you do not need. Each
+        Rename them, rewrite what they know, add your own or delete the ones you don’t need. Each
         one can run on a different model.
       </p>
     </Section>
@@ -204,7 +204,7 @@ export function Room() {
 export function Steps() {
   return (
     <Section>
-      <Heading>Twenty minutes to set up. Then it is just there.</Heading>
+      <Heading>Setup takes about twenty minutes.</Heading>
 
       <Stagger as="ol" className="mt-14 grid gap-x-14 gap-y-12 sm:grid-cols-2">
         {steps.map((step) => (
@@ -276,7 +276,7 @@ export function Offer() {
 export function Trust() {
   return (
     <Section>
-      <Heading>The boring answers, in advance.</Heading>
+      <Heading>Security and your data.</Heading>
 
       <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
         {trust.map((item) => (
@@ -297,7 +297,7 @@ export function Trust() {
 export function Straight() {
   return (
     <Section>
-      <Heading>And the parts we would rather you heard from us.</Heading>
+      <Heading>What to know before you start.</Heading>
 
       <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
         {straight.map((item) => (
@@ -334,7 +334,7 @@ export function Close() {
         Ask for a workspace.
       </h2>
       <p className="t-body mt-7 max-w-[50ch] text-pretty text-on-surface-variant md:text-[18px]">
-        We invite a few businesses at a time. Leave your email and we will send an invitation when
+        We invite a few businesses at a time. Leave your email and we’ll send an invitation when
         the next set opens.
       </p>
       <div className="mt-10">
