@@ -1,4 +1,5 @@
 import { AnimatedWordmark } from "@/components/animated-wordmark";
+import { ScrollProgress } from "@/components/scroll-progress";
 import { site } from "@/lib/site";
 
 /**
@@ -24,6 +25,7 @@ import { site } from "@/lib/site";
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-outline-variant bg-surface/85 backdrop-blur-md">
+      <ScrollProgress />
       <div className="shell flex items-center justify-between gap-4 py-2.5 sm:py-3">
         <AnimatedWordmark />
 
