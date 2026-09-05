@@ -94,6 +94,9 @@ export const straight = [
   },
 ];
 
+/** A blank line between paragraphs, without wrecking the indentation here. */
+const paras = (...parts: string[]) => parts.join("\n\n");
+
 export const faqs = [
   {
     q: "What does the beta cost?",
@@ -108,6 +111,14 @@ export const faqs = [
     a: "No. You bring your own API key and your provider bills you directly, with nothing added by us. We never mark up your usage and never meter it.",
   },
   {
+    q: "Is Eterneon itself built with AI?",
+    a: paras(
+      "Yes, a good deal of it. It would be odd to sell you a room of AI department heads and then claim I write every line by hand.",
+      "The part that matters is what happens next. Every release runs a test suite, an audit that reads every database query to check that one business cannot see another, and a check against the live database for anything left behind where it should not be. The source is published, so you can read it rather than take my word for it.",
+      "AI helps me build it faster. It does not decide what ships.",
+    ),
+  },
+  {
     q: "How long does setup take?",
     a: "About twenty minutes. Most of it is writing a page about your business, which is the part that makes the answers good.",
   },
@@ -119,4 +130,31 @@ export const faqs = [
     q: "Can I stop a colleague seeing something?",
     a: "Yes, per person: which heads they can work with, and which of eleven areas they can open. Read the note above on what that boundary does and doesn’t cover.",
   },
+  {
+    q: "What happens if Eterneon shuts down?",
+    a: paras(
+      "You take everything with you. Your whole workspace exports in one click as a single file: every conversation, file, task, decision and wiki page.",
+      "Your AI access is unaffected either way, because the key is yours. You signed up with Anthropic, OpenAI or Google directly, and that relationship does not run through me.",
+      "The source is published too, so the panel is not a black box that leaves with me.",
+    ),
+  },
 ];
+
+/**
+ * The one place on this site that says "I" rather than "we".
+ *
+ * That is the point of the section, so it is not an oversight. Every
+ * other section speaks for the business; this one answers who the
+ * business is, and a paragraph about there being no team behind a logo
+ * cannot be written in the plural.
+ */
+export const builder = {
+  headline: "Who builds this",
+  body: [
+    "I’m Zachary. Eterneon is a one person business, and that is the honest version: there is no team behind a logo.",
+    "I work as an administrative assistant at an accounting practice, so I spend my days around small businesses and the things that go wrong in them. Not as their accountant. As the person who sees which questions they were never asked in time.",
+    "That day job also means this doesn’t have to pay my rent. Eterneon can be $9.99 because it isn’t carrying a salary, and it won’t be abandoned because a growth target got missed.",
+    "Every release is in the changelog inside the panel, and the source is published so you can read it. Your whole workspace exports in one click, as one file. And because the API key is yours, your AI access is a direct relationship with your provider that does not depend on me being here.",
+  ],
+  close: "If something breaks, you email me and I answer. There is nobody to pass it to.",
+};

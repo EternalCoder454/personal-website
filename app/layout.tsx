@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Newsreader } from "next/font/google";
 import { site, siteUrl } from "@/lib/site";
+import { SiteHeader } from "@/components/site-header";
+import { MotionProvider } from "@/components/motion-provider";
 import "./globals.css";
 
 /* Two typefaces. Geist is the brand face from the kit: it carries the
@@ -147,7 +149,15 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        {children}
+        {/* The provider lives here rather than in page.tsx because
+            the header is site-wide and its wordmark animates. `m.*`
+            under `strict` throws without a LazyMotion ancestor, so a
+            provider scoped to one route would have broken the legal
+            pages the moment the header appeared on them. */}
+        <MotionProvider>
+          <SiteHeader />
+          {children}
+        </MotionProvider>
         <script
           type="application/ld+json"
           /* Static object built above, not user input. */

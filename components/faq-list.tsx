@@ -82,7 +82,21 @@ export function FaqList({ faqs }: { faqs: { q: string; a: string }[] }) {
                   }
                   className="overflow-hidden"
                 >
-                  <p className="t-body-sm pb-7 text-pretty text-on-surface-variant">{faq.a}</p>
+                  {/* Longer answers are stored as paragraphs separated
+                      by a blank line. Rendering the whole answer in one
+                      <p> ran three arguments together into a wall.
+                      Single-paragraph answers split to one item and come
+                      out exactly as before. */}
+                  <div className="pb-7">
+                    {faq.a.split(/\n{2,}/).map((para) => (
+                      <p
+                        key={para}
+                        className="t-body-sm mt-4 max-w-[62ch] text-pretty text-on-surface-variant first:mt-0"
+                      >
+                        {para}
+                      </p>
+                    ))}
+                  </div>
                 </m.div>
               ) : null}
             </AnimatePresence>

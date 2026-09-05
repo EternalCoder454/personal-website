@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { Wordmark } from "@/components/wordmark";
 
 /**
  * The shared shell for the legal pages.
@@ -19,9 +18,7 @@ export function LegalPage({
 }) {
   return (
     <main id="main" tabIndex={-1} className="shell py-14 md:py-20">
-      <Wordmark />
-
-      <h1 className="t-headline mt-16 text-on-surface">{title}</h1>
+      <h1 className="t-headline text-on-surface">{title}</h1>
       <p className="t-body-sm mt-4 text-on-surface-muted">Last updated {updated}</p>
 
       <div className="mt-14 max-w-[68ch] border-t border-outline-variant pt-10">{children}</div>

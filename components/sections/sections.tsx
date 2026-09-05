@@ -2,13 +2,13 @@ import type { ReactNode } from "react";
 import { Cta } from "@/components/cta";
 import { HeroStack } from "@/components/hero-stack";
 import { Zoomable } from "@/components/lightbox";
-import { AnimatedWordmark } from "@/components/animated-wordmark";
 import { CountUp, Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { FaqList } from "@/components/faq-list";
 import { hasProof, proof, screenshots } from "@/lib/site";
 import { TourFrame } from "@/components/tour";
 import {
   beta,
+  builder,
   capabilities,
   costs,
   faqs,
@@ -53,12 +53,12 @@ function Heading({ children }: { children: ReactNode }) {
 /* ------------------------------------------------------------------ */
 
 export function Hero() {
+  /* The top padding was trimmed when the wordmark moved into the sticky
+     bar. The bar carries its own padding, so the old value stacked on
+     top of it and pushed the headline 24px further down the phone
+     screen. This puts the first line back where it was. */
   return (
-    <header className="shell pt-10 pb-20 md:pt-14 md:pb-28">
-      {/* The wordmark, and nothing else. No menu, because there is
-          nowhere else on this site to go. */}
-      <AnimatedWordmark />
-
+    <header className="shell pt-4 pb-20 md:pt-8 md:pb-28">
       <div className="mt-20 grid items-start gap-16 md:mt-28 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-10 xl:gap-14">
         <Stagger trigger="mount" step={0.09} delay={0.45}>
         <StaggerItem>
@@ -321,6 +321,28 @@ export function Faq() {
       <Heading>Frequently asked questions</Heading>
 
       <FaqList faqs={faqs} />
+    </Section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+export function Builder() {
+  return (
+    <Section>
+      <Heading>{builder.headline}</Heading>
+
+      {/* Narrower than the rest of the page. This is the one stretch of
+          continuous prose on the site rather than a grid of short
+          facts, so it wants a reading measure, not a marketing one. */}
+      <div className="mt-10 max-w-[62ch]">
+        {builder.body.map((para) => (
+          <p key={para} className="t-body mt-6 text-pretty text-on-surface-variant first:mt-0">
+            {para}
+          </p>
+        ))}
+        <p className="t-body mt-8 text-pretty text-on-surface md:text-[18px]">{builder.close}</p>
+      </div>
     </Section>
   );
 }
