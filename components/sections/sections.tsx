@@ -318,7 +318,7 @@ export function Straight() {
 export function Faq() {
   return (
     <Section>
-      <Heading>Questions people actually ask.</Heading>
+      <Heading>Frequently Asked Questions</Heading>
 
       <FaqList faqs={faqs} />
     </Section>

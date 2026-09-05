@@ -23,9 +23,9 @@ export const heads: Head[] = [
 ];
 
 export const problem = {
-  headline: "You know your product. The rest is guesswork.",
-  body: "Most owners are experts in one or two parts of their business and figure out the rest as they go. You might know your product inside out but have real questions about a contract. You might be good at selling and still avoid building a cash flow forecast. Hiring a finance lead to answer a few questions a month doesn’t make sense, so those questions go unanswered.",
-  kicker: "Eterneon gives you someone to ask in each of those areas, without hiring anyone.",
+  headline: "You need experts. You can’t afford to hire them.",
+  body: "A finance lead, a lawyer, a marketer and an operations manager cost more in a month than a lot of small businesses make. So you do all of it yourself. You guess at the contract, put off the cash flow forecast, and set a price because it felt about right. If you are just starting out, you might not know which of those questions to ask first.",
+  kicker: "Eterneon is a company of AI department heads you can ask instead. It costs $9.99 a month, and nothing at all if you test it with us during the beta.",
 };
 
 export const steps = [
