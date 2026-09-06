@@ -4,7 +4,7 @@ import { HeroStack } from "@/components/hero-stack";
 import { Zoomable } from "@/components/lightbox";
 import { CountUp, Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { FaqList } from "@/components/faq-list";
-import { hasProof, proof, screenshots, site } from "@/lib/site";
+import { hasProof, proof, screenshots, site, srcSetFor } from "@/lib/site";
 import { TourFrame } from "@/components/tour";
 import {
   beta,
@@ -155,6 +155,15 @@ export function Proof() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={shot.src}
+                  srcSet={srcSetFor(shot)}
+                  /* One column on a phone inside 20px of shell padding,
+                     a third of the shell from md, and a fixed third of
+                     the wider measure on a large display. */
+                  /* Card width solved per breakpoint from --measure
+                     and .shell padding. "30vw" was 30% too generous at
+                     1440, which made the browser take the 800w file to
+                     paint 331 css pixels. */
+                  sizes="(min-width: 2200px) 437px, (min-width: 1600px) 371px, (min-width: 1184px) 331px, (min-width: 768px) calc((100vw - 128px) / 3), calc(100vw - 40px)"
                   alt={shot.alt}
                   width={shot.width}
                   height={shot.height}

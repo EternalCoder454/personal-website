@@ -2,7 +2,7 @@
 
 import { m, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
-import { heroShots } from "@/lib/site";
+import { heroShots, srcSetFor } from "@/lib/site";
 import { useLightbox } from "@/components/lightbox";
 
 /**
@@ -101,6 +101,13 @@ export function HeroStack() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={shot.src}
+              srcSet={srcSetFor(shot)}
+              /* The stack is display:none below lg, so below that its
+                 real rendered width is nothing. Saying so lets the
+                 browser take the 400w file rather than the 1500px one
+                 it was fetching and never painting: measured at 74KB
+                 downloaded on every phone visit for no pixels at all. */
+              sizes="(min-width: 2200px) 517px, (min-width: 1600px) 439px, (min-width: 1024px) 392px, 1px"
               alt=""
               width={shot.width}
               height={shot.height}

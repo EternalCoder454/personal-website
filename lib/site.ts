@@ -97,6 +97,25 @@ export const screenshots: Screenshot[] = [
   },
 ];
 
+/**
+ * The widths scripts/responsive-screens.mjs writes next to each card.
+ *
+ * Measured on the live site: a proof card renders at 333 CSS pixels on
+ * a 375px phone and about 437 on the widest desktop, so 800 covers a 2x
+ * phone and 1200 covers a 3x one. Every phone had been pulling the full
+ * 1500px file to draw it a third that size.
+ */
+const RESPONSIVE_WIDTHS = [400, 800, 1200] as const;
+
+/** The candidate list for one card, original included as the largest. */
+export const srcSetFor = (shot: Pick<Screenshot, "src" | "width">) => {
+  const base = shot.src.replace(/\.webp$/, "");
+  return [
+    ...RESPONSIVE_WIDTHS.filter((w) => w < shot.width).map((w) => `${base}-${w}w.webp ${w}w`),
+    `${shot.src} ${shot.width}w`,
+  ].join(", ");
+};
+
 /** The three that stack behind the headline. */
 export const heroShots: Screenshot[] = [
   {
