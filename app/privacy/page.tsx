@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { legal, site } from "@/lib/site";
+import { legal, og, site } from "@/lib/site";
 import { LegalPage, Para, Section } from "@/components/legal-page";
 
 export const metadata: Metadata = {
@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   description:
     "What Eterneon collects when you ask for beta access, why, how long it is kept, and how to have it deleted.",
   alternates: { canonical: "/privacy" },
+  openGraph: og("/privacy"),
 };
 
 export default function PrivacyPage() {

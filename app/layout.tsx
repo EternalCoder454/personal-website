@@ -62,6 +62,12 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
   category: "business software",
+  /* Set GOOGLE_SITE_VERIFICATION in Vercel to have Next emit the tag.
+     Verifying by DNS TXT instead covers apex and www together and needs
+     no deploy, which is why this is the fallback rather than the plan. */
+  ...(process.env.GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
+    : {}),
   /* The real brand kit, wired the way it was handed over. Next emits the
      link tags from this, so there is no hand-written <head> to drift. */
   icons: {
@@ -90,6 +96,9 @@ const structuredData = {
       name: site.name,
       url: siteUrl,
       description: site.description,
+      logo: `${siteUrl}/brand/eterneon-icon-dark-512x512.png`,
+      email: site.contactEmail,
+      slogan: site.tagline,
     },
     {
       "@type": "SoftwareApplication",

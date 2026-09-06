@@ -128,6 +128,21 @@ export const heroShots: Screenshot[] = [
   },
 ];
 
+/**
+ * When each page's content last actually changed.
+ *
+ * The sitemap used `new Date()`, which stamped all three URLs with the
+ * build time on every deploy. Google uses lastmod only while it stays
+ * consistent with reality, and a value that moves when nothing changed
+ * teaches it to ignore the field. Bump the line you edited, and leave
+ * the others alone.
+ */
+export const contentUpdated = {
+  home: "2026-09-05",
+  privacy: "2026-09-05",
+  terms: "2026-09-05",
+} as const;
+
 export const site = {
   name: "Eterneon",
   /* Under 60 characters. */
@@ -140,6 +155,22 @@ export const site = {
   /* The kit tagline, from the horizontal lockup. */
   tagline: "Systems for small business",
 } as const;
+
+/**
+ * Open Graph for one page.
+ *
+ * og:url was missing everywhere. It cannot live in the root layout,
+ * because a child page inherits it verbatim and then advertises the
+ * home page URL while its own canonical says something else. Each page
+ * passes its own path instead. The rest of the fields are the same on
+ * every page, so they live here rather than being retyped three times.
+ */
+export const og = (path: string) => ({
+  type: "website" as const,
+  siteName: site.name,
+  locale: "en_US",
+  url: path,
+});
 
 /**
  * The product tour that plays in the overlay.

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { legal, site } from "@/lib/site";
+import { legal, og, site } from "@/lib/site";
 import { LegalPage, Para, Section } from "@/components/legal-page";
 
 export const metadata: Metadata = {
@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   description:
     "The terms of the Eterneon private beta: what we promise, what we do not, and what the free-for-life offer actually commits us to.",
   alternates: { canonical: "/terms" },
+  openGraph: og("/terms"),
 };
 
 export default function TermsPage() {

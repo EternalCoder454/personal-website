@@ -15,7 +15,11 @@ import { SiteFooter } from "@/components/site-footer";
 import { TourProvider } from "@/components/tour";
 import { LightboxProvider } from "@/components/lightbox";
 import { faqs } from "@/lib/content";
-import { siteUrl } from "@/lib/site";
+import { og, siteUrl } from "@/lib/site";
+
+/* Only Open Graph. Title, description and canonical come from the root
+   layout, which is correct for the home page and only the home page. */
+export const metadata = { openGraph: og("/") };
 
 const faqSchema = {
   "@context": "https://schema.org",
