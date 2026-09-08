@@ -1,0 +1,12 @@
+# Secrets never go in an image, and an image is a thing that gets pushed.
+.env*
+!.env.example
+
+.git
+.next
+node_modules
+npm-debug.log*
+
+scripts
+.vscode
+.claude

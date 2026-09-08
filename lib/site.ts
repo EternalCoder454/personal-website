@@ -1,15 +1,12 @@
 /**
  * Site-level constants.
  *
- * The explicit variable comes first because the platform variable can
- * resolve to a preview domain, which would put the wrong host in every
- * canonical link, sitemap entry and share card.
+ * One variable and a local fallback. There used to be a platform one from
+ * Vercel in between, and it went with the platform: it resolved to a
+ * preview domain, which would put the wrong host in every canonical
+ * link, sitemap entry and share card.
  */
-export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3050");
+export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3050";
 
 /**
  * The legal identity behind the site.

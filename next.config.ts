@@ -86,6 +86,12 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+
+  /* A self-contained server, for the image this ships in now. Next
+     traces what the app imports and writes a directory that runs on its
+     own, which is a few megabytes rather than the whole of
+     node_modules. On Vercel this was the platform's job. */
+  output: "standalone",
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },

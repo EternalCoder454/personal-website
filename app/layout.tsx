@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Newsreader } from "next/font/google";
 import { site, siteUrl } from "@/lib/site";
-import { Analytics } from "@vercel/analytics/next";
 import { SiteHeader } from "@/components/site-header";
 import { MotionProvider } from "@/components/motion-provider";
 import "./globals.css";
@@ -168,11 +167,6 @@ export default function RootLayout({
           <SiteHeader />
           {children}
         </MotionProvider>
-        {/* Cookieless and same-origin in production: the script is
-            served from /_vercel/insights/script.js on this domain, so
-            the CSP needs no third-party host. What it records is
-            written out in full in the privacy notice. */}
-        <Analytics />
         <script
           type="application/ld+json"
           /* Static object built above, not user input. */

@@ -49,14 +49,6 @@ export default function PrivacyPage() {
           is not written to a database.
         </Para>
         <Para>
-          The site also counts page views, using Vercel Web Analytics. A view records the page you
-          looked at, where you arrived from, your browser and device type, and an approximate
-          location worked out from your connection, as far as the city. It does not record your IP
-          address. Visitors are counted using a hash of the request, which Vercel discards after
-          twenty four hours, so the same person returning the next day is a new number and cannot
-          be joined to the previous one.
-        </Para>
-        <Para>
           When performance sampling is switched on, the server times its own work: a route name
           like &ldquo;/privacy&rdquo; and a duration in milliseconds. No IP address, no browser or
           device details, no referrer and no identifier of any kind goes into it, so it cannot be
