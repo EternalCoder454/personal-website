@@ -11,8 +11,9 @@ Push to `origin main` whenever work is finished and `npm run typecheck` and
 
 `D:\Websites\Important Documents` holds the reference material:
 
-- `claude\what_i_like.md`: how things should read and feel. Read before writing
-  any copy.
+- `claude\what_i_like.md`: **read this first, in full.** Standing instructions:
+  how to talk, how to write, how to build, and what has already been decided.
+  It is written to be loaded as a system prompt.
 - `material-design-ux-handbook_3.html`: Material 3, tokens, motion, layout,
   accessibility.
 - `branding/`: logos and brand assets.
