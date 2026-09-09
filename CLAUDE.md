@@ -44,7 +44,9 @@ brand/       logos
 - Load time is the point of this site. Measure the bundle, do not guess. As of
   September 2026: HTML 17.5KB gzipped, CSS 6.9KB, JS 240KB of which react-dom
   is 73KB and Motion 65KB.
-- Make minimal changes. Push as soon as typecheck and lint pass.
+- Make minimal changes. Push as soon as typecheck and lint pass, then deploy:
+  `ssh eterneon-vps 'cd /srv/site && ./deploy.sh'`. There is no CI, so a push
+  on its own changes nothing anybody can see.
 
 ## Out of scope
 
