@@ -7,3 +7,6 @@ out
 next-env.d.ts
 .vercel
 .DS_Store
+
+# Personal, per developer, never shared.
+CLAUDE.local.md

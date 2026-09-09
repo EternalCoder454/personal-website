@@ -1,60 +1,57 @@
 # Eterneon Site
 
-The marketing site. Next.js 16, no `src` directory, routes and components at
-the root. Runs on port 3050 in development. Deployed to eterneon.net from the
-one VPS.
+The marketing site. Next.js 16, no `src` directory. Serves eterneon.net.
 
-Push to `origin main` whenever work is finished and `npm run typecheck` and
-`npm run lint` pass. Do not wait to be asked.
+## Commands
 
-## Read first
+```
+npm run dev          # port 3050
+npm run typecheck    # tsc --noEmit
+npm run lint
+npm run build
+npm run screens      # responsive screenshots
+```
 
-`D:\Websites\Important Documents` holds the reference material:
+## Architecture
 
-- `claude\what_i_like.md`: **read this first, in full.** Standing instructions:
-  how to talk, how to write, how to build, and what has already been decided.
-  It is written to be loaded as a system prompt.
-- `material-design-ux-handbook_3.html`: Material 3, tokens, motion, layout,
-  accessibility.
-- `branding/`: logos and brand assets.
-- `engineering-handbook.html`: performance and testing practice.
+```
+app/         routes
+components/  every client component, flat
+lib/         data and helpers
+proxy.ts     at the root. NOT middleware.ts
+public/      images, with 400w 800w 1200w and full variants
+brand/       logos
+```
 
-## House rules
+## Hard rules
 
-- No em dashes, en dashes or doubled hyphens in any prose.
+- IMPORTANT: reduced motion makes an animation instant. It does not skip it.
+  The server renders the hidden state because that is what `initial` means, so
+  a component that decides not to animate leaves the text at opacity zero
+  forever. This once rendered the whole hero invisible. Always animate to the
+  shown state and set the duration to zero instead.
+- Use `m.*`, never `motion.*`. `LazyMotion` runs with `strict` in
+  `components/motion-provider.tsx` and will throw, which is the point.
+- Do not swap this site to `motion/mini`. That is the panel's rule. The weight
+  here buys `useScroll`, `useSpring` and `useInView`, which mini does not have.
+- Images keep their `srcset` and the `sizes` list ending in `1px`, so phones
+  take the smallest file. The `-full` variants are around 940KB and are only
+  fetched by the lightbox.
 - Headings and labels are short and plain, not sentences.
-- Comments are long prose that explains why, including the bug that made the
-  code look like that.
 
-## Performance, which is the point of this site
+## Workflow
 
-Load time is treated as a business concern here: "Even 0.1 faster loading can
-keep clients." Measure the bundle rather than guessing at it.
+- Load time is the point of this site. Measure the bundle, do not guess. As of
+  September 2026: HTML 17.5KB gzipped, CSS 6.9KB, JS 240KB of which react-dom
+  is 73KB and Motion 65KB.
+- Make minimal changes. Push as soon as typecheck and lint pass.
 
-Where it stands, measured September 2026: HTML 17.5 KB gzipped, CSS 6.9 KB, JS
-240 KB. Of that JS, react-dom is 73 KB and Motion is 65 KB, about 27 per cent.
+## Out of scope
 
-Motion is already reduced as far as it usefully goes. `components/motion-provider.tsx`
-runs `LazyMotion` with `domAnimation` and `strict`, so only the feature set
-this site uses is loaded, and `strict` throws if anybody imports `motion.*`
-instead of `m.*`, which would quietly pull the full bundle back in.
+- `public/` image variants. They are generated. Do not hand edit one.
+- `brand/`.
 
-Do not swap this for `motion/mini`, which is right in the panel and wrong here.
-The remaining weight buys `useScroll` and `useSpring` for the progress bar,
-`useInView` for the reveals, and `animate`. Mini has none of those, so the swap
-means hand written scroll and intersection code across the whole motion
-vocabulary to save about 45 KB.
+## Human approval required
 
-## Traps
-
-- Reduced motion makes an animation instant. It does not skip it. The server
-  renders the hidden state into the HTML because that is what `initial` means,
-  so a component that decides not to animate after hydration leaves the text at
-  opacity zero forever. This happened once and rendered the entire hero
-  invisible. Every component animates to the shown state; reduced motion only
-  sets the duration to zero.
-- `proxy.ts` at the root, not `middleware.ts`. Next 16 renamed the convention.
-- Images are served through a real `srcset` at 400w, 800w, 1200w and full, with
-  a `sizes` list ending in `1px` so phones take the smallest file. The `-full`
-  variants are around 940 KB and are only fetched by the lightbox on demand.
-  Keep it that way.
+- Adding any dependency. Weigh it against the numbers above first.
+- Changing pricing, claims, or anything a customer could hold the company to.
