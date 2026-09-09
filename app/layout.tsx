@@ -102,7 +102,7 @@ const structuredData = {
     {
       "@type": "SoftwareApplication",
       "@id": `${siteUrl}/#software`,
-      name: `${site.name} AI Panel`,
+      name: `${site.name} Panel`,
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       url: site.appUrl,
