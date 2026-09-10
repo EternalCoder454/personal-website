@@ -30,6 +30,10 @@ const WIDTHS = [400, 800, 1200];
 
 const S = "Screenshot 2026-09-09 ";
 
+/* The panel with the browser taken off. Detected once across all
+   sixteen captures and identical every time. */
+const WINDOW = { left: 62, top: 96, width: 3776, height: 2062 };
+
 /**
  * Address text to paint out, in source pixel coordinates.
  *
@@ -70,13 +74,13 @@ const SHOTS = [
   { name: "profile",   file: S + "205812.png", box: { left: 481, top: 328, width: 1638, height: 1024 } },
   { name: "costs",     file: S + "205149.png", box: { left: 425, top: 1418, width: 1120, height: 700 } },
   { name: "dashboard", file: S + "205149.png", box: { left: 62, top: 96, width: 3776, height: 2062 } },
-  /* The whole screen, not a strip of it. The first crop matched the
-     old file's 3.60 aspect and paid for it by losing the status, due
-     and owner columns off the right edge and cutting the last row in
-     half. This starts at the page title so the image says what it
-     is, and ends below the last row. */
-  { name: "tasks",     file: S + "205218.png", box: { left: 417, top: 101, width: 3393, height: 737 } },
-  { name: "wiki",      file: S + "205618.png", box: { left: 1755, top: 302, width: 1126, height: 946 } },
+  /* All three hero cards are whole windows, so all three are 1.83.
+     They overlap in a stack, and a stack of three different shapes
+     does not work: with 1.83, 4.60 and 1.19 in the same box the tall
+     one ran 188px past the container and spilled into the section
+     below. Same shape, same height, offsets behave. */
+  { name: "tasks",     file: S + "205218.png", box: WINDOW },
+  { name: "wiki",      file: S + "205618.png", box: WINDOW },
 ];
 
 const black = (r) => ({
