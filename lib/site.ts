@@ -126,12 +126,12 @@ export const heroShots: Screenshot[] = [
   },
   {
     src: "/screens/tasks.webp",
-    alt: "The task list, with columns for head, title, project, priority and status.",
+    alt: "The task list, filtered by head, with columns for head, title, project, priority, status, due date and owner.",
     caption: "",
     width: 1500,
-    height: 417,
-    fullWidth: 1519,
-    fullHeight: 422,
+    height: 326,
+    fullWidth: 2600,
+    fullHeight: 565,
   },
   {
     src: "/screens/wiki.webp",

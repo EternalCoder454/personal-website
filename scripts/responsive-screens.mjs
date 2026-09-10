@@ -70,7 +70,12 @@ const SHOTS = [
   { name: "profile",   file: S + "205812.png", box: { left: 481, top: 328, width: 1638, height: 1024 } },
   { name: "costs",     file: S + "205149.png", box: { left: 425, top: 1418, width: 1120, height: 700 } },
   { name: "dashboard", file: S + "205149.png", box: { left: 62, top: 96, width: 3776, height: 2062 } },
-  { name: "tasks",     file: S + "205218.png", box: { left: 425, top: 380, width: 1519, height: 422 } },
+  /* The whole screen, not a strip of it. The first crop matched the
+     old file's 3.60 aspect and paid for it by losing the status, due
+     and owner columns off the right edge and cutting the last row in
+     half. This starts at the page title so the image says what it
+     is, and ends below the last row. */
+  { name: "tasks",     file: S + "205218.png", box: { left: 417, top: 101, width: 3393, height: 737 } },
   { name: "wiki",      file: S + "205618.png", box: { left: 1755, top: 302, width: 1126, height: 946 } },
 ];
 
