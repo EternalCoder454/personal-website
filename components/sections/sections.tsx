@@ -269,7 +269,7 @@ export function Steps() {
 
 export function Offer() {
   return (
-    <Section>
+    <Section id="pricing">
       <Reveal className="border-l-2 border-primary py-2 pl-8 md:pl-10">
         <p className="t-label text-primary">The beta offer</p>
         <h2 className="t-headline mt-6 max-w-[18ch] text-balance text-on-surface">
@@ -311,7 +311,7 @@ export function Offer() {
 
 export function Trust() {
   return (
-    <Section>
+    <Section id="security">
       <Heading>Security and your data</Heading>
 
       <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
@@ -401,7 +401,7 @@ export function Fit() {
 
 export function Faq() {
   return (
-    <Section>
+    <Section id="faq">
       <Heading>Frequently asked questions</Heading>
 
       <FaqList faqs={faqs} />

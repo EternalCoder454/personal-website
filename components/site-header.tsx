@@ -4,13 +4,24 @@ import { ScrollProgress } from "@/components/scroll-progress";
 import { site } from "@/lib/site";
 
 /**
- * A slim bar with the mark and one way into the product.
+ * A slim bar with the mark, three jumps down the page, and one way
+ * into the product.
  *
- * The no-navigation rule still holds: there is no menu here, because
- * there are no other marketing pages to send anybody to and a nav bar
- * would imply some. What was missing is different. Somebody who already
- * has a workspace had no way in from this domain at all, and was left
- * guessing at a subdomain.
+ * The page used to have no navigation at all. That held while it was
+ * short; at eleven sections, somebody who only wants the price or the
+ * FAQ was scrolling past everything or using find. The links are in
+ * page anchors, not routes, so nothing here sends a reader off the one
+ * page there is. From a legal page they go home first, then jump.
+ *
+ * Shown from md up only. On a phone the row has room for the mark and
+ * a 48px Sign in and nothing else, and three more targets would either
+ * wrap the bar or shrink below a usable tap size. They are plain text
+ * in the muted colour so they never outrank "Request beta access".
+ *
+ * 38px tall, the same as Sign in at this width. At 44px they made the
+ * bar 69px instead of 63px, and the hero is sized as the viewport less
+ * 63px, so the first screen came out 6px too tall. 38px still clears
+ * the 24px WCAG 2.2 AA target minimum.
  *
  * Sticky rather than fixed, deliberately. A sticky element still takes
  * up its space in the flow, so it can never sit on top of the headline
@@ -23,6 +34,14 @@ import { site } from "@/lib/site";
  * person this page is for, and the header must not compete with the
  * thing we actually want them to do.
  */
+/* "/#..." rather than "#..." so the same links work from /privacy and
+   /terms, where there is no section to jump to until you are home. */
+const sections = [
+  { label: "Pricing", href: "/#pricing" },
+  { label: "Security", href: "/#security" },
+  { label: "FAQ", href: "/#faq" },
+];
+
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-outline-variant bg-surface/85 backdrop-blur-md">
@@ -37,6 +56,22 @@ export function SiteHeader() {
           <AnimatedWordmark />
         </Link>
 
+        <div className="flex items-center gap-2 md:gap-4">
+          <nav aria-label="Sections" className="hidden md:block">
+            <ul className="flex items-center">
+              {sections.map((item) => (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    className="inline-flex min-h-[38px] items-center px-3 t-body-sm whitespace-nowrap text-on-surface-variant transition-colors duration-100 ease-[var(--ease-standard)] hover:text-on-surface"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
         {/* 48px on a phone for the tap target, tighter above it where a
             pointer does not need the room and the bar wants to stay
             slim. `whitespace-nowrap` because "Sign in" wrapping to two
@@ -47,6 +82,7 @@ export function SiteHeader() {
         >
           Sign in
         </a>
+        </div>
       </div>
     </header>
   );

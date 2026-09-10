@@ -223,4 +223,5 @@ export const tour = {
  */
 export const hasProof = tour.src.length > 0 || screenshots.length > 0;
 
-/* There is no navigation. One page, one action, nowhere else to go. */
+/* One page. The header links jump within it; the only ways off it are
+   Sign in and the two legal pages. */

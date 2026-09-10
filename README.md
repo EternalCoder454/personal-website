@@ -181,9 +181,11 @@ never give it a variant with no properties in it. Set the duration to zero.
 It is built to do one thing: turn a visitor into a beta request. The rules below
 are the ones that are easy to erode a change at a time, so they are written down.
 
-- **There is no navigation, anywhere.** No header menu, no footer links, no
-  in-page anchors. `lib/site.ts` has no `nav` export and should not grow one. A
-  link is an exit, and the page has one way forward.
+- **Navigation is three in-page jumps and nothing more.** Pricing, Security and
+  FAQ in the header, from md up, all anchors on this one page. No menu, no second
+  marketing page to send anyone to. A link to another page is an exit, and the
+  page has one way forward. The jumps exist because at eleven sections, somebody
+  who only wanted the price was scrolling past everything to find it.
 - **One call to action, and it appears twice.** The same component, the same
   words, in the hero and at the end. Never a second, different offer competing
   with it: no "book a demo" beside "request access", no "learn more".
