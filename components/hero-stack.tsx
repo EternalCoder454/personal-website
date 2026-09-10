@@ -87,7 +87,7 @@ export function HeroStack() {
             onFocus={() => setPaused(true)}
             onBlur={() => setPaused(false)}
             aria-label={`Enlarge: ${shot.alt}`}
-            className="absolute top-0 left-0 w-[94%] cursor-zoom-in overflow-hidden rounded-[var(--radius-md)] border border-outline-variant bg-surface-low text-left shadow-2xl shadow-black/60"
+            className="absolute top-0 left-0 w-[94%] cursor-zoom-in overflow-hidden rounded-[var(--radius-md)] border border-outline bg-surface-low text-left shadow-2xl shadow-black/60"
             initial={false}
             animate={slot}
             whileHover={

@@ -151,7 +151,14 @@ export function Proof() {
           {screenshots.map((shot) => (
             <li key={shot.src}>
               <Zoomable shot={shot}>
-                <span className="block overflow-hidden border border-outline-variant bg-surface-lowest transition-colors duration-150 ease-[var(--ease-standard)] group-hover:border-outline">
+                {/* outline, not outline-variant. Measured against the page
+                    ground: the old border was 1.29:1, where a UI boundary
+                    wants 3:1, and the screenshots themselves sit between
+                    1.03 and 1.33 of the same tone. With nothing to mark
+                    the edge, a dark screenshot on a dark page is a smudge.
+                    outline is 4.06:1 and is already the site's visible
+                    boundary token. */}
+                <span className="block overflow-hidden border border-outline bg-surface-lowest transition-colors duration-150 ease-[var(--ease-standard)] group-hover:border-on-surface-muted">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={shot.src}
@@ -227,7 +234,11 @@ export function Steps() {
         ))}
       </Stagger>
 
-      <Stagger as="ul" className="mt-16 grid gap-x-14 gap-y-4 border-t border-outline-variant pt-8 sm:grid-cols-2">
+      <Reveal className="mt-16 border-t border-outline-variant pt-8">
+        <p className="t-label text-primary">Also included</p>
+      </Reveal>
+
+      <Stagger as="ul" className="mt-6 grid gap-x-14 gap-y-4 sm:grid-cols-2">
         {capabilities.map((item) => (
           <StaggerItem as="li" key={item} className="t-body-sm text-on-surface-variant">
             {item}
