@@ -345,26 +345,47 @@ export function Straight() {
 /* ------------------------------------------------------------------ */
 
 export function Fit() {
+  /* Two facing boards. The left one is the pitch, the right one turns
+     business away, and the right one is why the section works at all. */
+  const boards = [
+    { ...fit.forYou, accent: "text-primary", rule: "border-outline", note: undefined as string | undefined },
+    { ...fit.notForYou, accent: "text-on-surface-muted", rule: "border-outline-variant" },
+  ];
+
   return (
     <Section>
       <Heading>{fit.headline}</Heading>
 
-      <Stagger as="ul" className="mt-14 grid gap-x-14 gap-y-8 sm:grid-cols-2">
-        {fit.forWhom.map((item) => (
-          <StaggerItem as="li" key={item} className="border-t border-outline-variant pt-5">
-            <p className="t-body-sm max-w-[38ch] text-pretty text-on-surface-variant">{item}</p>
+      <Stagger className="mt-14 grid gap-8 md:grid-cols-2" step={0.1}>
+        {boards.map((board) => (
+          <StaggerItem
+            key={board.label}
+            className={`border ${board.rule} bg-surface-low p-8 md:p-10`}
+          >
+            <p className={`t-label ${board.accent}`}>{board.label}</p>
+
+            <ul className="mt-7 space-y-4">
+              {board.items.map((item) => (
+                <li key={item} className="flex gap-3">
+                  <span
+                    aria-hidden="true"
+                    className={`mt-[0.6em] h-[5px] w-[5px] shrink-0 rounded-full ${
+                      board.accent === "text-primary" ? "bg-primary" : "bg-on-surface-muted"
+                    }`}
+                  />
+                  <span className="t-body-sm text-pretty text-on-surface-variant">{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            {board.note ? (
+              <p className="t-body-sm mt-7 border-t border-outline-variant pt-6 text-pretty text-on-surface">
+                {board.note}
+              </p>
+            ) : null}
           </StaggerItem>
         ))}
       </Stagger>
-
-      {/* Turning the wrong reader away in plain sight. The rule is
-          brighter than the ones above it because this is the line that
-          costs us a signup on purpose. */}
-      <Reveal className="mt-16 border-l-2 border-outline py-2 pl-8 md:pl-10">
-        <p className="t-body max-w-[56ch] text-pretty text-on-surface md:text-[18px]">
-          {fit.notFor}
-        </p>
-      </Reveal>
     </Section>
   );
 }

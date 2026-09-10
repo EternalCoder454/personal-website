@@ -71,7 +71,11 @@ const REDACT = {
  */
 const SHOTS = [
   { name: "heads",     file: S + "205743.png", box: { left: 445, top: 328, width: 1637, height: 1023 } },
-  { name: "profile",   file: S + "205812.png", box: { left: 481, top: 328, width: 1638, height: 1024 } },
+  /* Starts at the page header so the card names its own screen, and
+     ends where the first panel ends. The old box began below the header
+     and ran 90px into the next panel, so it showed a bare "Direction"
+     heading with nothing under it. */
+  { name: "profile",   file: S + "205812.png", box: { left: 481, top: 96, width: 1638, height: 1024 } },
   { name: "costs",     file: S + "205149.png", box: { left: 425, top: 1418, width: 1120, height: 700 } },
   { name: "dashboard", file: S + "205149.png", box: { left: 62, top: 96, width: 3776, height: 2062 } },
   /* All three hero cards are whole windows, so all three are 1.83.

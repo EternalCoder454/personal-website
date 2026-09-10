@@ -23,7 +23,7 @@ export const heads: Head[] = [
 ];
 
 export const problem = {
-  headline: "You need experts. You can’t afford to hire them.",
+  headline: "You can’t afford the experts you need",
   /* Real 2026 US rates, not a gesture at "expensive". The lawyer figure
      is the California average because that is where this business is.
      The finance band is the one quoted for businesses under $1M in
@@ -202,22 +202,30 @@ export const builder = {
 };
 
 /**
- * Who the product is for, and who it is not.
+ * Who the product is for, and who it is not, as two facing lists.
  *
- * SoloPro Tax turns business away in plain sight, listing who is not a
- * fit next to who is. It reads as confidence rather than exclusion,
- * and it saves the wrong reader a signup they would regret. The three
- * here are the real target: family businesses, new ones, and ones that
- * have run unchanged long enough to have new questions.
+ * SoloPro Tax puts a fit and a no-fit card side by side, and the
+ * no-fit one is the reason it works: turning the wrong reader away in
+ * plain sight reads as confidence. Same idea, none of their styling.
  */
 export const fit = {
   headline: "Who this is for",
-  forWhom: [
-    "A family business where four people cover nine jobs, and nobody was hired to do half of them.",
-    "A new business still working out what it charges, and why that number and not another one.",
-    "A business that has run the same way for twenty years and now has questions it never used to have.",
-    "A business the public never sees, quietly keeping the ones it does see running.",
-  ],
-  notFor:
-    "It is not built for a company that already employs a finance team, a legal team and a marketing team. If you have those people, ask them. They know your business better than any of this will.",
+  forYou: {
+    label: "It’s for you if",
+    items: [
+      "Four people cover nine jobs, and nobody was hired to do half of them.",
+      "You are still working out what to charge, and why that number and not another.",
+      "You have run the same way for twenty years and now have questions you never used to.",
+      "Nobody outside your trade has heard of you, and the businesses people have heard of depend on you.",
+    ],
+  },
+  notForYou: {
+    label: "Not for you if",
+    items: [
+      "You already employ a finance team, a legal team and a marketing team.",
+      "You need an answer you can hold a professional to.",
+      "You want it to act on its own, without being asked first.",
+    ],
+    note: "If you have those people, ask them. They know your business better than any of this will.",
+  },
 };
