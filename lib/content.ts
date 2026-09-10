@@ -24,19 +24,19 @@ export const heads: Head[] = [
 
 export const problem = {
   headline: "You can’t afford the experts you need",
-  /* Real 2026 US rates, not a gesture at "expensive". The lawyer figure
-     is the California average because that is where this business is.
-     The finance band is the one quoted for businesses under $1M in
-     revenue, which is the reader, rather than the $4k to $8k that gets
-     quoted for larger ones. Conservative on purpose: a number someone
-     can check has to survive being checked. */
-  body: "A fractional finance lead is $1,500 to $3,000 a month for a business your size. A lawyer averages $422 an hour in California, and one contract review runs $250 to $650 on its own. So you do all of it yourself. You guess at the contract, put off the cash flow forecast, and set a price because it felt about right. Or you paste the question into a chatbot that has never heard of your business and will have forgotten it by tomorrow.",
-  kicker: "Eterneon is a company of AI department heads you can ask instead, for $9.99 a month plus whatever your own model usage costs.",
-  /* The honest limit, next to the numbers rather than three sections
-     away, so nobody reads the comparison without it. Framed the way the
-     panel frames it internally: the point is not to skip the lawyer,
-     it is to stop paying one to explain the basics. */
-  caveat: "It does not replace any of those people, and it says so itself. What it does is get you most of the way in minutes rather than weeks, so that when you do pay for an hour, you walk in already knowing what to ask.",
+  /* Real 2026 US rates. The lawyer figure is the California average,
+     $422 against a US average of $349, which is why the state stays in
+     the sentence: without it the number overstates. The finance band is
+     the one quoted for businesses under $1M in revenue. Two figures, not
+     three: the contract review number turned the paragraph into a price
+     list. The last sentence is the second bad option, the free one most
+     readers have already tried. */
+  body: "A fractional finance lead runs $1,500 to $3,000 a month. A lawyer averages $422 an hour in California. So you guess at the contract, put off the forecast, and set a price because it felt about right. Or you ask a chatbot that has never heard of your business.",
+  /* No price here. The beta offer has its own section with the cards and
+     the model usage caveat, and saying $9.99 here as well read as a pitch
+     before the problem had finished landing. */
+  kicker: "Eterneon is a company of AI department heads you can ask instead.",
+  caveat: "It doesn’t replace those people, and it says so. It gets you most of the way in minutes, so when you do pay for an hour, you already know what to ask.",
 };
 
 export const steps = [
@@ -56,7 +56,6 @@ export const capabilities = [
 export const beta = {
   headline: "Test it during the beta and keep it free",
   body: "You pay nothing during the beta. When we launch, every workspace that tested with us stays free for life, with three seats at no cost.",
-  anchor: "That's the $9.99 a month, and the $3.99 a seat, that everyone else will pay.",
   caveat: "Model usage is the exception. You bring your own key, and your provider bills you for it directly.",
 };
 

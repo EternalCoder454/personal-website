@@ -186,9 +186,12 @@ are the ones that are easy to erode a change at a time, so they are written down
   marketing page to send anyone to. A link to another page is an exit, and the
   page has one way forward. The jumps exist because at eleven sections, somebody
   who only wanted the price was scrolling past everything to find it.
-- **One call to action, and it appears twice.** The same component, the same
-  words, in the hero and at the end. Never a second, different offer competing
-  with it: no "book a demo" beside "request access", no "learn more".
+- **One call to action.** The form appears in the beta offer and again at the
+  end. The hero carries the same words as a button that jumps to the offer,
+  because the offer is where the price and what testers keep sit, which is what
+  a reader needs before handing over an address. Never a second, different
+  offer competing with it: no "book a demo" beside "request access", no "learn
+  more".
 - **One bright fill.** `--color-cta` is the only bone-bright surface on the page,
   at 16.6:1 against the ground. The moment a card or a heading borrows it, the
   button stops being the obvious thing to press.

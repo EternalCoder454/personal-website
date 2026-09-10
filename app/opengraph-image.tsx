@@ -1,6 +1,9 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Eterneon: the department heads your business is missing";
+/* Matches the H1 and the page title. It still said the old headline, so
+   a shared link told a different story from the tab it opened in. When
+   the headline changes, this file changes with it. */
+export const alt = "Eterneon: AI advisors for small business";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -76,7 +79,7 @@ export default function OpengraphImage() {
               maxWidth: 940,
             }}
           >
-            Every department head your business is missing.
+            AI advisors for small business
           </div>
           <div
             style={{
@@ -87,7 +90,8 @@ export default function OpengraphImage() {
               maxWidth: 880,
             }}
           >
-            Marketing, Finance, Legal, Operations and four more, in one private workspace.
+            Eight department heads: Marketing, Finance, Legal, Operations and four more, in one
+            private workspace.
           </div>
         </div>
 

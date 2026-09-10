@@ -86,13 +86,22 @@ export function Hero() {
 
         <StaggerItem>
           <p className="t-body mt-7 max-w-[52ch] text-pretty text-on-surface-variant md:text-[18px]">
-            Marketing, Finance, Legal, Operations and four more, in one private workspace. Ask one
-            of them, or ask all of them at once and see where they disagree.
+            Eight department heads: Marketing, Finance, Legal, Operations and four more, in one
+            private workspace. Ask one of them, or ask all of them at once and see where they disagree.
           </p>
         </StaggerItem>
 
         <StaggerItem className="mt-10">
-          <Cta />
+          {/* A button, not the form. The form lives in the beta offer, next
+              to the price and what testers keep, which is what a reader
+              needs before handing over an address. This jumps there. A bare
+              fragment, so a tagged arrival keeps its query string. */}
+          <a
+            href="#pricing"
+            className="inline-flex min-h-[52px] items-center rounded-[var(--radius-sm)] bg-cta px-7 t-title text-[16px] whitespace-nowrap text-on-cta transition-colors duration-100 ease-[var(--ease-standard)] hover:bg-on-surface"
+          >
+            Request beta access
+          </a>
         </StaggerItem>
 
         {proof.businessesTesting > 0 ? (
@@ -277,9 +286,6 @@ export function Offer() {
         </h2>
         <p className="t-body mt-7 max-w-[54ch] text-pretty text-on-surface-variant md:text-[18px]">
           {beta.body}
-        </p>
-        <p className="t-body mt-5 max-w-[54ch] text-pretty text-on-surface md:text-[18px]">
-          {beta.anchor}
         </p>
         <p className="t-body-sm mt-7 max-w-[54ch] text-pretty text-on-surface-muted">
           {beta.caveat}
