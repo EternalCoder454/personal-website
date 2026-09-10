@@ -136,6 +136,9 @@ export function Problem() {
       <p className="t-body mt-6 max-w-[58ch] text-pretty text-on-surface md:text-[18px]">
         {problem.kicker}
       </p>
+      <p className="t-body-sm mt-6 max-w-[58ch] text-pretty text-on-surface-muted">
+        {problem.caveat}
+      </p>
     </Section>
   );
 }

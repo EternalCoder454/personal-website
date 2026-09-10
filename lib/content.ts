@@ -24,8 +24,19 @@ export const heads: Head[] = [
 
 export const problem = {
   headline: "You need experts. You can’t afford to hire them.",
-  body: "A finance lead, a lawyer, a marketer and an operations manager cost more in a month than a lot of small businesses make. So you do all of it yourself. You guess at the contract, put off the cash flow forecast, and set a price because it felt about right. If you are just starting out, you might not know which of those questions to ask first.",
-  kicker: "Eterneon is a company of AI department heads you can ask instead. It costs $9.99 a month, and nothing at all if you test it with us during the beta.",
+  /* Real 2026 US rates, not a gesture at "expensive". The lawyer figure
+     is the California average because that is where this business is.
+     The finance band is the one quoted for businesses under $1M in
+     revenue, which is the reader, rather than the $4k to $8k that gets
+     quoted for larger ones. Conservative on purpose: a number someone
+     can check has to survive being checked. */
+  body: "A fractional finance lead is $1,500 to $3,000 a month for a business your size. A lawyer averages $422 an hour in California, and one contract review runs $250 to $650 on its own. So you do all of it yourself. You guess at the contract, put off the cash flow forecast, and set a price because it felt about right.",
+  kicker: "Eterneon is a company of AI department heads you can ask instead, for $9.99 a month plus whatever your own model usage costs.",
+  /* The honest limit, next to the numbers rather than three sections
+     away, so nobody reads the comparison without it. Framed the way the
+     panel frames it internally: the point is not to skip the lawyer,
+     it is to stop paying one to explain the basics. */
+  caveat: "It does not replace any of those people, and it says so itself. What it does is get you most of the way in minutes rather than weeks, so that when you do pay for an hour, you walk in already knowing what to ask.",
 };
 
 export const steps = [
