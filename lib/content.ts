@@ -68,18 +68,26 @@ export const costs = [
 
 export const trust = [
   {
+    icon: "/data-isolation.svg",
     title: "Your data is yours alone",
-    body: "Your data is kept separate from every other business. We check that separation in the code and against the live database.",
+    body: "Your data is kept separate from every other business. Every release checks that, in the code and against the live database.",
   },
   {
+    icon: "/encrypted-key.svg",
     title: "Your API key is encrypted",
-    body: "We encrypt it with AES-256-GCM. Once you save it, it is never shown again, including to you.",
+    /* No cipher name: nobody this page is for knows what AES-256-GCM
+       means. And not "even we can't see it": the server has to decrypt
+       the key to call the provider, so that would be a promise the
+       product cannot keep. "Never shown again" is the true one. */
+    body: "It is encrypted the moment you save it, and the panel never shows it again, not even to you.",
   },
   {
+    icon: "/invite-only.svg",
     title: "Access is by invitation only",
     body: "You sign in with Google, and only invited people can get in. Remove someone and their access ends on their next request.",
   },
   {
+    icon: "/approval.svg",
     title: "Nothing happens without your approval",
     body: "Every action is suggested first and waits for you to approve it. Eterneon never acts on its own.",
   },

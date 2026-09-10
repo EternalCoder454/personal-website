@@ -322,8 +322,25 @@ export function Trust() {
 
       <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
         {trust.map((item) => (
-          <StaggerItem key={item.title} className="border-t border-outline-variant pt-5">
-            <dt className="t-title text-on-surface">{item.title}</dt>
+          <StaggerItem key={item.title} className="border-t border-outline-variant pt-8">
+            <dt className="t-title text-on-surface">
+              {/* Inside the dt, not beside it: this is a definition list,
+                  and a bare image between the group and its dt is invalid
+                  HTML. Decorative, so alt is empty. The files carry
+                  role="img" and an aria-label repeating the title, which
+                  would have a screen reader say each card's name twice. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={item.icon}
+                alt=""
+                width={40}
+                height={40}
+                loading="lazy"
+                decoding="async"
+                className="mb-5 block h-10 w-10"
+              />
+              {item.title}
+            </dt>
             <dd className="t-body-sm mt-2 max-w-[46ch] text-pretty text-on-surface-variant">
               {item.body}
             </dd>
