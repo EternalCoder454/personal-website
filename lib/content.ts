@@ -99,6 +99,19 @@ const paras = (...parts: string[]) => parts.join("\n\n");
 
 export const faqs = [
   {
+    /* The objection every visitor has and the site never answered.
+       Plausible, Fathom and Basecamp all name their incumbent in the
+       first screen; this one had no incumbent anywhere on the page.
+       The wording is lifted from the panel's own documentation, so it
+       is the product's existing claim rather than a new one. */
+    q: "Why not just use ChatGPT?",
+    a: paras(
+      "Because one assistant knows nothing about your business and forgets the conversation when you close the tab. You re-explain what you sell, who you sell it to, and what you already decided, every time you open it.",
+      "This is eight of them. Each one runs a department, keeps its own history with you, and remembers what you decided. They all read the same company profile before they answer, so a pricing question reaches Finance already knowing your margins.",
+      "You bring your own key either way, so you pay the same provider whichever you use. What the $9.99 buys is the room around it: the context, the memory, and seven other heads who can disagree with the first one.",
+    ),
+  },
+  {
     q: "What does the beta cost?",
     a: "Nothing, now or later. Test with us and your workspace stays free for life with three seats. A fourth seat and beyond is $3.99 a month each, same as everyone. No credit card at any point in the beta, and when there is eventually something to pay, Stripe handles it and your card details never reach us.",
   },
