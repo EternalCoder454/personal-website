@@ -110,41 +110,53 @@ const paras = (...parts: string[]) => parts.join("\n\n");
 
 export const faqs = [
   {
-    /* The objection every visitor has and the site never answered.
-       Plausible, Fathom and Basecamp all name their incumbent in the
-       first screen; this one had no incumbent anywhere on the page.
-       The wording is lifted from the panel's own documentation, so it
-       is the product's existing claim rather than a new one. */
+    /* Was two questions. The general chatbot and the AI employee tools
+       are different incumbents, but a reader weighing either is asking
+       the same thing, and ten questions in a list is a wall. */
     q: "Why not just use ChatGPT?",
     a: paras(
       "Because one assistant knows nothing about your business and forgets the conversation when you close the tab. You re-explain what you sell, who you sell it to, and what you already decided, every time you open it.",
-      "This is eight of them. Each one runs a department, keeps its own history with you, and remembers what you decided. They all read the same company profile before they answer, so a pricing question reaches Finance already knowing your margins.",
-      "You bring your own key either way, so you pay the same provider whichever you use. What the $9.99 buys is the room around it: the context, the memory, and seven other heads who can disagree with the first one.",
+      "This is eight of them. Each runs a department, keeps its own history with you, and remembers what you decided. They all read the same company profile before they answer, so a pricing question reaches Finance already knowing your margins. And you can put them in a room: ask all eight the same thing and the Chief of Staff reads the seven answers and tells you where they disagree.",
+      "The AI employee tools are a different shape again. Those hire you a digital worker to do a task, and most of them meter you with a credit allowance that resets each month. These answer questions where being wrong costs money, on a key you own, with nothing marked up and nothing metered.",
     ),
   },
   {
-    /* The category this gets compared to is the "AI employee" tools,
-       which sell a digital worker per task and meter it with a monthly
-       credit allowance. Named as a category rather than a company: the
-       difference is structural, and a competitor's name dates fast. */
-    q: "How is this different from the AI employee tools?",
+    q: "What does the beta cost, and what’s the catch?",
     a: paras(
-      "Those hire you a digital worker to do a task: post to social, answer tickets, write the newsletter. Useful, and not this. These eight answer questions where being wrong costs money, like what a clause commits you to, or whether a price covers what it costs you to deliver.",
-      "The billing differs too. Most of them meter you, with a credit allowance that resets each month and top-ups when it runs out. You bring your own key here. Your provider bills you at their list price, and we never mark it up and never meter it.",
-      "And you can put them in a room. Ask all eight the same question, and the Chief of Staff reads the seven answers and tells you where they disagree. A tool that runs one worker per task has nothing to disagree about.",
+      "Nothing, now or later. Test with us and your workspace stays free for life with three seats. A fourth seat and beyond is $3.99 a month each, same as everyone. No credit card at any point in the beta, and when there is eventually something to pay, Stripe handles it and your card details never reach us.",
+      "The catch is that you are using an unfinished product and telling us where it breaks. That is worth more to us than $9.99 a month. The offer sticks to the workspace, so it survives you adding and removing people.",
     ),
-  },
-  {
-    q: "What does the beta cost?",
-    a: "Nothing, now or later. Test with us and your workspace stays free for life with three seats. A fourth seat and beyond is $3.99 a month each, same as everyone. No credit card at any point in the beta, and when there is eventually something to pay, Stripe handles it and your card details never reach us.",
-  },
-  {
-    q: "Free for life is a big claim. What's the catch?",
-    a: "You're using an unfinished product and telling us where it breaks. That's worth more to us than $9.99 a month. The offer sticks to the workspace, so it survives you adding and removing people.",
   },
   {
     q: "Does the price include the AI?",
     a: "No. You bring your own API key and your provider bills you directly, with nothing added by us. We never mark up your usage and never meter it.",
+  },
+  {
+    q: "How long does setup take?",
+    a: "About twenty minutes. Most of it is writing a page about your business, which is the part that makes the answers good.",
+  },
+  {
+    /* Was two questions, one about other businesses and one about
+       colleagues. Both are "who can see this", and merging them puts
+       the permissions caveat inline instead of pointing up the page. */
+    q: "Who can see my data?",
+    a: paras(
+      "No other business, ever. Your data is kept separate from every other workspace, and we check that separation in the code and against the live database.",
+      "Inside your own workspace you set it per person: which heads they can work with, and which of eleven areas they can open. One limit worth knowing, and it is in the list above too. The workspace loads as one document, so those permissions hide screens rather than seal data. Anyone who must never see something needs their own workspace.",
+    ),
+  },
+  {
+    /* Was "What happens if Eterneon shuts down?". The answer was good
+       and the question was not: it plants the doubt it then settles,
+       and a reader deciding whether to trust a one person business does
+       not need the idea handed to them. Same facts, asked the way a
+       careful buyer would actually ask it. */
+    q: "How do I get my data out?",
+    a: paras(
+      "One click. Your whole workspace exports as a single file: every conversation, file, task, decision and wiki page. No ticket, no waiting, no export fee.",
+      "Your AI access sits outside that entirely, because the key is yours. You signed up with Anthropic, OpenAI or Google directly, and that relationship does not run through us.",
+      "The source is published as well, so none of this is a black box you could be shut out of.",
+    ),
   },
   {
     q: "Is Eterneon itself built with AI?",
@@ -152,26 +164,6 @@ export const faqs = [
       "Yes, a good deal of it. It would be odd to sell you a room of AI department heads and then claim I write every line by hand.",
       "The part that matters is what happens next. Every release runs a test suite, an audit that reads every database query to check that one business cannot see another, and a check against the live database for anything left behind where it should not be. The source is published, so you can read it rather than take my word for it.",
       "AI helps me build it faster. It does not decide what ships.",
-    ),
-  },
-  {
-    q: "How long does setup take?",
-    a: "About twenty minutes. Most of it is writing a page about your business, which is the part that makes the answers good.",
-  },
-  {
-    q: "Is my data mixed in with other businesses?",
-    a: "No. Your data is kept separate from every other business, and we check that separation in the code and against the live database.",
-  },
-  {
-    q: "Can I stop a colleague seeing something?",
-    a: "Yes, per person: which heads they can work with, and which of eleven areas they can open. Read the note above on what that boundary does and doesn’t cover.",
-  },
-  {
-    q: "What happens if Eterneon shuts down?",
-    a: paras(
-      "You take everything with you. Your whole workspace exports in one click as a single file: every conversation, file, task, decision and wiki page.",
-      "Your AI access is unaffected either way, because the key is yours. You signed up with Anthropic, OpenAI or Google directly, and that relationship does not run through me.",
-      "The source is published too, so the panel is not a black box that leaves with me.",
     ),
   },
 ];
