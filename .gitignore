@@ -10,3 +10,4 @@ next-env.d.ts
 
 # Personal, per developer, never shared.
 CLAUDE.local.md
+screens-src/
