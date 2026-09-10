@@ -1,3 +1,5 @@
+import { SCREENS_VERSION } from "./screens-version";
+
 /**
  * Site-level constants.
  *
@@ -104,12 +106,25 @@ export const screenshots: Screenshot[] = [
  */
 const RESPONSIVE_WIDTHS = [400, 800, 1200] as const;
 
+/**
+ * A screenshot URL with the current set's version on it.
+ *
+ * Filenames stay the same when a screenshot is replaced, and the files
+ * are cached for a day with a week of stale-while-revalidate, so a
+ * returning visitor kept the old picture. Measured in a browser that had
+ * visited before the hero crops changed: it drew tasks at 4.61 and wiki
+ * at 1.19 while the server was sending 1.83 for both, which is the tall
+ * wiki card that kept appearing in the hero. The version is a hash of
+ * the files, so it changes exactly when they do.
+ */
+export const screenUrl = (path: string) => `${path}?v=${SCREENS_VERSION}`;
+
 /** The candidate list for one card, original included as the largest. */
 export const srcSetFor = (shot: Pick<Screenshot, "src" | "width">) => {
   const base = shot.src.replace(/\.webp$/, "");
   return [
-    ...RESPONSIVE_WIDTHS.filter((w) => w < shot.width).map((w) => `${base}-${w}w.webp ${w}w`),
-    `${shot.src} ${shot.width}w`,
+    ...RESPONSIVE_WIDTHS.filter((w) => w < shot.width).map((w) => `${screenUrl(`${base}-${w}w.webp`)} ${w}w`),
+    `${screenUrl(shot.src)} ${shot.width}w`,
   ].join(", ");
 };
 

@@ -2,7 +2,7 @@
 
 import { m, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
-import { heroShots, srcSetFor } from "@/lib/site";
+import { heroShots, screenUrl, srcSetFor } from "@/lib/site";
 import { useLightbox } from "@/components/lightbox";
 
 /**
@@ -100,7 +100,7 @@ export function HeroStack() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={shot.src}
+              src={screenUrl(shot.src)}
               srcSet={srcSetFor(shot)}
               /* The stack is display:none below lg, so below that its
                  real rendered width is nothing. Saying so lets the

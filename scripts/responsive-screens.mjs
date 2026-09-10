@@ -15,7 +15,8 @@
  * Run with: npm run screens
  */
 import sharp from "sharp";
-import { mkdir, readdir, rm, stat } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { mkdir, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 const SRC = process.env.SCREENS_SRC || "screens-src";
@@ -144,6 +145,21 @@ async function main() {
     console.log(`${shot.name.padEnd(10)} crop ${nw}x${nh}  aspect ${(nw / nh).toFixed(2)}`);
     console.log(`           ${out.join("  ")}`);
   }
+
+  /* Every screenshot URL on the site carries ?v= this hash. Replacing a
+     file under the same name used to leave returning visitors on the old
+     picture for up to a week: a day of max-age plus a week of
+     stale-while-revalidate. A new hash is a new URL, so no cache can hold
+     the old picture against it. The hash covers every output file, so it
+     changes exactly when one of them does. */
+  const hash = createHash("sha256");
+  for (const f of (await readdir(OUT)).sort()) hash.update(f).update(await readFile(join(OUT, f)));
+  const version = hash.digest("hex").slice(0, 10);
+  await writeFile(
+    "lib/screens-version.ts",
+    ["/* Written by npm run screens. Do not edit by hand. */", `export const SCREENS_VERSION = "${version}";`, ""].join(String.fromCharCode(10)),
+  );
+  console.log(`version ${version} written to lib/screens-version.ts`);
 
   console.log("\npaste into lib/site.ts:");
   for (const d of dims) {

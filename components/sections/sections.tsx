@@ -4,7 +4,7 @@ import { HeroStack } from "@/components/hero-stack";
 import { Zoomable } from "@/components/lightbox";
 import { CountUp, Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { FaqList } from "@/components/faq-list";
-import { hasProof, proof, screenshots, site, srcSetFor } from "@/lib/site";
+import { hasProof, proof, screenshots, screenUrl, site, srcSetFor } from "@/lib/site";
 import { TourFrame } from "@/components/tour";
 import {
   beta,
@@ -186,7 +186,7 @@ export function Proof() {
                 <span className="block overflow-hidden border border-outline bg-surface-lowest transition-colors duration-150 ease-[var(--ease-standard)] group-hover:border-on-surface-muted">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={shot.src}
+                  src={screenUrl(shot.src)}
                   srcSet={srcSetFor(shot)}
                   /* One column on a phone inside 20px of shell padding,
                      a third of the shell from md, and a fixed third of

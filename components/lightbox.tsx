@@ -9,7 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { Screenshot } from "@/lib/site";
+import { screenUrl, type Screenshot } from "@/lib/site";
 
 /**
  * Click a screenshot, read it properly.
@@ -135,7 +135,7 @@ export function LightboxProvider({ children }: { children: ReactNode }) {
             <div className={actualSize ? "overflow-auto" : "overflow-hidden"}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={fullSrc(shot.src)}
+                src={screenUrl(fullSrc(shot.src))}
                 alt={shot.alt}
                 /* The full file's own dimensions, not the card's. An
                    attribute width smaller than the file caps the used
