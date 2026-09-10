@@ -57,10 +57,17 @@ export function Hero() {
   /* The top padding was trimmed when the wordmark moved into the sticky
      bar. The bar carries its own padding, so the old value stacked on
      top of it and pushed the headline 24px further down the phone
-     screen. This puts the first line back where it was. */
+     screen. This puts the first line back where it was.
+
+     From lg up the hero also fills the first screen, less the 63px bar,
+     with its content centred. It used to end at a fixed 919px, so on any
+     window taller than that the next section's heading showed up inside
+     the first view and read as part of the hero. Shortening the headline
+     to two lines made that 180px worse, which is why trimming the next
+     heading never fixed it. */
   return (
-    <header className="shell pt-4 pb-20 md:pt-8 md:pb-28">
-      <div className="mt-20 grid items-start gap-16 md:mt-28 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-10 xl:gap-14">
+    <header className="shell pt-4 pb-20 md:pt-8 md:pb-28 lg:flex lg:min-h-[calc(100svh-63px)] lg:flex-col lg:justify-center lg:py-16">
+      <div className="mt-20 grid items-start gap-16 md:mt-28 lg:mt-0 lg:w-full lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-center lg:gap-10 xl:gap-14">
         <Stagger trigger="mount" step={0.09} delay={0.45}>
         <StaggerItem>
           <p className="t-label text-primary">Private beta</p>
