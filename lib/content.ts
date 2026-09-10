@@ -200,3 +200,24 @@ export const builder = {
     rest: " and I answer. There is nobody to pass it to.",
   },
 };
+
+/**
+ * Who the product is for, and who it is not.
+ *
+ * SoloPro Tax turns business away in plain sight, listing who is not a
+ * fit next to who is. It reads as confidence rather than exclusion,
+ * and it saves the wrong reader a signup they would regret. The three
+ * here are the real target: family businesses, new ones, and ones that
+ * have run unchanged long enough to have new questions.
+ */
+export const fit = {
+  headline: "Who this is for",
+  forWhom: [
+    "A family business where four people cover nine jobs, and nobody was hired to do half of them.",
+    "A new business still working out what it charges, and why that number and not another one.",
+    "A business that has run the same way for twenty years and now has questions it never used to have.",
+    "A business the public never sees, quietly keeping the ones it does see running.",
+  ],
+  notFor:
+    "It is not built for a company that already employs a finance team, a legal team and a marketing team. If you have those people, ask them. They know your business better than any of this will.",
+};

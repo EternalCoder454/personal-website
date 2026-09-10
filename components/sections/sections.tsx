@@ -9,6 +9,7 @@ import { TourFrame } from "@/components/tour";
 import {
   beta,
   builder,
+  fit,
   capabilities,
   costs,
   faqs,
@@ -337,6 +338,33 @@ export function Straight() {
           </StaggerItem>
         ))}
       </Stagger>
+    </Section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+export function Fit() {
+  return (
+    <Section>
+      <Heading>{fit.headline}</Heading>
+
+      <Stagger as="ul" className="mt-14 grid gap-x-14 gap-y-8 sm:grid-cols-2">
+        {fit.forWhom.map((item) => (
+          <StaggerItem as="li" key={item} className="border-t border-outline-variant pt-5">
+            <p className="t-body-sm max-w-[38ch] text-pretty text-on-surface-variant">{item}</p>
+          </StaggerItem>
+        ))}
+      </Stagger>
+
+      {/* Turning the wrong reader away in plain sight. The rule is
+          brighter than the ones above it because this is the line that
+          costs us a signup on purpose. */}
+      <Reveal className="mt-16 border-l-2 border-outline py-2 pl-8 md:pl-10">
+        <p className="t-body max-w-[56ch] text-pretty text-on-surface md:text-[18px]">
+          {fit.notFor}
+        </p>
+      </Reveal>
     </Section>
   );
 }

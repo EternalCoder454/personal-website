@@ -2,6 +2,7 @@ import {
   Builder,
   Close,
   Faq,
+  Fit,
   Hero,
   Offer,
   Problem,
@@ -47,6 +48,7 @@ export default function HomePage() {
         <Offer />
         <Trust />
         <Straight />
+        <Fit />
         <Faq />
         <Builder />
         <Close />
