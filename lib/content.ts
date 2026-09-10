@@ -112,6 +112,18 @@ export const faqs = [
     ),
   },
   {
+    /* The category this gets compared to is the "AI employee" tools,
+       which sell a digital worker per task and meter it with a monthly
+       credit allowance. Named as a category rather than a company: the
+       difference is structural, and a competitor's name dates fast. */
+    q: "How is this different from the AI employee tools?",
+    a: paras(
+      "Those hire you a digital worker to do a task: post to social, answer tickets, write the newsletter. Useful, and not this. These eight answer questions where being wrong costs money, like what a clause commits you to, or whether a price covers what it costs you to deliver.",
+      "The billing differs too. Most of them meter you, with a credit allowance that resets each month and top-ups when it runs out. You bring your own key here. Your provider bills you at their list price, and we never mark it up and never meter it.",
+      "And you can put them in a room. Ask all eight the same question, and the Chief of Staff reads the seven answers and tells you where they disagree. A tool that runs one worker per task has nothing to disagree about.",
+    ),
+  },
+  {
     q: "What does the beta cost?",
     a: "Nothing, now or later. Test with us and your workspace stays free for life with three seats. A fourth seat and beyond is $3.99 a month each, same as everyone. No credit card at any point in the beta, and when there is eventually something to pay, Stripe handles it and your card details never reach us.",
   },

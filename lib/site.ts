@@ -162,10 +162,10 @@ export const contentUpdated = {
 export const site = {
   name: "Eterneon",
   /* Under 60 characters. */
-  title: "Eterneon: the department heads your business is missing",
+  title: "AI business advisors for small business | Eterneon",
   /* 150 to 160 characters. */
   description:
-    "Marketing, Finance, Legal, Operations and four more, as AI department heads in one private workspace. Free for life for beta testers. No credit card.",
+    "Eight AI department heads for your small business: Marketing, Finance, Legal, Operations and four more, in one workspace. Bring your own API key. Free in beta.",
   appUrl: "https://business.eterneon.net",
   contactEmail: "hello@eterneon.net",
   /* The kit tagline, from the horizontal lockup. */

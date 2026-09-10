@@ -66,8 +66,13 @@ export function Hero() {
         </StaggerItem>
 
         <StaggerItem>
-          <h1 className="t-display mt-6 max-w-[16ch] text-balance text-on-surface">
-            Every department head your business is missing
+          {/* No max-width. The old 16ch computed to 917px against a
+              column that is 583px, so it never bound anything: the grid
+              did. Measured in the real face at the real size, a line
+              holds about sixteen characters, which is why the headline
+              is short enough to break on its own phrases. */}
+          <h1 className="t-display mt-6 text-balance text-on-surface">
+            AI advisors for small business
           </h1>
         </StaggerItem>
 
