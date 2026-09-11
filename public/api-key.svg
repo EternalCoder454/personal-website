@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#8d9498" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="You need an API key">
+  <circle cx="14" cy="24" r="9"/>
+  <circle cx="14" cy="24" r="2.8" fill="#8d9498" stroke="none"/>
+  <path d="M23 24h20"/>
+  <path d="M36 24v7M42 24v5"/>
+</svg>

@@ -360,8 +360,26 @@ export function Straight() {
 
       <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
         {straight.map((item) => (
-          <StaggerItem key={item.title} className="border-t border-outline pt-5">
-            <dt className="t-title text-on-surface">{item.title}</dt>
+          <StaggerItem key={item.title} className="border-t border-outline pt-8">
+            <dt className="t-title text-on-surface">
+              {/* Same layout as the security cards, and the same reasons:
+                  inside the dt to stay valid HTML, alt empty because the
+                  title under it already says it. The icons are drawn in
+                  the muted grey rather than cyan on purpose. These are the
+                  limits, and in the accent colour they would read as more
+                  selling points next to the guarantees above them. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={item.icon}
+                alt=""
+                width={40}
+                height={40}
+                loading="lazy"
+                decoding="async"
+                className="mb-5 block h-10 w-10"
+              />
+              {item.title}
+            </dt>
             <dd className="t-body-sm mt-2 max-w-[46ch] text-pretty text-on-surface-variant">
               {item.body}
             </dd>

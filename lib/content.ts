@@ -95,18 +95,22 @@ export const trust = [
 
 export const straight = [
   {
+    icon: "/api-key.svg",
     title: "You need an API key",
     body: "Without a key, the heads can’t answer. Signing up with Anthropic, OpenAI or Google takes a few minutes, and you only do it once.",
   },
   {
+    icon: "/hidden-screens.svg",
     title: "Permissions hide screens, not data",
     body: "The workspace loads as one document, so a determined person could read what the interface hides. Anyone who must never see something needs their own workspace.",
   },
   {
+    icon: "/google-signin.svg",
     title: "Google sign-in only",
     body: "No email and password, no SSO, no Microsoft.",
   },
   {
+    icon: "/not-advice.svg",
     title: "It is not professional advice",
     body: "The Legal and Finance heads help you think. They don’t replace a lawyer or an accountant, and we say so inside the product too.",
   },
