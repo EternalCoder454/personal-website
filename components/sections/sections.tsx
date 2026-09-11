@@ -26,6 +26,10 @@ import {
  * Space is the hierarchy here. Sections are far apart, headings are
  * large, and there are few enough elements in each that nothing needs a
  * box drawn round it.
+ *
+ * The gaps are about a quarter shorter than they first were. At 176px
+ * a side on desktop the page ran to 10,872px, and several screens held
+ * one heading and little else. Same rhythm, shorter gaps.
  */
 function Section({
   id,
@@ -37,7 +41,7 @@ function Section({
   className?: string;
 }) {
   return (
-    <section id={id} className={`py-24 md:py-36 lg:py-44 ${className}`}>
+    <section id={id} className={`py-20 md:py-28 lg:py-32 ${className}`}>
       <div className="shell">{children}</div>
     </section>
   );
@@ -86,8 +90,9 @@ export function Hero() {
 
         <StaggerItem>
           <p className="t-body mt-7 max-w-[52ch] text-pretty text-on-surface-variant md:text-[18px]">
-            Eight department heads: Marketing, Finance, Legal, Operations and four more, in one
-            private workspace. Ask one of them, or ask all of them at once and see where they disagree.
+            Eight department heads in one private workspace: Marketing, Finance, Legal, Operations
+            and four more. They all read the same profile of your business before they answer. Ask
+            one, or ask all of them at once and see where they disagree.
           </p>
         </StaggerItem>
 
@@ -155,6 +160,9 @@ export function Problem() {
       </p>
       <p className="t-body-sm mt-6 max-w-[58ch] text-pretty text-on-surface-muted">
         {problem.caveat}
+      </p>
+      <p className="t-body-sm mt-4 max-w-[58ch] text-pretty text-on-surface-muted">
+        {problem.sources}
       </p>
     </Section>
   );
@@ -233,7 +241,9 @@ export function Room() {
       </Stagger>
 
       <p className="t-body-sm mt-14 max-w-[58ch] text-pretty text-on-surface-muted">
-        Rename them, rewrite what they know, add your own or delete the ones you don’t need. Each
+        Every head reads your company profile, the decisions you have recorded and your key
+        figures before it answers. Rename them, rewrite what they know, add your own or delete the
+        ones you don’t need. Each
         one can run on a different model.
       </p>
     </Section>

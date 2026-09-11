@@ -32,6 +32,10 @@ export const problem = {
      list. The last sentence is the second bad option, the free one most
      readers have already tried. */
   body: "A fractional finance lead runs $1,500 to $3,000 a month. A lawyer averages $422 an hour in California. So you guess at the contract, put off the forecast, and set a price because it felt about right. Or you ask a chatbot that has never heard of your business.",
+  /* A reader seeing two exact prices on a page about Finance and Legal
+     will ask where they came from, so the page says. No single pricing
+     guide is named for the finance range because it was not tied to one. */
+  sources: "Where the numbers come from: the lawyer rate is Clio’s March 2026 average for California, and the finance range is published 2026 fractional CFO pricing for businesses under $1M in revenue.",
   /* No price here. The beta offer has its own section with the cards and
      the model usage caveat, and saying $9.99 here as well read as a pitch
      before the problem had finished landing. */
@@ -57,7 +61,9 @@ export const capabilities = [
 export const beta = {
   headline: "Test it during the beta and keep it free",
   body: "You pay nothing during the beta. When we launch, every workspace that tested with us stays free for life, with three seats at no cost.",
-  caveat: "Model usage is the exception. You bring your own key, and your provider bills you for it directly.",
+  /* Answers "free for life, including the AI?" at the price, where the
+     question comes up. */
+  caveat: "Free for life covers the workspace. The AI is yours: you bring your own key, your provider bills you directly, and we never mark it up.",
 };
 
 /* amount and decimals drive the count-up. */
@@ -135,6 +141,10 @@ export const faqs = [
     a: paras(
       "Because one assistant knows nothing about your business and forgets the conversation when you close the tab. You re-explain what you sell, who you sell it to, and what you already decided, every time you open it.",
       "This is eight of them. Each runs a department, keeps its own history with you, and remembers what you decided. They all read the same company profile before they answer, so a pricing question reaches Finance already knowing your margins. And you can put them in a room: ask all eight the same thing and the Chief of Staff reads the seven answers and tells you where they disagree.",
+      /* The sharper version of the objection. Worded around the work that
+         lands on the reader, not around what ChatGPT lacks: its features
+         change often, and a claim about them could be wrong next month. */
+      "You could set up eight custom GPTs, and then you would be the one keeping them in step: pasting the same background into each, remembering what one told you when you ask another, and copying answers into your own notes. Here the heads share one profile and one record of your decisions, answer the same question side by side, and turn answers into tasks and decisions your team can see.",
       "The AI employee tools are a different shape again. Those hire you a digital worker to do a task, and most of them meter you with a credit allowance that resets each month. These answer questions where being wrong costs money, on a key you own, with nothing marked up and nothing metered.",
     ),
   },
