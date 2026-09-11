@@ -107,7 +107,7 @@ export function Cta({ size = "large" }: { size?: "large" | "compact" }) {
           disabled={state === "sending"}
           className="min-h-[52px] shrink-0 rounded-[var(--radius-sm)] bg-cta px-7 t-title text-[16px] whitespace-nowrap text-on-cta transition-colors duration-100 ease-[var(--ease-standard)] hover:bg-on-surface disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {state === "sending" ? "Sending" : "Request beta access"}
+          {state === "sending" ? "Sending" : "Ask for an invite"}
         </button>
       </form>
 

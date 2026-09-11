@@ -13,14 +13,15 @@ export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:305
 /**
  * The legal identity behind the site.
  *
- * Eterneon is a sole trader business, not a registered company, so there
+ * Eterneon is a one person business, a sole proprietorship in US terms,
+ * not a registered company, so there
  * is no company name distinct from the trading name and no company
  * number. That is a normal thing to be and the pages say so plainly
  * rather than leaving a gap where a reader expects a company.
  *
  * address is deliberately empty. A privacy notice needs the controller
  * identity and a way to reach them, and an email address satisfies that.
- * A sole trader working from home should not have to publish a home
+ * A one person business run from home should not have to publish a home
  * address to run a beta. Fill it in only if there is a business address
  * that is not somebody house.
  */

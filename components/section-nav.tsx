@@ -17,9 +17,10 @@ import { usePathname } from "next/navigation";
  * bar 69px instead of 63px, and the hero is sized as the viewport less
  * 63px. 38px still clears the 24px WCAG 2.2 AA target minimum.
  */
+/* In page order, so the links read top to bottom the way the page does. */
 const sections = [
-  { label: "Pricing", id: "pricing" },
   { label: "Security", id: "security" },
+  { label: "Pricing", id: "pricing" },
   { label: "FAQ", id: "faq" },
 ];
 

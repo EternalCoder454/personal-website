@@ -31,7 +31,7 @@ export function SiteFooter() {
 
             <p className="t-body-sm mt-8 text-on-surface">
               {legal.entity}
-              {legal.soleTrader ? ", a sole trader business" : ""}
+              {legal.soleTrader ? ", a one person business" : ""}
               {legal.companyNumber ? `. Company number ${legal.companyNumber}` : ""}
             </p>
             {legal.address ? (

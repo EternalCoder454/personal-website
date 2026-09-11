@@ -100,7 +100,7 @@ export function Hero() {
             href="#pricing"
             className="inline-flex min-h-[52px] items-center rounded-[var(--radius-sm)] bg-cta px-7 t-title text-[16px] whitespace-nowrap text-on-cta transition-colors duration-100 ease-[var(--ease-standard)] hover:bg-on-surface"
           >
-            Request beta access
+            Ask for an invite
           </a>
         </StaggerItem>
 
@@ -303,9 +303,9 @@ export function Offer() {
         ))}
       </Stagger>
 
-      {/* Third instance of the same call to action. Somebody who has
-          just read the price is as close to deciding as they will get,
-          and the next one was 4,000px away. */}
+      {/* The form sits here, right after the price. Somebody who has just
+          read it is as close to deciding as they will get, and the hero's
+          button jumps straight to this spot. */}
       <div className="mt-16">
         <Cta />
       </div>

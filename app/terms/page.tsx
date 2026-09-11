@@ -24,7 +24,7 @@ export default function TermsPage() {
         <Para>
           {legal.entity}
           {legal.soleTrader
-            ? " is a sole trader business rather than a registered company"
+            ? " is a one person business rather than a registered company"
             : legal.companyNumber
               ? `, company number ${legal.companyNumber}`
               : ""}

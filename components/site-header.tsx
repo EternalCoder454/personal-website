@@ -17,7 +17,7 @@ import { site } from "@/lib/site";
  * Shown from md up only. On a phone the row has room for the mark and
  * a 48px Sign in and nothing else, and three more targets would either
  * wrap the bar or shrink below a usable tap size. They are plain text
- * in the muted colour so they never outrank "Request beta access".
+ * in the muted colour so they never outrank "Ask for an invite".
 
  *
  * Sticky rather than fixed, deliberately. A sticky element still takes
@@ -27,7 +27,7 @@ import { site } from "@/lib/site";
  * first line of the hero on exactly one phone size.
  *
  * The button is outlined, not filled. There is one filled button on this
- * site and it says "Request beta access". A signed-out stranger is the
+ * site and it says "Ask for an invite". A signed-out stranger is the
  * person this page is for, and the header must not compete with the
  * thing we actually want them to do.
  */

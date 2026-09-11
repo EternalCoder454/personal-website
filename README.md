@@ -314,7 +314,7 @@ user data. It is written down rather than left to be found.
 
 - [ ] Name the state in the terms if a lawyer wants it narrower. `legal` says
       "the State of California, United States", which is right for a
-      California sole trader.
+      California sole proprietorship.
 - [ ] Have a lawyer read the free-for-life clause in `/terms`. A perpetual
       commitment is easy to make and expensive to be vague about.
 - [ ] Name the provider that holds the invitation list in `/privacy` once it is

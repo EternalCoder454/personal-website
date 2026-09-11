@@ -25,7 +25,7 @@ export default function PrivacyPage() {
         <Para>
           {legal.entity}
           {legal.soleTrader
-            ? ", a sole trader business rather than a registered company,"
+            ? ", a one person business rather than a registered company,"
             : legal.companyNumber
               ? `, company number ${legal.companyNumber},`
               : ","}{" "}

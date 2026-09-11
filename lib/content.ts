@@ -160,7 +160,7 @@ export const faqs = [
     q: "Who can see my data?",
     a: paras(
       "No other business, ever. Your data is kept separate from every other workspace, and we check that separation in the code and against the live database.",
-      "Inside your own workspace you set it per person: which heads they can work with, and which of eleven areas they can open. One limit worth knowing, and it is in the list above too. The workspace loads as one document, so those permissions hide screens rather than seal data. Anyone who must never see something needs their own workspace.",
+      "Inside your own workspace you set it per person: which heads they can work with, and which of eleven areas they can open. One limit worth knowing, and it is in the list above too: hiding a screen from someone doesn’t stop a determined person reading it. Anyone who must never see something needs their own workspace.",
     ),
   },
   {
