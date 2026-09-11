@@ -197,21 +197,24 @@ export function Answers() {
         {answers.intro}
       </p>
 
-      {/* The captions carry the point in text. On a phone a reply is too
-          small to read in place, and the whole reply is one tap away. */}
-      <ul className="mt-14 grid gap-12 md:grid-cols-2 md:gap-8">
+      {/* One row of four. Two by two took 1,370px, most of a screen and a
+          half, to make a point the captions already make in text. The
+          reply is too small to read in place at this size, and the whole
+          reply is one click away. Below lg the row scrolls sideways
+          instead of stacking four tall cards down a phone. */}
+      <ul className="mt-14 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0">
         {conversations.map((shot) => (
-          <li key={shot.src}>
+          <li key={shot.src} className="w-[78vw] max-w-[320px] shrink-0 snap-start lg:w-auto lg:max-w-none">
             <Zoomable shot={shot}>
               <span className="block overflow-hidden border border-outline bg-surface-lowest transition-colors duration-150 ease-[var(--ease-standard)] group-hover:border-on-surface-muted">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={screenUrl(shot.src)}
                   srcSet={srcSetFor(shot)}
-                  /* Half the shell from md, solved from the same widths
-                     as the proof cards: a third there is 331, 371 and
-                     437px with 32px gaps. */
-                  sizes="(min-width: 2200px) 672px, (min-width: 1600px) 573px, (min-width: 1184px) 513px, (min-width: 768px) calc((100vw - 96px) / 2), calc(100vw - 40px)"
+                  /* Measured: 324, 274 and 244px across the fixed
+                     shell widths, and a quarter of what the shell
+                     leaves from 1024. Below that, the scroller card. */
+                  sizes="(min-width: 2200px) 324px, (min-width: 1600px) 274px, (min-width: 1184px) 244px, (min-width: 1024px) calc((100vw - 160px) / 4), min(78vw, 320px)"
                   alt={shot.alt}
                   width={shot.width}
                   height={shot.height}
