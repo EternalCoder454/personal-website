@@ -4,9 +4,10 @@ import { HeroStack } from "@/components/hero-stack";
 import { Zoomable } from "@/components/lightbox";
 import { CountUp, Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { FaqList } from "@/components/faq-list";
-import { hasProof, proof, screenshots, screenUrl, site, srcSetFor } from "@/lib/site";
+import { conversations, hasProof, proof, screenshots, screenUrl, site, srcSetFor } from "@/lib/site";
 import { TourFrame } from "@/components/tour";
 import {
+  answers,
   beta,
   builder,
   fit,
@@ -182,6 +183,49 @@ export function Problem() {
           ),
         )}
       </p>
+    </Section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+export function Answers() {
+  return (
+    <Section>
+      <Heading>{answers.headline}</Heading>
+      <p className="t-body mt-8 max-w-[58ch] text-pretty text-on-surface-variant md:text-[18px]">
+        {answers.intro}
+      </p>
+
+      {/* The captions carry the point in text. On a phone a reply is too
+          small to read in place, and the whole reply is one tap away. */}
+      <ul className="mt-14 grid gap-12 md:grid-cols-2 md:gap-8">
+        {conversations.map((shot) => (
+          <li key={shot.src}>
+            <Zoomable shot={shot}>
+              <span className="block overflow-hidden border border-outline bg-surface-lowest transition-colors duration-150 ease-[var(--ease-standard)] group-hover:border-on-surface-muted">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={screenUrl(shot.src)}
+                  srcSet={srcSetFor(shot)}
+                  /* Half the shell from md, solved from the same widths
+                     as the proof cards: a third there is 331, 371 and
+                     437px with 32px gaps. */
+                  sizes="(min-width: 2200px) 672px, (min-width: 1600px) 573px, (min-width: 1184px) 513px, (min-width: 768px) calc((100vw - 96px) / 2), calc(100vw - 40px)"
+                  alt={shot.alt}
+                  width={shot.width}
+                  height={shot.height}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-auto w-full"
+                />
+              </span>
+              <span className="t-label mt-4 block text-primary">Read the whole reply</span>
+            </Zoomable>
+            <p className="t-body-sm mt-2 text-pretty text-on-surface-variant">{shot.caption}</p>
+          </li>
+        ))}
+      </ul>
     </Section>
   );
 }
@@ -423,23 +467,27 @@ export function Straight() {
 export function Fit() {
   /* Two facing boards, weighted on purpose. The left one is the pitch
      and steps forward: a cyan edge, the lighter card, text at full
-     brightness. The right one turns business away and steps back: the
-     plain edge, the base card, muted text, and a closing note in grey
+     brightness, and its label on a cyan tag, 5.6:1. The right one turns
+     business away and steps back: the plain edge, the base card, muted
+     text, a bare label, and a closing note in grey
      rather than white, which had been the brightest thing in the box.
+     A grey tag there measured 4.95:1, under the 5.0 floor, and would
+     have brightened the board meant to recede. It keeps the tag's
+     vertical padding so both lists still start level.
      Same structure on both, so they still read as a pair. */
   const boards = [
     {
       ...fit.forYou,
       note: undefined as string | undefined,
       box: "border-primary/70 bg-surface-container",
-      labelColor: "text-primary",
+      labelColor: "inline-block rounded-[var(--radius-sm)] bg-primary/15 px-3 py-1.5 text-primary",
       dotColor: "bg-primary",
       textColor: "text-on-surface",
     },
     {
       ...fit.notForYou,
       box: "border-outline-variant bg-surface-low",
-      labelColor: "text-on-surface-muted",
+      labelColor: "py-1.5 text-on-surface-muted",
       dotColor: "bg-on-surface-muted",
       textColor: "text-on-surface-muted",
     },

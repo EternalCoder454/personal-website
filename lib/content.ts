@@ -54,6 +54,15 @@ export const problem = {
   caveat: "It doesn’t replace those people, and it says so. It gets you most of the way in minutes, so when you do pay for an hour, you already know what to ask.",
 };
 
+/* Straight after the problem, because it is the answer to its last
+   line: a chatbot that has never heard of your business. None of the
+   questions in these replies carries a number, so every figure the heads
+   quote came from the workspace. The replies are cropped, not edited. */
+export const answers = {
+  headline: "Four heads, one business",
+  intro: "Real replies from one workspace, cropped but not edited. None of the questions gives a number. The heads already knew the business has 61 clients, wants 150, and can’t hire until one plan reaches 40 clients.",
+};
+
 export const steps = [
   { n: "01", title: "Add your API key", body: "One key from Anthropic, OpenAI, Google or DeepSeek. Encrypted, and never shown again." },
   { n: "02", title: "Describe your business", body: "Spend about ten minutes writing down what your business does. Without it, the answers are generic." },

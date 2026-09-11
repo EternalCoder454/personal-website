@@ -98,6 +98,52 @@ export const screenshots: Screenshot[] = [
 ];
 
 /**
+ * Four real replies from the same workspace, for the Answers section.
+ *
+ * The card is the top of the reply, cut in a gap between two lines, and
+ * all four share a 6:7 shape so each row sits level. The -full twin is
+ * the whole visible reply, which is what the lightbox is for here.
+ */
+export const conversations: Screenshot[] = [
+  {
+    src: "/screens/ask-marketing.webp",
+    alt: "Marketing’s reply to “What should we do to get a bigger reach of clients?” It asks for a target date, then drafts a campaign brief: the goal of 150 clients, who it is for, one message, and two channels, bookkeeper referrals and search.",
+    caption: "Marketing, asked how to reach more clients. It starts from the 61 clients and the target of 150, and asks for the date it is missing.",
+    width: 1277,
+    height: 1490,
+    fullWidth: 1277,
+    fullHeight: 1718,
+  },
+  {
+    src: "/screens/ask-finance.webp",
+    alt: "Finance’s reply to “Is our pricing the best amount?” A table of the three prices and what each is worth a year, then the four numbers it needs before it will call any price right.",
+    caption: "Finance, asked if the prices are right. It says it can’t tell without the cost of serving one client, and won’t make that number up.",
+    width: 950,
+    height: 1108,
+    fullWidth: 950,
+    fullHeight: 1640,
+  },
+  {
+    src: "/screens/ask-legal.webp",
+    alt: "Legal’s reply to “Anything we should make sure is properly set in legal?” A ranked list with a client agreement first, then cancellation terms, a privacy notice and a contractor agreement, and a note that it is not legal advice.",
+    caption: "Legal, asked what needs setting up properly. It ranks the gaps, says it isn’t legal advice, and names the two worth paying a lawyer to check.",
+    width: 1069,
+    height: 1247,
+    fullWidth: 1069,
+    fullHeight: 1760,
+  },
+  {
+    src: "/screens/ask-operations.webp",
+    alt: "Operations’ reply to “How can we efficiently handle more clients?” Four places the work could break between 61 and 150 clients, a guess that building each client’s dashboard is the one, and a question about how long a build takes.",
+    caption: "Operations, asked how to take on more clients. It lists where the work could break, makes a guess, and asks for the one number it needs.",
+    width: 1276,
+    height: 1489,
+    fullWidth: 1276,
+    fullHeight: 1489,
+  },
+];
+
+/**
  * The widths scripts/responsive-screens.mjs writes next to each card.
  *
  * Measured on the live site: a proof card renders at 333 CSS pixels on

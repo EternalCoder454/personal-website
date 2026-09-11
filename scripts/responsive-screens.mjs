@@ -30,6 +30,7 @@ const CARD_MAX = 1500;
 const WIDTHS = [400, 800, 1200];
 
 const S = "Screenshot 2026-09-09 ";
+const T = "Screenshot 2026-09-10 ";
 
 /* The panel with the browser taken off. Detected once across all
    sixteen captures and identical every time. */
@@ -86,6 +87,19 @@ const SHOTS = [
      below. Same shape, same height, offsets behave. */
   { name: "tasks",     file: S + "205218.png", box: WINDOW },
   { name: "wiki",      file: S + "205618.png", box: WINDOW },
+  /* Real replies, for the Answers section. Only the chat column: the
+     sidebar is already on the page twice. A card runs from just above
+     the question to a gap between two lines of text, then repeats that
+     blank row `extend` times to reach the shared 6:7 shape, so the four
+     cards are one shape and no line is cut through. `full` is the whole
+     visible reply, for the lightbox. Two were captured with the browser
+     zoomed out; cropping to the column keeps the text the same size
+     relative to the card either way. */
+  { name: "ask-marketing",  file: T + "205922.png", box: { left: 1730, top: 244, width: 1277, height: 1456 }, extend: 34, full: { left: 1730, top: 225, width: 1277, height: 1718 } },
+  { name: "ask-finance",    file: T + "210148.png", box: { left: 1759, top: 194, width: 950,  height: 1092 }, extend: 16, full: { left: 1759, top: 192, width: 950,  height: 1640 } },
+  { name: "ask-legal",      file: T + "210030.png", box: { left: 1728, top: 213, width: 1069, height: 1233 }, extend: 14, full: { left: 1728, top: 205, width: 1069, height: 1760 } },
+  /* The whole reply fits the card, so one crop serves both. */
+  { name: "ask-operations", file: T + "202545.png", box: { left: 1738, top: 244, width: 1276, height: 1489 } },
 ];
 
 const black = (r) => ({
@@ -122,22 +136,28 @@ async function main() {
   const dims = [];
   for (const shot of SHOTS) {
     const src = await clean(shot.file);
-    const cropped = await src.extract(shot.box).png().toBuffer();
+    const crop = (box, extend = 0) => {
+      const img = src.clone().extract(box);
+      return (extend > 0 ? img.extend({ bottom: extend, extendWith: "copy" }) : img).png().toBuffer();
+    };
+    const cropped = await crop(shot.box, shot.extend);
+    const fullCropped = shot.full ? await crop(shot.full) : cropped;
     const { width: nw, height: nh } = await sharp(cropped).metadata();
+    const { width: fnw } = await sharp(fullCropped).metadata();
 
-    const fullW = Math.min(nw, FULL_MAX);
+    const fullW = Math.min(fnw, FULL_MAX);
     const cardW = Math.min(nw, CARD_MAX);
     const out = [];
 
-    const write = async (name, w) => {
+    const write = async (name, w, buf = cropped) => {
       const p = join(OUT, name);
-      await sharp(cropped).resize({ width: w }).webp({ quality: 82, effort: 6 }).toFile(p);
+      await sharp(buf).resize({ width: w }).webp({ quality: 82, effort: 6 }).toFile(p);
       const m = await sharp(p).metadata();
       out.push(`${String(w).padStart(4)}w ${kb(await size(p))}`);
       return m;
     };
 
-    const full = await write(`${shot.name}-full.webp`, fullW);
+    const full = await write(`${shot.name}-full.webp`, fullW, fullCropped);
     const card = await write(`${shot.name}.webp`, cardW);
     for (const w of WIDTHS) if (w < cardW) await write(`${shot.name}-${w}w.webp`, w);
 

@@ -1,4 +1,5 @@
 import {
+  Answers,
   Builder,
   Close,
   Faq,
@@ -40,12 +41,14 @@ export default function HomePage() {
     <TourProvider>
       <LightboxProvider>
       <main id="main" tabIndex={-1}>
-        {/* Order is the argument: the problem and the product first, then
+        {/* Order is the argument: the problem, real replies that answer it,
+           and the product first, then
            who it is for while the reader is still deciding whether it applies
            to them, then setup, security and limits, then who is behind it and
            why it can cost $9.99, and only then the price. */}
         <Hero />
         <Problem />
+        <Answers />
         <Proof />
         <Room />
         <Fit />
