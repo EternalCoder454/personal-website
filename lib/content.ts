@@ -24,7 +24,7 @@ export const heads: Head[] = [
 
 export const problem = {
   headline: "You can’t afford the experts you need",
-  /* Real 2026 US rates. The lawyer figure is the California average,
+  /* Real US rates. The lawyer figure is Clio’s California average as of 2025,
      $422 against a US average of $349, which is why the state stays in
      the sentence: without it the number overstates. The finance band is
      the one quoted for businesses under $1M in revenue. Two figures, not
@@ -33,9 +33,20 @@ export const problem = {
      readers have already tried. */
   body: "A fractional finance lead runs $1,500 to $3,000 a month. A lawyer averages $422 an hour in California. So you guess at the contract, put off the forecast, and set a price because it felt about right. Or you ask a chatbot that has never heard of your business.",
   /* A reader seeing two exact prices on a page about Finance and Legal
-     will ask where they came from, so the page says. No single pricing
-     guide is named for the finance range because it was not tied to one. */
-  sources: "Where the numbers come from: the lawyer rate is Clio’s March 2026 average for California, and the finance range is published 2026 fractional CFO pricing for businesses under $1M in revenue.",
+     will ask where they came from, so the page says and links to it.
+     Both pages were read before linking, and each states its figure
+     outright: Clio gives $422 as the 2025 California lawyer average, and
+     MB Accounting Group gives $1,500 to $3,000 a month for revenue under
+     $1M. A pricing guide from the same searches was not used: its lowest
+     tier starts at $3M revenue, so it does not back the range here.
+     Strings are plain text, objects are links. */
+  sources: [
+    "Where the numbers come from: the lawyer rate is ",
+    { text: "Clio’s 2025 average for California", href: "https://www.clio.com/resources/legal-trends/compare-lawyer-rates/ca/" },
+    ", and the finance range is ",
+    { text: "2026 fractional CFO pricing for businesses under $1M in revenue", href: "https://mbaccountinggroup.com/fractional-cfo-cost-small-business/" },
+    ".",
+  ] as Array<string | { text: string; href: string }>,
   /* No price here. The beta offer has its own section with the cards and
      the model usage caveat, and saying $9.99 here as well read as a pitch
      before the problem had finished landing. */

@@ -162,7 +162,25 @@ export function Problem() {
         {problem.caveat}
       </p>
       <p className="t-body-sm mt-4 max-w-[58ch] text-pretty text-on-surface-muted">
-        {problem.sources}
+        {problem.sources.map((part) =>
+          typeof part === "string" ? (
+            part
+          ) : (
+            /* A new tab, so checking a source does not lose the page.
+               noreferrer, because the source has no need to know the
+               reader came from here. */
+            <a
+              key={part.href}
+              href={part.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline decoration-outline underline-offset-4 transition-colors duration-100 hover:text-primary hover:decoration-primary"
+            >
+              {part.text}
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          ),
+        )}
       </p>
     </Section>
   );
