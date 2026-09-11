@@ -78,7 +78,7 @@ export default function TermsPage() {
 
       <Section title="Your API key">
         <Para>
-          You bring your own key and remain the account holder with Anthropic, OpenAI or Google.
+          You bring your own key and remain the account holder with Anthropic, OpenAI, Google or DeepSeek.
           Their terms and their bills are between you and them. We encrypt the key, never return it
           to any browser, and never use it for anything other than answering inside your workspace.
         </Para>

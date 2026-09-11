@@ -32,7 +32,7 @@ export const legal = {
   address: "",
   jurisdiction: "the State of California, United States",
   privacyEmail: "hello@eterneon.net",
-  lastUpdated: "5 September 2026",
+  lastUpdated: "10 September 2026",
 } as const;
 
 /**
@@ -169,9 +169,9 @@ export const heroShots: Screenshot[] = [
  * the others alone.
  */
 export const contentUpdated = {
-  home: "2026-09-05",
-  privacy: "2026-09-05",
-  terms: "2026-09-05",
+  home: "2026-09-10",
+  privacy: "2026-09-10",
+  terms: "2026-09-10",
 } as const;
 
 export const site = {

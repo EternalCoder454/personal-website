@@ -91,9 +91,14 @@ export default function PrivacyPage() {
           controller of that payment data under its own privacy policy.
         </Para>
         <Para>
-          Your AI provider, which is Anthropic, OpenAI or Google depending on the key you bring,
-          receives whatever you send the heads inside the panel. That relationship is yours, under
-          their terms, and it is billed to you directly. We never mark it up and never meter it.
+          Your AI provider, which is Anthropic, OpenAI, Google or DeepSeek depending on the key you
+          bring, receives whatever you send the heads inside the panel. That relationship is yours,
+          under their terms, and it is billed to you directly. We never mark it up and never meter
+          it.
+        </Para>
+        <Para>
+          If you turn on web search through Perplexity, the searches a head runs for you are sent to
+          Perplexity, under Perplexity&rsquo;s own terms.
         </Para>
       </Section>
 

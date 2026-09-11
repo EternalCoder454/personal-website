@@ -40,7 +40,7 @@ export const problem = {
 };
 
 export const steps = [
-  { n: "01", title: "Add your API key", body: "One key from Anthropic, OpenAI or Google. Encrypted, and never shown again." },
+  { n: "01", title: "Add your API key", body: "One key from Anthropic, OpenAI, Google or DeepSeek. Encrypted, and never shown again." },
   { n: "02", title: "Describe your business", body: "Spend about ten minutes writing down what your business does. Without it, the answers are generic." },
   { n: "03", title: "Ask", body: "One head in its own thread, or the whole room at once." },
   { n: "04", title: "Keep it", body: "Answers become tasks, files and decisions. Export any of it to Word." },
@@ -51,6 +51,7 @@ export const capabilities = [
   "A shared library and a task board that every head can see",
   "Scheduled briefings, and a record of the decisions you have made",
   "An internal wiki, a private inbox, and an optional calendar link",
+  "Optional web search, built in or through Perplexity",
 ];
 
 export const beta = {
@@ -97,12 +98,18 @@ export const straight = [
   {
     icon: "/api-key.svg",
     title: "You need an API key",
-    body: "Without a key, the heads can’t answer. Signing up with Anthropic, OpenAI or Google takes a few minutes, and you only do it once.",
+    /* Says what a key is first. A contractor or a shop owner reading
+       this has no reason to know, and "API key" with no explanation is
+       the one piece of developer language left on the page. */
+    body: "An API key is your own pay-as-you-go account with an AI company, so you pay only for what you use. Without one, the heads can’t answer. Signing up with Anthropic, OpenAI, Google or DeepSeek takes a few minutes, and you only do it once.",
   },
   {
     icon: "/hidden-screens.svg",
-    title: "Permissions hide screens, not data",
-    body: "The workspace loads as one document, so a determined person could read what the interface hides. Anyone who must never see something needs their own workspace.",
+    /* Was "Permissions hide screens, not data", which is accurate and
+       reads like a developer's note. The advice is the useful part, so it
+       leads, and the candid admission stays in plain words. */
+    title: "Only invite people you trust",
+    body: "Everyone in a workspace can get to the same business information. Hiding a screen from someone doesn’t stop a determined person reading it. If someone must never see something, give them their own workspace.",
   },
   {
     icon: "/google-signin.svg",
@@ -165,7 +172,7 @@ export const faqs = [
     q: "How do I get my data out?",
     a: paras(
       "One click. Your whole workspace exports as a single file: every conversation, file, task, decision and wiki page. No ticket, no waiting, no export fee.",
-      "Your AI access sits outside that entirely, because the key is yours. You signed up with Anthropic, OpenAI or Google directly, and that relationship does not run through us.",
+      "Your AI access sits outside that entirely, because the key is yours. You signed up with Anthropic, OpenAI, Google or DeepSeek directly, and that relationship does not run through us.",
       "The source is published as well, so none of this is a black box you could be shut out of.",
     ),
   },
