@@ -360,7 +360,7 @@ export function Straight() {
 
       <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
         {straight.map((item) => (
-          <StaggerItem key={item.title} className="border-t border-outline pt-8">
+          <StaggerItem key={item.title} className="border-t border-outline-variant pt-8">
             <dt className="t-title text-on-surface">
               {/* Same layout as the security cards, and the same reasons:
                   inside the dt to stay valid HTML, alt empty because the
@@ -393,11 +393,28 @@ export function Straight() {
 /* ------------------------------------------------------------------ */
 
 export function Fit() {
-  /* Two facing boards. The left one is the pitch, the right one turns
-     business away, and the right one is why the section works at all. */
+  /* Two facing boards, weighted on purpose. The left one is the pitch
+     and steps forward: a cyan edge, the lighter card, text at full
+     brightness. The right one turns business away and steps back: the
+     plain edge, the base card, muted text, and a closing note in grey
+     rather than white, which had been the brightest thing in the box.
+     Same structure on both, so they still read as a pair. */
   const boards = [
-    { ...fit.forYou, accent: "text-primary", rule: "border-outline", note: undefined as string | undefined },
-    { ...fit.notForYou, accent: "text-on-surface-muted", rule: "border-outline-variant" },
+    {
+      ...fit.forYou,
+      note: undefined as string | undefined,
+      box: "border-primary/70 bg-surface-container",
+      labelColor: "text-primary",
+      dotColor: "bg-primary",
+      textColor: "text-on-surface",
+    },
+    {
+      ...fit.notForYou,
+      box: "border-outline-variant bg-surface-low",
+      labelColor: "text-on-surface-muted",
+      dotColor: "bg-on-surface-muted",
+      textColor: "text-on-surface-muted",
+    },
   ];
 
   return (
@@ -406,28 +423,23 @@ export function Fit() {
 
       <Stagger className="mt-14 grid gap-8 md:grid-cols-2" step={0.1}>
         {boards.map((board) => (
-          <StaggerItem
-            key={board.label}
-            className={`border ${board.rule} bg-surface-low p-8 md:p-10`}
-          >
-            <p className={`t-label ${board.accent}`}>{board.label}</p>
+          <StaggerItem key={board.label} className={`border ${board.box} p-8 md:p-10`}>
+            <p className={`t-label ${board.labelColor}`}>{board.label}</p>
 
             <ul className="mt-7 space-y-4">
               {board.items.map((item) => (
                 <li key={item} className="flex gap-3">
                   <span
                     aria-hidden="true"
-                    className={`mt-[0.6em] h-[5px] w-[5px] shrink-0 rounded-full ${
-                      board.accent === "text-primary" ? "bg-primary" : "bg-on-surface-muted"
-                    }`}
+                    className={`mt-[0.6em] h-[5px] w-[5px] shrink-0 rounded-full ${board.dotColor}`}
                   />
-                  <span className="t-body-sm text-pretty text-on-surface-variant">{item}</span>
+                  <span className={`t-body-sm text-pretty ${board.textColor}`}>{item}</span>
                 </li>
               ))}
             </ul>
 
             {board.note ? (
-              <p className="t-body-sm mt-7 border-t border-outline-variant pt-6 text-pretty text-on-surface">
+              <p className="t-body-sm mt-7 border-t border-outline-variant pt-6 text-pretty text-on-surface-variant">
                 {board.note}
               </p>
             ) : null}
