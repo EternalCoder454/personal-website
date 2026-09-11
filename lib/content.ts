@@ -188,11 +188,15 @@ export const faqs = [
  * cannot be written in the plural.
  */
 export const builder = {
-  headline: "Who builds this",
+  headline: "Who’s behind this",
   body: [
     "I’m Zachary, based in California. Eterneon is a one person business, and that is the honest version: there is no team behind a logo.",
     "I work as an administrative assistant at an accounting practice, so I spend my days around small businesses and the things that go wrong in them. Not as their accountant. As the person who sees which questions they were never asked in time.",
-    "That day job also means this doesn’t have to pay my rent. Eterneon can be $9.99 because it isn’t carrying a salary, and it won’t be abandoned because a growth target got missed.",
+    /* Was "this doesn't have to pay my rent", which is honest and reads
+       as a hobby that could wait out a busy month, at a job where tax
+       season is a busy month. Same facts, ordered so the day job is the
+       reason it lasts rather than a sign it matters less. */
+    "The day job pays my bills, so Eterneon doesn’t have to. That’s why it can be $9.99, and why it won’t be shut down for growing slowly.",
     "Every release is in the changelog inside the panel, and the source is published so you can read it. Your whole workspace exports in one click, as one file. And because the API key is yours, your AI access is a direct relationship with your provider that does not depend on me being here.",
   ],
   /* Split so "email me" can carry the address. The section promises a
