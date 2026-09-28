@@ -1,0 +1,3 @@
+# LF in every checkout, whatever the machine's own git settings say. Development
+# is on Linux only.
+* text=auto eol=lf
