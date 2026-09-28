@@ -16,7 +16,9 @@ npm run screens      # responsive screenshots
 ## Architecture
 
 ```
-app/         routes
+app/(company)/  the Eterneon home at /: light, rounded, Geist only, its own header
+app/(muster)/   /muster, /privacy, /terms: the Muster header, dark, square
+app/            root layout, API routes, sitemap, 404
 components/  every client component, flat
 lib/         data and helpers
 proxy.ts     at the root. NOT middleware.ts
@@ -25,6 +27,11 @@ brand/       logos
 ```
 
 ## Hard rules
+
+- `/` is the company and lists the products. Each product gets its own path,
+  like `/muster`, in `app/(muster)`. The two looks stay apart: the company
+  theme is scoped to `.co` in `globals.css`, and nothing under it may use the
+  Muster tokens or the Newsreader serif.
 
 - IMPORTANT: reduced motion makes an animation instant. It does not skip it.
   The server renders the hidden state because that is what `initial` means, so

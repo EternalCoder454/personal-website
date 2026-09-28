@@ -5,13 +5,14 @@ import { usePathname } from "next/navigation";
 /**
  * The three jumps in the header.
  *
- * On the home page they are bare fragments, "#pricing", so a click is a
+ * On the Muster page they are bare fragments, "#pricing", so a click is a
  * jump within the page the reader is already on. They were "/#pricing"
  * everywhere, and that is a different address from "/?utm_source=..."
  * or any other tagged arrival, so a click from a campaign link reloaded
  * the whole page and dropped the tag. Measured on the live site before
- * this change. On every other page they stay "/#pricing", which goes
- * home first and then jumps.
+ * this change. On the terms and privacy pages they are "/muster#pricing",
+ * which goes to the Muster page first and then jumps. / is the company
+ * home now and has no sections of these names.
  *
  * 38px tall, the same as Sign in at this width. At 44px they made the
  * bar 69px instead of 63px, and the hero is sized as the viewport less
@@ -25,7 +26,7 @@ const sections = [
 ];
 
 export function SectionNav() {
-  const home = usePathname() === "/";
+  const home = usePathname() === "/muster";
 
   return (
     <nav aria-label="Sections" className="hidden md:block">
@@ -33,7 +34,7 @@ export function SectionNav() {
         {sections.map((item) => (
           <li key={item.id}>
             <a
-              href={`${home ? "" : "/"}#${item.id}`}
+              href={`${home ? "" : "/muster"}#${item.id}`}
               className="inline-flex min-h-[38px] items-center px-3 t-body-sm whitespace-nowrap text-on-surface-variant transition-colors duration-100 ease-[var(--ease-standard)] hover:text-on-surface"
             >
               {item.label}

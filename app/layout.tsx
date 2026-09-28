@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Newsreader } from "next/font/google";
 import { site, siteUrl } from "@/lib/site";
-import { SiteHeader } from "@/components/site-header";
 import { MotionProvider } from "@/components/motion-provider";
 import "./globals.css";
 
@@ -24,20 +23,15 @@ const geist = Geist({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  /* The company's defaults. /muster sets its own title, description and
+     keywords, because that page is about the product. */
   title: {
-    default: site.title,
+    default: site.companyTitle,
     template: `%s · ${site.name}`,
   },
-  description: site.description,
+  description: site.companyDescription,
   applicationName: site.name,
-  keywords: [
-    "Muster",
-    "AI for small business",
-    "bring your own API key",
-    "AI department heads",
-    "AI chief of staff",
-    "small business software",
-  ],
+  keywords: ["Eterneon", "Muster", "small business software"],
   alternates: {
     canonical: "/",
   },
@@ -94,7 +88,7 @@ const structuredData = {
       "@id": `${siteUrl}/#organization`,
       name: site.name,
       url: siteUrl,
-      description: site.description,
+      description: site.companyDescription,
       logo: `${siteUrl}/brand/eterneon-icon-dark-512x512.png`,
       email: site.contactEmail,
       slogan: site.tagline,
@@ -105,7 +99,7 @@ const structuredData = {
       name: site.product,
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
-      url: site.appUrl,
+      url: `${siteUrl}/muster`,
       publisher: { "@id": `${siteUrl}/#organization` },
       description:
         "AI department heads for small business. Each workspace gets a room of AI department heads, meetings, a shared library, tasks and a wiki, running on the business's own model API key.",
@@ -163,10 +157,9 @@ export default function RootLayout({
             under `strict` throws without a LazyMotion ancestor, so a
             provider scoped to one route would have broken the legal
             pages the moment the header appeared on them. */}
-        <MotionProvider>
-          <SiteHeader />
-          {children}
-        </MotionProvider>
+        {/* Each route group brings its own header: the company pages and
+            the Muster pages look different on purpose. */}
+        <MotionProvider>{children}</MotionProvider>
         <script
           type="application/ld+json"
           /* Static object built above, not user input. */

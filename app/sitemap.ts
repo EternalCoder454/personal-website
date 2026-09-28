@@ -6,8 +6,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: siteUrl,
       lastModified: contentUpdated.home,
-      changeFrequency: "weekly",
+      changeFrequency: "monthly",
       priority: 1,
+    },
+    {
+      url: `${siteUrl}/muster`,
+      lastModified: contentUpdated.muster,
+      changeFrequency: "weekly",
+      priority: 0.9,
     },
     {
       url: `${siteUrl}/privacy`,

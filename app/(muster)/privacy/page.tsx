@@ -141,10 +141,10 @@ export default function PrivacyPage() {
 
       <Para>
         <Link
-          href="/"
+          href="/muster"
           className="underline decoration-outline underline-offset-4 hover:text-primary hover:decoration-primary"
         >
-          Back to {site.name}
+          Back to {site.product}
         </Link>
       </Para>
     </LegalPage>

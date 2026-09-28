@@ -18,7 +18,7 @@ export default function NotFound() {
         There is nothing at this address.
       </h1>
       <p className="t-body mt-6 max-w-[50ch] text-pretty text-on-surface-variant">
-        Eterneon is one page, and everything on it is at the address below.
+        Everything Eterneon makes is listed on the home page.
       </p>
       <div className="mt-10">
         <Link

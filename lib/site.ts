@@ -217,6 +217,7 @@ export const heroShots: Screenshot[] = [
  */
 export const contentUpdated = {
   home: "2026-09-27",
+  muster: "2026-09-27",
   privacy: "2026-09-27",
   terms: "2026-09-27",
 } as const;
@@ -232,6 +233,10 @@ export const site = {
   /* 150 to 160 characters. */
   description:
     "Muster gives your small business eight AI department heads: Marketing, Finance, Legal, Operations and four more. Bring your own API key. Free in beta.",
+  /* The company home at /, which lists the products. */
+  companyTitle: "Eterneon: software for small business",
+  companyDescription:
+    "Eterneon is an independent software company in California building tools small businesses can afford and run themselves. Home of Muster, AI department heads.",
   appUrl: "https://business.eterneon.net",
   contactEmail: "hello@eterneon.net",
   /* The kit tagline, from the horizontal lockup. */

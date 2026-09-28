@@ -7,6 +7,21 @@ at `business.eterneon.net`; this repository is only the page in front of it.
 Next.js 16 (App Router), React 19, Tailwind v4, TypeScript. Same stack as the
 panel, so anybody who works on one can work on the other.
 
+## Two parts
+
+- **`/` is Eterneon, the company.** What it is, the products it makes, and how
+  to reach it. Light, rounded and set in Geist only, so it reads as the maker
+  rather than as another product page. Lives in `app/(company)`, styled by
+  the `.co` block at the end of `app/globals.css`.
+- **`/muster` is the Muster landing page**, with the beta terms and privacy
+  notice beside it at `/terms` and `/privacy`. Everything below about the
+  landing page, its one call to action and its three section jumps, is about
+  this page. Lives in `app/(muster)`.
+
+Both are route groups, so neither folder name appears in a URL. A second
+product becomes a folder of its own beside `(muster)` and a card on the
+company page.
+
 ## Running it
 
 ```bash
