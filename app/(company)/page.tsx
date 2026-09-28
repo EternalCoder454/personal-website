@@ -18,10 +18,11 @@ const shot = heroShots[0];
 /**
  * The company home.
  *
- * Written the way the small studios worth copying write theirs: the company
- * says what it makes in a sentence of its own, the product is shown as the
- * product rather than as an icon on a card, and the rest is plain prose in
- * the first person. Every fact here is one the Muster page already states.
+ * The product is shown as the product rather than as an icon on a card, and
+ * the words are short and plain: one fact to a sentence, a reason joined with
+ * "so" where it helps, and nothing added for effect. Written in Zachary's own
+ * voice, which states the point and stops. Every fact here is one the Muster
+ * page already states.
  */
 export default function CompanyHome() {
   return (
@@ -35,7 +36,7 @@ export default function CompanyHome() {
         </StaggerItem>
         <StaggerItem>
           <p className="mt-6 max-w-[38ch] text-[clamp(19px,2vw,23px)] leading-snug text-pretty text-[var(--co-muted)]">
-            It is run by one person in California, and so far it makes one thing.
+            Independent and California-owned.
           </p>
         </StaggerItem>
       </Stagger>
@@ -50,8 +51,8 @@ export default function CompanyHome() {
               {site.product}
             </h2>
             <p className="mt-5 max-w-[34ch] text-[18px] leading-relaxed text-[#b9c4c5]">
-              AI department heads for your business. Finance, Legal, Marketing, Operations and
-              four more, each reading the same profile of your business before it answers.
+              AI department heads for your business: Finance, Legal, Marketing, Operations and
+              four more.
             </p>
             <p className="mt-4 text-[15px] text-[#8e9b9c]">In private beta.</p>
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 md:mt-auto md:pt-10">
@@ -93,22 +94,17 @@ export default function CompanyHome() {
             About
           </h2>
           <div className="flex max-w-[62ch] flex-col gap-5 text-[18px] leading-relaxed text-[var(--co-muted)]">
+            <p>I’m Zachary, and I run {site.name} out of California.</p>
             <p>
-              <span className="text-[var(--co-ink)]">I’m Zachary.</span> {site.name} is my one
-              person software company, based in California. There is no team behind the logo.
+              I work at an accounting practice, so I see the same problems come up in small
+              businesses again and again. {site.product} is built around those problems.
+            </p>
+            <p>My day job covers my bills, so {site.name} can grow at its own pace.</p>
+            <p>
+              {site.product}’s source code is public, and every update is listed in its changelog.
             </p>
             <p>
-              By day I’m an administrative assistant at an accounting practice, around small
-              businesses and the things that go wrong in them. {site.product} came out of the
-              questions I watched owners never get to ask in time.
-            </p>
-            <p>
-              The day job pays my bills, so {site.name} doesn’t have to. That is why nothing here
-              gets shut down for growing slowly. The source is published, and every release is
-              written up in plain words.
-            </p>
-            <p>
-              Write to me at{" "}
+              For questions or feedback, email{" "}
               <a href={`mailto:${site.contactEmail}`} className="co-link">
                 {site.contactEmail}
               </a>

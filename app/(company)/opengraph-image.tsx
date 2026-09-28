@@ -46,7 +46,7 @@ export default function OpengraphImage() {
         </div>
 
         <div style={{ display: "flex", fontSize: 26, color: "#4a5759" }}>
-          Home of Muster. Run by one person in California.
+          Independent and California-owned.
         </div>
       </div>
     ),

@@ -236,7 +236,7 @@ export const site = {
   /* The company home at /, which lists the products. */
   companyTitle: "Eterneon: software for small business",
   companyDescription:
-    "Eterneon is an independent software company in California building tools small businesses can afford and run themselves. Home of Muster, AI department heads.",
+    "Eterneon is an independent, California-owned software company that makes tools for small businesses, starting with Muster, AI department heads for your business.",
   appUrl: "https://business.eterneon.net",
   contactEmail: "hello@eterneon.net",
   /* The kit tagline, from the horizontal lockup. */
