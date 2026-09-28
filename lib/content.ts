@@ -50,7 +50,7 @@ export const problem = {
   /* No price here. The beta offer has its own section with the cards and
      the model usage caveat, and saying $9.99 here as well read as a pitch
      before the problem had finished landing. */
-  kicker: "Eterneon is a company of AI department heads you can ask instead.",
+  kicker: "Muster is a company of AI department heads you can ask instead.",
   caveat: "It doesn’t replace those people, and it says so. It gets you most of the way in minutes, so when you do pay for an hour, you already know what to ask.",
 };
 
@@ -106,7 +106,7 @@ export const trust = [
        means. And not "even we can't see it": the server has to decrypt
        the key to call the provider, so that would be a promise the
        product cannot keep. "Never shown again" is the true one. */
-    body: "It is encrypted the moment you save it, and the panel never shows it again, not even to you.",
+    body: "It is encrypted the moment you save it, and Muster never shows it again, not even to you.",
   },
   {
     icon: "/invite-only.svg",
@@ -116,7 +116,7 @@ export const trust = [
   {
     icon: "/approval.svg",
     title: "Nothing happens without your approval",
-    body: "Every action is suggested first and waits for you to approve it. Eterneon never acts on its own.",
+    body: "Every action is suggested first and waits for you to approve it. Muster never acts on its own.",
   },
 ];
 
@@ -207,7 +207,7 @@ export const faqs = [
     ),
   },
   {
-    q: "Is Eterneon itself built with AI?",
+    q: "Is Muster itself built with AI?",
     a: paras(
       "Yes, a good deal of it. It would be odd to sell you a room of AI department heads and then claim I write every line by hand.",
       "The part that matters is what happens next. Every release runs a test suite, an audit that reads every database query to check that one business cannot see another, and a check against the live database for anything left behind where it should not be. The source is published, so you can read it rather than take my word for it.",
@@ -234,7 +234,7 @@ export const builder = {
        season is a busy month. Same facts, ordered so the day job is the
        reason it lasts rather than a sign it matters less. */
     "The day job pays my bills, so Eterneon doesn’t have to. That’s why it can be $9.99, and why it won’t be shut down for growing slowly.",
-    "Every release is in the changelog inside the panel, and the source is published so you can read it. Your whole workspace exports in one click, as one file. And because the API key is yours, your AI access is a direct relationship with your provider that does not depend on me being here.",
+    "Every release is in the changelog inside Muster, and the source is published so you can read it. Your whole workspace exports in one click, as one file. And because the API key is yours, your AI access is a direct relationship with your provider that does not depend on me being here.",
   ],
   /* Split so "email me" can carry the address. The section promises a
      reply and then made the reader go looking for where to send it. */

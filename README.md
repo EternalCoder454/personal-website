@@ -1,6 +1,7 @@
 # Eterneon landing site
 
-The public site for Eterneon, the AI department panel. The product itself lives
+The public site for Eterneon and its product, Muster (called Eterneon Panel
+until September 2026). The product itself lives
 at `business.eterneon.net`; this repository is only the page in front of it.
 
 Next.js 16 (App Router), React 19, Tailwind v4, TypeScript. Same stack as the

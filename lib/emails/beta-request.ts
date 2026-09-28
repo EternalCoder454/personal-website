@@ -87,7 +87,7 @@ export function betaRequestEmail(lead: Lead) {
   const when = escapeHtml(formatWhen(lead.receivedAt));
   const source = escapeHtml(lead.source);
   const mailto = `mailto:${encodeURIComponent(lead.email)}?subject=${encodeURIComponent(
-    "Your Eterneon beta invitation",
+    "Your Muster beta invitation",
   )}`;
 
   /* Explicit width and height, and display:block so Outlook does not
@@ -157,7 +157,7 @@ export function betaRequestEmail(lead: Lead) {
 
                 <p style="margin:14px 0 0 0;font:400 15px/23px -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;color:${muted};">
                   <a href="${mailto}" style="color:${teal};text-decoration:underline;">${address}</a>
-                  asked for access to the Eterneon beta. Replying to this email goes straight to them.
+                  asked for access to the Muster beta. Replying to this email goes straight to them.
                 </p>
 
                 <!-- A padded anchor inside a coloured table cell, which is
@@ -213,7 +213,7 @@ export function betaRequestEmail(lead: Lead) {
   const text = [
     `New beta request`,
     ``,
-    `${lead.email} asked for access to the Eterneon beta.`,
+    `${lead.email} asked for access to the Muster beta.`,
     `Replying to this email goes straight to them.`,
     ``,
     `Received ${formatWhen(lead.receivedAt)} from the ${lead.source} page.`,

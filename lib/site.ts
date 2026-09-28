@@ -33,7 +33,7 @@ export const legal = {
   address: "",
   jurisdiction: "the State of California, United States",
   privacyEmail: "hello@eterneon.net",
-  lastUpdated: "10 September 2026",
+  lastUpdated: "27 September 2026",
 } as const;
 
 /**
@@ -197,7 +197,7 @@ export const heroShots: Screenshot[] = [
   },
   {
     src: "/screens/wiki.webp",
-    alt: "The internal wiki, explaining what the panel is and how to ask a department for something useful.",
+    alt: "The internal wiki, explaining what Muster is and how to ask a department for something useful.",
     caption: "",
     width: 1500,
     height: 819,
@@ -216,18 +216,22 @@ export const heroShots: Screenshot[] = [
  * the others alone.
  */
 export const contentUpdated = {
-  home: "2026-09-10",
-  privacy: "2026-09-10",
-  terms: "2026-09-10",
+  home: "2026-09-27",
+  privacy: "2026-09-27",
+  terms: "2026-09-27",
 } as const;
 
 export const site = {
+  /* The company. The logo, the footer, the legal entity. */
   name: "Eterneon",
+  /* The product somebody signs up for. It was Eterneon Panel until
+     September 2026, which people found hard to say. */
+  product: "Muster",
   /* Under 60 characters. */
-  title: "AI business advisors for small business | Eterneon",
+  title: "Muster: AI business advisors for small business | Eterneon",
   /* 150 to 160 characters. */
   description:
-    "Eight AI department heads for your small business: Marketing, Finance, Legal, Operations and four more, in one workspace. Bring your own API key. Free in beta.",
+    "Muster gives your small business eight AI department heads: Marketing, Finance, Legal, Operations and four more. Bring your own API key. Free in beta.",
   appUrl: "https://business.eterneon.net",
   contactEmail: "hello@eterneon.net",
   /* The kit tagline, from the horizontal lockup. */

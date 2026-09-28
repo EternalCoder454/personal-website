@@ -6,7 +6,7 @@ import { LegalPage, Para, Section } from "@/components/legal-page";
 export const metadata: Metadata = {
   title: "Beta terms",
   description:
-    "The terms of the Eterneon private beta: what we promise, what we do not, and what the free-for-life offer actually commits us to.",
+    "The terms of the Muster private beta: what we promise, what we do not, and what the free-for-life offer actually commits us to.",
   alternates: { canonical: "/terms" },
   openGraph: og("/terms"),
 };
@@ -36,7 +36,7 @@ export default function TermsPage() {
       <Section title="The beta is unfinished, and that is the deal">
         <Para>
           You get the product early and free. In exchange you are using something that will have
-          bugs, will change under you, and may lose work. Do not make Eterneon the only place a
+          bugs, will change under you, and may lose work. Do not make Muster the only place a
           business-critical document exists. Export anything you would be upset to lose.
         </Para>
         <Para>
@@ -46,7 +46,7 @@ export default function TermsPage() {
 
       <Section title="What free for life means">
         <Para>
-          If your workspace takes part in the beta, it keeps access to the panel at no charge for as
+          If your workspace takes part in the beta, it keeps access to Muster at no charge for as
           long as Eterneon runs it, with up to three seats included. A fourth seat and beyond is
           charged at the standard rate. The offer attaches to the workspace rather than to a person,
           so it survives you adding and removing colleagues.
@@ -54,7 +54,7 @@ export default function TermsPage() {
         <Para>
           It does not cover model usage, which you pay your own AI provider for directly and which
           we never see or mark up. It does not oblige us to run the product forever. If we ever
-          shut Eterneon down we will give notice and let you export your data.
+          shut Muster down we will give notice and let you export your data.
         </Para>
       </Section>
 

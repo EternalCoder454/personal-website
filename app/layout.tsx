@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   description: site.description,
   applicationName: site.name,
   keywords: [
-    "AI panel",
+    "Muster",
     "AI for small business",
     "bring your own API key",
     "AI department heads",
@@ -102,13 +102,13 @@ const structuredData = {
     {
       "@type": "SoftwareApplication",
       "@id": `${siteUrl}/#software`,
-      name: `${site.name} Panel`,
+      name: site.product,
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       url: site.appUrl,
       publisher: { "@id": `${siteUrl}/#organization` },
       description:
-        "A multi-tenant AI business panel. Each workspace gets a room of AI department heads, meetings, a shared library, tasks and a wiki, running on the business's own model API key.",
+        "AI department heads for small business. Each workspace gets a room of AI department heads, meetings, a shared library, tasks and a wiki, running on the business's own model API key.",
       offers: [
         {
           "@type": "Offer",

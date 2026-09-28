@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 /* Matches the H1 and the page title. It still said the old headline, so
    a shared link told a different story from the tab it opened in. When
    the headline changes, this file changes with it. */
-export const alt = "Eterneon: AI advisors for small business";
+export const alt = "Muster by Eterneon: AI advisors for small business";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -66,7 +66,7 @@ export default function OpengraphImage() {
               letterSpacing: "0.11em",
             }}
           >
-            PRIVATE BETA
+            MUSTER · PRIVATE BETA
           </div>
         </div>
 

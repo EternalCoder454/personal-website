@@ -75,7 +75,7 @@ export function Hero() {
       <div className="mt-20 grid items-start gap-16 md:mt-28 lg:mt-0 lg:w-full lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-center lg:gap-10 xl:gap-14">
         <Stagger trigger="mount" step={0.09} delay={0.45}>
         <StaggerItem>
-          <p className="t-label text-primary">Private beta</p>
+          <p className="t-label text-primary">{site.product} · Private beta</p>
         </StaggerItem>
 
         <StaggerItem>
@@ -112,7 +112,7 @@ export function Hero() {
 
         {proof.businessesTesting > 0 ? (
           <p className="t-body-sm mt-8 text-on-surface-variant">
-            {proof.businessesTesting} businesses are testing Eterneon right now.
+            {proof.businessesTesting} businesses are testing Muster right now.
           </p>
         ) : null}
 

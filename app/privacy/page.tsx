@@ -16,7 +16,7 @@ export default function PrivacyPage() {
     <LegalPage title="Privacy" updated={legal.lastUpdated}>
       <Para>
         This notice covers this website only. It describes what happens when you ask for beta
-        access. The panel itself, at{" "}
+        access. Muster itself, at{" "}
         <span className="text-on-surface">business.eterneon.net</span>, has its own notice inside
         the product.
       </Para>
@@ -82,7 +82,7 @@ export default function PrivacyPage() {
           This site runs on Vercel, which serves the page, keeps short-lived server logs, and
           receives the page view counts described above. When
           you submit the form, your address is emailed to us through Resend, which is the same
-          email provider the panel uses. Both act on our instructions and do not use your address
+          email provider Muster uses. Both act on our instructions and do not use your address
           for their own purposes.
         </Para>
         <Para>
@@ -92,7 +92,7 @@ export default function PrivacyPage() {
         </Para>
         <Para>
           Your AI provider, which is Anthropic, OpenAI, Google or DeepSeek depending on the key you
-          bring, receives whatever you send the heads inside the panel. That relationship is yours,
+          bring, receives whatever you send the heads inside Muster. That relationship is yours,
           under their terms, and it is billed to you directly. We never mark it up and never meter
           it.
         </Para>
