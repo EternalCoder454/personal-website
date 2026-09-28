@@ -16,7 +16,7 @@ npm run screens      # responsive screenshots
 ## Architecture
 
 ```
-app/(company)/  the Eterneon home at /: light, rounded, Geist only, its own header
+app/(company)/  the Eterneon home at /: light, Schibsted Grotesk, its own header
 app/(muster)/   /muster, /privacy, /terms: the Muster header, dark, square
 app/            root layout, API routes, sitemap, 404
 components/  every client component, flat
@@ -32,6 +32,10 @@ brand/       logos
   like `/muster`, in `app/(muster)`. The two looks stay apart: the company
   theme is scoped to `.co` in `globals.css`, and nothing under it may use the
   Muster tokens or the Newsreader serif.
+- The company page is written against the patterns that make a page look
+  generated: no violet or gradients, no badge above the headline, no row of
+  identical cards, no shadow under every box, nothing fading in on scroll,
+  and the real product shown rather than an icon for it. Keep it that way.
 
 - IMPORTANT: reduced motion makes an animation instant. It does not skip it.
   The server renders the hidden state because that is what `initial` means, so

@@ -1,148 +1,121 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
-import { Reveal, Stagger, StaggerItem } from "@/components/motion";
-import { og, site } from "@/lib/site";
+import { Stagger, StaggerItem } from "@/components/motion";
+import { heroShots, og, site, srcSetFor, screenUrl } from "@/lib/site";
 
 /* Title and description are the company defaults from the root layout. */
 export const metadata: Metadata = { openGraph: og("/") };
 
 /* The only light page on the site, so the browser chrome follows it. */
 export const viewport: Viewport = {
-  themeColor: "#f4f5f7",
+  themeColor: "#f5f7f7",
   colorScheme: "light",
 };
 
-/**
- * What each principle says. Every one of these is already a claim the Muster
- * page makes and backs, restated for the company, so this page promises
- * nothing that is not already promised somewhere a customer has read it.
- */
-const principles = [
-  {
-    title: "Priced for small business",
-    body: "Built for a business with no IT department and no budget for one. Muster is $9.99 a month at launch.",
-  },
-  {
-    title: "Open about how it works",
-    body: "The source is published so you can read it, and every release is written down in plain words.",
-  },
-  {
-    title: "Here for the long run",
-    body: "A day job pays the bills, so nothing here gets shut down for growing slowly.",
-  },
-];
+/* The real Muster dashboard, the same file the Muster page leads with. */
+const shot = heroShots[0];
 
+/**
+ * The company home.
+ *
+ * Written the way the small studios worth copying write theirs: the company
+ * says what it makes in a sentence of its own, the product is shown as the
+ * product rather than as an icon on a card, and the rest is plain prose in
+ * the first person. Every fact here is one the Muster page already states.
+ */
 export default function CompanyHome() {
   return (
     <main id="main" tabIndex={-1}>
-      <section className="co-shell pt-20 pb-16 sm:pt-28">
-        <Stagger trigger="mount" step={0.08} delay={0.1}>
-          <StaggerItem>
-            <span className="co-tag">Independent software, made in California</span>
-          </StaggerItem>
-          <StaggerItem>
-            <h1 className="mt-6 max-w-[14ch] text-[clamp(44px,7vw,80px)] leading-[1.02] font-semibold tracking-[-0.035em] text-balance">
-              Software a small business can run on.
-            </h1>
-          </StaggerItem>
-          <StaggerItem>
-            <p className="mt-6 max-w-[56ch] text-[18px] leading-relaxed text-pretty text-[var(--co-muted)]">
-              {site.name} builds tools that a small business can afford, understand and run
-              itself.
-            </p>
-          </StaggerItem>
-          <StaggerItem className="mt-9 flex flex-wrap gap-3">
-            <a href="#products" className="co-pill co-pill-solid">
-              See our products
-            </a>
-            <a href="#about" className="co-pill co-pill-line">
-              About {site.name}
-            </a>
-          </StaggerItem>
-        </Stagger>
-      </section>
+      {/* One entrance, on load. Nothing else on the page moves. */}
+      <Stagger trigger="mount" step={0.07} className="co-shell pt-20 pb-20 sm:pt-28 sm:pb-24">
+        <StaggerItem>
+          <h1 className="max-w-[17ch] text-[clamp(40px,6.4vw,76px)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance">
+            {site.name} makes software for small businesses.
+          </h1>
+        </StaggerItem>
+        <StaggerItem>
+          <p className="mt-6 max-w-[38ch] text-[clamp(19px,2vw,23px)] leading-snug text-pretty text-[var(--co-muted)]">
+            It is run by one person in California, and so far it makes one thing.
+          </p>
+        </StaggerItem>
+      </Stagger>
 
-      <section id="products" className="co-shell scroll-mt-24 py-10">
-        <Reveal>
-          <h2 className="text-[28px] font-semibold tracking-[-0.02em] sm:text-[32px]">Products</h2>
-        </Reveal>
-
-        <div className="mt-8 grid gap-5 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
-          <Reveal className="co-card flex flex-col p-7 sm:p-9">
-            <div className="flex items-center gap-4">
-              <span
-                aria-hidden
-                className="grid h-14 w-14 place-items-center rounded-[18px] bg-[var(--co-accent)] text-[26px] font-bold text-white"
-              >
-                M
-              </span>
-              <div>
-                <p className="text-[24px] font-semibold tracking-[-0.02em]">{site.product}</p>
-                <span className="co-tag mt-1">Private beta</span>
-              </div>
-            </div>
-            <p className="mt-6 max-w-[48ch] text-[17px] leading-relaxed text-[var(--co-muted)]">
-              AI department heads for your business. Marketing, Finance, Legal, Operations and
-              four more, in one workspace, each reading the same profile of your business before
-              it answers.
+      <section aria-labelledby="muster" className="co-shell">
+        {/* The product as an object: its own dark ground, because Muster is
+            dark, and its real screen running off the edge. The one rounded
+            thing on the page. */}
+        <div className="grid overflow-hidden rounded-[28px] bg-[#101617] text-[#eef2f2] md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+          <div className="flex flex-col p-7 sm:p-10 md:py-12">
+            <h2 id="muster" className="text-[40px] leading-none font-semibold tracking-[-0.03em] sm:text-[48px]">
+              {site.product}
+            </h2>
+            <p className="mt-5 max-w-[34ch] text-[18px] leading-relaxed text-[#b9c4c5]">
+              AI department heads for your business. Finance, Legal, Marketing, Operations and
+              four more, each reading the same profile of your business before it answers.
             </p>
-            <div className="mt-auto flex flex-wrap gap-3 pt-8">
-              <Link href="/muster" className="co-pill co-pill-solid">
-                Explore {site.product}
+            <p className="mt-4 text-[15px] text-[#8e9b9c]">In private beta.</p>
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 md:mt-auto md:pt-10">
+              <Link href="/muster" className="co-button">
+                Visit {site.product}
               </Link>
-              <a href={site.appUrl} className="co-pill co-pill-line">
+              <a
+                href={site.appUrl}
+                className="text-[16px] underline decoration-[#4a5759] decoration-[1.5px] underline-offset-4 hover:decoration-[#eef2f2]"
+              >
                 Sign in
               </a>
             </div>
-          </Reveal>
+          </div>
 
-          {/* Where the next product goes. It says there will be a place for
-              it and nothing about when, because a date here would be a
-              promise. */}
-          <Reveal
-            delay={0.08}
-            className="flex min-h-[220px] flex-col justify-center rounded-[var(--co-radius)] border-2 border-dashed border-[var(--co-line)] p-7 sm:p-9"
-          >
-            <p className="text-[20px] font-semibold tracking-[-0.01em]">The next one</p>
-            <p className="mt-2 text-[16px] leading-relaxed text-[var(--co-muted)]">
-              When {site.name} makes something else, it will be listed here.
-            </p>
-          </Reveal>
+          <div className="pl-7 sm:pl-10 md:pt-12 md:pl-0">
+            {/* eslint-disable-next-line @next/next/no-img-element -- the
+                site serves its own responsive variants, as the Muster page does */}
+            <img
+              src={screenUrl(shot.src)}
+              srcSet={srcSetFor(shot)}
+              sizes="(min-width: 768px) 680px, 1px"
+              width={shot.width}
+              height={shot.height}
+              alt={shot.alt}
+              className="block h-auto w-full rounded-tl-[14px]"
+            />
+          </div>
         </div>
       </section>
 
-      <section className="co-shell py-10">
-        <Stagger className="grid gap-5 md:grid-cols-3" as="ul">
-          {principles.map((item) => (
-            <StaggerItem key={item.title} as="li" className="co-card p-7">
-              <p className="text-[18px] font-semibold tracking-[-0.01em]">{item.title}</p>
-              <p className="mt-2 text-[16px] leading-relaxed text-[var(--co-muted)]">{item.body}</p>
-            </StaggerItem>
-          ))}
-        </Stagger>
-      </section>
-
-      <section id="about" className="co-shell scroll-mt-24 py-10">
-        <Reveal className="co-card grid gap-8 p-7 sm:p-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
-          <h2 className="text-[28px] font-semibold tracking-[-0.02em] sm:text-[32px]">
-            About {site.name}
+      <section
+        id="about"
+        aria-labelledby="about-heading"
+        className="co-shell mt-24 scroll-mt-8 sm:mt-32"
+      >
+        <div className="grid gap-6 border-t border-[var(--co-line)] pt-8 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
+          <h2 id="about-heading" className="text-[26px] font-semibold tracking-[-0.02em]">
+            About
           </h2>
-          <div className="flex flex-col gap-4 text-[17px] leading-relaxed text-[var(--co-muted)]">
+          <div className="flex max-w-[62ch] flex-col gap-5 text-[18px] leading-relaxed text-[var(--co-muted)]">
             <p>
-              {site.name} is a one person software company in California, run by Zachary. There
-              is no team behind the logo, and that is the honest version.
+              <span className="text-[var(--co-ink)]">I’m Zachary.</span> {site.name} is my one
+              person software company, based in California. There is no team behind the logo.
             </p>
             <p>
-              The work comes from a day job around small businesses, seeing which questions they
-              were never asked in time. Each product here is an answer to one of them.
+              By day I’m an administrative assistant at an accounting practice, around small
+              businesses and the things that go wrong in them. {site.product} came out of the
+              questions I watched owners never get to ask in time.
             </p>
-            <div className="pt-2">
-              <a href={`mailto:${site.contactEmail}`} className="co-pill co-pill-solid">
-                Email {site.contactEmail}
+            <p>
+              The day job pays my bills, so {site.name} doesn’t have to. That is why nothing here
+              gets shut down for growing slowly. The source is published, and every release is
+              written up in plain words.
+            </p>
+            <p>
+              Write to me at{" "}
+              <a href={`mailto:${site.contactEmail}`} className="co-link">
+                {site.contactEmail}
               </a>
-            </div>
+              .
+            </p>
           </div>
-        </Reveal>
+        </div>
       </section>
     </main>
   );

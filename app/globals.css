@@ -323,111 +323,81 @@ summary {
 /* ---------------------------------------------------------------------------
  * The company home at /.
  *
- * Deliberately a different look from Muster, which is dark, square cornered
- * and editorial. Eterneon is the company that makes Muster and whatever comes
- * after it, so its own page is light, rounded and set in Geist only. Scoped to
- * .co so none of it reaches the Muster pages, and the Muster tokens above are
- * left alone.
+ * A different look from Muster, which is dark and editorial, and built
+ * against the patterns that make a page read as generated: no violet, no
+ * gradients, no badge above a centred headline, no row of identical cards, no
+ * soft shadow under everything, and nothing that fades in on scroll. The one
+ * bright colour is the cyan already in the logo. Rounding is kept for the one
+ * thing that is an object, the product, rather than applied to every box.
+ * Scoped to .co so none of it reaches the Muster pages.
  * ------------------------------------------------------------------------- */
 .co {
-  --co-bg: #f4f5f7;
-  --co-surface: #ffffff;
-  --co-ink: #101217;
-  --co-muted: #545a66;
-  --co-line: #e3e5e9;
-  --co-accent: #5a45ff;
-  --co-accent-ink: #3b2bd6;
-  --co-accent-soft: #efecff;
-  --co-radius: 28px;
+  --co-bg: #f5f7f7;
+  --co-ink: #0f1516;
+  --co-muted: #4a5759;
+  --co-line: #d9e0e1;
+  --co-bright: #62c6da;
   color-scheme: light;
   min-height: 100dvh;
   background: var(--co-bg);
   color: var(--co-ink);
-  font-family: var(--font-sans);
+  font-family: var(--font-co), var(--font-sans);
 }
 
 /* The page under the company home is dark, so an overscroll or a slow paint
    would flash it. Browsers without :has() keep the dark ground, which is the
    old behaviour rather than a broken one. */
 html:has(.co) {
-  background: #f4f5f7;
+  background: #f5f7f7;
+}
+
+/* The logo's middle bar is the brand cyan here, as it is in the kit. */
+.co .text-primary {
+  color: var(--co-bright);
 }
 
 .co-shell {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1180px;
   margin-inline: auto;
   padding-inline: 16px;
 }
 @media (min-width: 640px) {
   .co-shell {
-    padding-inline: 24px;
+    padding-inline: 32px;
   }
 }
 
-.co-card {
-  background: var(--co-surface);
-  border: 1px solid var(--co-line);
-  border-radius: var(--co-radius);
-  box-shadow:
-    0 1px 2px rgb(16 18 23 / 0.04),
-    0 12px 32px -12px rgb(16 18 23 / 0.1);
-}
-
-.co-pill {
-  display: inline-flex;
-  min-height: 44px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border-radius: 999px;
-  padding-inline: 22px;
-  font-size: 15px;
-  font-weight: 600;
-  white-space: nowrap;
-  transition:
-    background-color 120ms var(--ease-standard),
-    color 120ms var(--ease-standard),
-    border-color 120ms var(--ease-standard);
-}
-.co-pill-solid {
-  background: var(--co-ink);
-  color: #ffffff;
-}
-.co-pill-solid:hover {
-  background: #2a2e37;
-}
-.co-pill-line {
-  border: 1px solid var(--co-line);
-  background: var(--co-surface);
-  color: var(--co-ink);
-}
-.co-pill-line:hover {
-  border-color: #c9ccd3;
-}
-.co-pill:focus-visible,
-.co-link:focus-visible {
-  outline: 2px solid var(--co-accent);
-  outline-offset: 3px;
-}
-
-.co-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border-radius: 999px;
-  background: var(--co-accent-soft);
-  color: var(--co-accent-ink);
-  padding: 5px 12px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
 .co-link {
-  border-radius: 999px;
-  color: var(--co-muted);
-  transition: color 120ms var(--ease-standard);
+  color: var(--co-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--co-line);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 120ms var(--ease-standard);
 }
 .co-link:hover {
+  text-decoration-color: var(--co-ink);
+}
+
+.co-button {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  border-radius: 999px;
+  background: #ffffff;
   color: var(--co-ink);
+  padding-inline: 22px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 120ms var(--ease-standard);
+}
+.co-button:hover {
+  background: #e3f5f9;
+}
+
+.co-link:focus-visible,
+.co-button:focus-visible {
+  outline: 2px solid var(--co-bright);
+  outline-offset: 3px;
 }

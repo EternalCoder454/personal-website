@@ -10,8 +10,11 @@ panel, so anybody who works on one can work on the other.
 ## Two parts
 
 - **`/` is Eterneon, the company.** What it is, the products it makes, and how
-  to reach it. Light, rounded and set in Geist only, so it reads as the maker
-  rather than as another product page. Lives in `app/(company)`, styled by
+  to reach it. Light and set in Schibsted Grotesk, with the logo's cyan as the
+  only bright colour, the real Muster dashboard on the one rounded panel, and
+  the rest as plain first person prose. It reads as the maker rather than as
+  another product page, and it is built to avoid the patterns that make a
+  page look generated. Lives in `app/(company)`, styled by
   the `.co` block at the end of `app/globals.css`.
 - **`/muster` is the Muster landing page**, with the beta terms and privacy
   notice beside it at `/terms` and `/privacy`. Everything below about the
