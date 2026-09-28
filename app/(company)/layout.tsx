@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { Schibsted_Grotesk } from "next/font/google";
-import { LogoIcon } from "@/components/wordmark";
+import { Wordmark } from "@/components/wordmark";
 import { site } from "@/lib/site";
 
 /*
- * The company's own face. Geist carries the wordmark, as the kit says, but
- * as the face of a whole page it is one of the defaults a generated site
+ * The company's own face. The wordmark is the kit's own artwork, and Geist,
+ * as the face of a whole page, is one of the defaults a generated site
  * reaches for, and it is Muster's face too. Schibsted Grotesk came out of a
  * newspaper and reads like one: plain, firm, a little warm. Loaded here, so
  * only the company pages request it and /muster keeps its two fonts.
@@ -28,12 +28,9 @@ export default function CompanyLayout({ children }: { children: React.ReactNode 
   return (
     <div className={`co ${schibsted.variable} flex flex-col`}>
       <header className="co-shell flex items-center justify-between gap-4 pt-6 pb-2">
-        <Link href="/" className="flex items-center gap-2.5">
-          <LogoIcon size={26} />
-          {/* The wordmark stays in Geist, heavy and uppercase, as the kit sets it. */}
-          <span className="font-[family-name:var(--font-geist)] text-[17px] font-black tracking-[-0.02em] uppercase">
-            {site.name}
-          </span>
+        {/* The kit's lockup in its light version, for this light page. */}
+        <Link href="/" className="flex items-center">
+          <Wordmark tone="light" height={30} />
         </Link>
         <nav aria-label="Main" className="flex items-center gap-6 text-[16px]">
           <Link href="/muster" className="co-link hidden no-underline! sm:inline">

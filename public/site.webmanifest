@@ -1,27 +1,21 @@
 {
   "name": "Eterneon",
   "short_name": "Eterneon",
-  "description": "Systems for small business. A private AI department panel.",
+  "description": "Eterneon makes software for small businesses.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#171A1C",
   "theme_color": "#171A1C",
   "icons": [
     {
-      "src": "/brand/eterneon-icon-dark-192x192.png",
-      "sizes": "192x192",
+      "src": "/brand/apple-touch-icon-180-light.png",
+      "sizes": "180x180",
       "type": "image/png"
     },
     {
-      "src": "/brand/eterneon-icon-dark-512x512.png",
+      "src": "/brand/favicon-512-light.png",
       "sizes": "512x512",
       "type": "image/png"
-    },
-    {
-      "src": "/brand/eterneon-icon-dark-512x512-maskable.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
     }
   ]
 }

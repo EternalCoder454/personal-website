@@ -1,4 +1,13 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
+
+/* The kit's lockup as a PNG. Satori draws an <img> reliably and the kit's
+   SVG uses gradients and clip paths it may not, so the raster is the safe
+   copy. Read at build time: this card is prerendered. */
+const lockup = `data:image/png;base64,${readFileSync(
+  join(process.cwd(), "public/brand/eterneon-lockup-light.png"),
+).toString("base64")}`;
 
 export const alt = "Eterneon makes software for small businesses.";
 export const size = { width: 1200, height: 630 };
@@ -29,16 +38,8 @@ export default function OpengraphImage() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <svg width="44" height="44" viewBox="0 0 100 100" fill="none">
-            <path fill="#0f1516" fillRule="evenodd" d="M0 0H100V100H30L0 70Z M12 12H88V88H35L12 65Z" />
-            <rect x="27" y="25" width="10" height="36" fill="#0f1516" />
-            <rect x="45" y="25" width="10" height="36" fill="#62c6da" />
-            <rect x="63" y="25" width="10" height="36" fill="#0f1516" />
-            <rect x="27" y="65" width="46" height="10" fill="#0f1516" />
-          </svg>
-          <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.02em", textTransform: "uppercase" }}>
-            Eterneon
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element -- Satori, not the DOM */}
+          <img src={lockup} width={192} height={44} alt="" />
         </div>
 
         <div style={{ fontSize: 76, lineHeight: 1.03, letterSpacing: "-0.03em", maxWidth: 980 }}>

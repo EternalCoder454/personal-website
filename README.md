@@ -106,9 +106,12 @@ somebody hands over an email, gets an invite, and signs in.
 `brand/` holds the shared tokens and the reasoning. Read `brand/README.md`
 before changing any colour or typeface here, and change it there first.
 
-Brand assets live in `public/` (favicons, at the paths the kit specified) and
-`public/brand/` (app icons, the horizontal lockup). The source kit is in
-`Important Documents/branding/branding-eterneon`.
+Brand assets live in `public/brand/`, copied unchanged from the September 2026
+kit (`eterneon-brand-kit.zip`): the icon, the wordmark, the lockups and the
+favicons, each in two versions. Warm is the dark version, for dark pages; cyan
+is the light version, for light pages. `public/favicon.ico` is built from the
+kit's 16, 32 and 48px light favicons. The source kit is in
+`Important Documents/branding/eterneon-brand-kit`.
 
 ## Where things are
 
@@ -338,10 +341,6 @@ user data. It is written down rather than left to be found.
       commitment is easy to make and expensive to be vague about.
 - [ ] Name the provider that holds the invitation list in `/privacy` once it is
       chosen. Vercel and Stripe are already named.
-- [ ] **Generate `public/favicon.ico`.** The head references it, as specified,
-      but the kit did not include one and it currently 404s. Browsers fall back
-      to the SVG so nothing looks broken, but the request is wasted. Export a
-      16/32/48 multi-size .ico from `eterneon-mark-simple-light.svg`.
 - [ ] Have a solicitor read the free-for-life clause in `/terms`. A perpetual
       commitment is easy to make and expensive to be vague about.
 - [ ] Name the actual processors in the privacy notice once they are chosen.

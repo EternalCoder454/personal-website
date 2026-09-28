@@ -351,11 +351,6 @@ html:has(.co) {
   background: #f5f7f7;
 }
 
-/* The logo's middle bar is the brand cyan here, as it is in the kit. */
-.co .text-primary {
-  color: var(--co-bright);
-}
-
 .co-shell {
   width: 100%;
   max-width: 1180px;

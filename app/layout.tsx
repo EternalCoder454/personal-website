@@ -64,13 +64,18 @@ export const metadata: Metadata = {
   /* The real brand kit, wired the way it was handed over. Next emits the
      link tags from this, so there is no hand-written <head> to drift. */
   icons: {
+    /* The kit's own favicons. Warm is the dark version and cyan the light
+       one, so the tab shows whichever suits the browser's own theme. */
     icon: [
       { url: "/favicon.ico", sizes: "any" },
-      { url: "/eterneon-mark-simple-light.svg", type: "image/svg+xml" },
-      { url: "/eterneon-mark-simple-light-32x32.png", type: "image/png", sizes: "32x32" },
-      { url: "/eterneon-mark-simple-light-16x16.png", type: "image/png", sizes: "16x16" },
+      { url: "/brand/eterneon-icon-light.svg", type: "image/svg+xml", media: "(prefers-color-scheme: light)" },
+      { url: "/brand/eterneon-icon-dark.svg", type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
+      { url: "/brand/favicon-32-light.png", type: "image/png", sizes: "32x32", media: "(prefers-color-scheme: light)" },
+      { url: "/brand/favicon-32-dark.png", type: "image/png", sizes: "32x32", media: "(prefers-color-scheme: dark)" },
+      { url: "/brand/favicon-16-light.png", type: "image/png", sizes: "16x16", media: "(prefers-color-scheme: light)" },
+      { url: "/brand/favicon-16-dark.png", type: "image/png", sizes: "16x16", media: "(prefers-color-scheme: dark)" },
     ],
-    apple: [{ url: "/eterneon-mark-simple-light-180x180.png", sizes: "180x180" }],
+    apple: [{ url: "/brand/apple-touch-icon-180-light.png", sizes: "180x180" }],
   },
   manifest: "/site.webmanifest",
 };
@@ -89,7 +94,7 @@ const structuredData = {
       name: site.name,
       url: siteUrl,
       description: site.companyDescription,
-      logo: `${siteUrl}/brand/eterneon-icon-dark-512x512.png`,
+      logo: `${siteUrl}/brand/eterneon-icon-light.png`,
       email: site.contactEmail,
       slogan: site.tagline,
     },

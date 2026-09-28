@@ -51,7 +51,7 @@ const panel = "#f4f6f7";
  */
 function markUrl(): string | null {
   return siteUrl.startsWith("https://")
-    ? `${siteUrl}/brand/eterneon-mark-email-78.png`
+    ? `${siteUrl}/brand/apple-touch-icon-180-light.png`
     : null;
 }
 
@@ -95,7 +95,7 @@ export function betaRequestEmail(lead: Lead) {
      blocked, sitting on the teal square. */
   const url = markUrl();
   const mark = url
-    ? `<img src="${url}" width="26" height="26" alt="Eterneon" style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;" />`
+    ? `<img src="${url}" width="44" height="44" alt="Eterneon" style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;" />`
     : "ET";
 
   const rows: Row[] = [
@@ -140,10 +140,10 @@ export function betaRequestEmail(lead: Lead) {
                 <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                   <tr>
                     <td style="width:44px;vertical-align:middle;">
-                      <!-- The teal square is a cell background, not part
-                           of the image, so a client that blocks images
-                           still shows the brand block rather than a hole. -->
-                      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:44px;height:44px;background-color:${teal};border-radius:10px;">
+                      <!-- The kit's icon is a whole tile, so it sits on
+                           nothing. Without an image URL the initials sit on
+                           a teal square instead, so there is still a block. -->
+                      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:44px;height:44px;${url ? "" : `background-color:${teal};`}border-radius:10px;">
                         <tr>
                           <td align="center" height="44" style="height:44px;text-align:center;vertical-align:middle;font:700 15px/44px -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;color:#ffffff;letter-spacing:0.02em;">${mark}</td>
                         </tr>
