@@ -115,8 +115,12 @@ export const trust = [
   },
   {
     icon: "/approval.svg",
-    title: "Nothing happens without your approval",
-    body: "Every action is suggested first and waits for you to approve it. Muster never acts on its own.",
+    /* Was "Nothing happens without your approval". True until agentic mode
+       shipped, and still the default, so the default leads and the choice
+       follows. The rewrite exception is named because it is the one thing
+       a buyer would worry about: work being overwritten with no copy. */
+    title: "You decide what runs on its own",
+    body: "By default, every action is suggested first and waits for you to approve it. Turn on agentic mode and the heads act as they go, then tell you what they did. Rewriting a finished document always asks first.",
   },
 ];
 
@@ -268,7 +272,7 @@ export const fit = {
     items: [
       "You already employ a finance team, a legal team and a marketing team.",
       "You need an answer you can hold a professional to.",
-      "You want it to act on its own, without being asked first.",
+      "You want it to run the business while nobody is looking.",
     ],
     note: "If you have those people, ask them. They know your business better than any of this will.",
   },
