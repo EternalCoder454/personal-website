@@ -8,6 +8,7 @@ import { conversations, hasProof, proof, screenshots, screenUrl, site, srcSetFor
 import { TourFrame } from "@/components/tour";
 import {
   agentic,
+  kinds,
   answers,
   beta,
   builder,
@@ -336,6 +337,38 @@ export function Agentic() {
 
       <Reveal className="mt-14 border-l-2 border-primary py-1 pl-6">
         <p className="t-body-sm max-w-[58ch] text-pretty text-on-surface-variant">{agentic.note}</p>
+      </Reveal>
+    </Section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+export function Kinds() {
+  return (
+    <Section id="kinds">
+      <Heading>{kinds.headline}</Heading>
+
+      <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        {kinds.groups.map((group) => (
+          <StaggerItem key={group.title} className="border-t border-outline-variant pt-5">
+            <dt className="t-title text-on-surface">{group.title}</dt>
+            <dd className="t-body-sm mt-2 max-w-[40ch] text-pretty text-on-surface-variant">{group.body}</dd>
+          </StaggerItem>
+        ))}
+      </Stagger>
+
+      <Stagger as="ul" className="mt-14 grid gap-x-14 gap-y-8 md:grid-cols-2">
+        {kinds.examples.map((example) => (
+          <StaggerItem as="li" key={example.who}>
+            <p className="t-label text-primary">{example.who} gets</p>
+            <p className="t-body-sm mt-2 max-w-[52ch] text-pretty text-on-surface-variant">{example.gets}</p>
+          </StaggerItem>
+        ))}
+      </Stagger>
+
+      <Reveal className="mt-14 border-l-2 border-primary py-1 pl-6">
+        <p className="t-body-sm max-w-[58ch] text-pretty text-on-surface-variant">{kinds.note}</p>
       </Reveal>
     </Section>
   );

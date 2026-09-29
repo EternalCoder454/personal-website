@@ -89,6 +89,31 @@ export const agentic = {
   note: "Off until you turn it on. Every change a head makes is listed with an Undo button beside it. Any head can be kept asking first, rewriting a finished document always asks, and it all stops at your monthly budget.",
 };
 
+/* The kinds of business Muster is set up for, from the panel's kits. Every
+   one here is a kit that ships: the heads learn the trade, and the business
+   gets its playbooks and rhythms. Keep this in step with src/lib/kits. */
+export const kinds = {
+  headline: "Built for your kind of business",
+  groups: [
+    { title: "Trades and home services", body: "Gardeners and landscapers, painters and decorators, cleaners, builders, plumbers, electricians and HVAC." },
+    { title: "Professional services", body: "Law firms, accountants and bookkeepers, consultants and coaches, agencies, estate agents." },
+    { title: "Shops and hospitality", body: "Online shops, shops with a counter, cafés, restaurants and food trucks." },
+    { title: "Health and personal care", body: "Salons and barbers, health practices, fitness studios and personal trainers." },
+    { title: "Creative and digital", body: "Photographers, videographers and designers, software and app businesses." },
+  ],
+  examples: [
+    {
+      who: "A painter",
+      gets: "A Quote a Job playbook that prices preparation as its own line, a Monday Job Board, a lead-paint check on older houses, and quiet quotes followed up for you.",
+    },
+    {
+      who: "A law firm",
+      gets: "Conflict Check, Fee Proposal and Month-End Billing and Collections, a Weekly Matter Review, and heads that keep client details out and never work out a court deadline.",
+    },
+  ],
+  note: "Pick yours when you start, or change it later. You see what it adds before it is added, and anything you renamed or rewrote is left alone.",
+};
+
 export const steps = [
   { n: "01", title: "Add your API key", body: "One key from Anthropic, OpenAI, Google or DeepSeek. Encrypted, and never shown again." },
   { n: "02", title: "Describe your business", body: "Spend about ten minutes writing down what your business does. Without it, the answers are generic." },
@@ -97,6 +122,10 @@ export const steps = [
 ];
 
 export const capabilities = [
+  "A growth goal, planned into tasks and checked every week",
+  "Your numbers read nightly from Stripe, Shopify or a Google Sheet",
+  "An Outbox of emails, posts and quotes drafted for you to send",
+  "A handbook for your first hire, and a weekly scan for opportunities",
   "Meetings where the whole room answers at once",
   "A shared library and a task board that every head can see",
   "Scheduled briefings, and a record of the decisions you have made",
