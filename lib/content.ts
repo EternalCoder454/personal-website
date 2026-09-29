@@ -124,6 +124,7 @@ export const steps = [
 export const capabilities = [
   "A growth goal, planned into tasks and checked every week",
   "Your numbers read nightly from Stripe, Shopify or a Google Sheet",
+  "Enquiries from your website form, with the reply drafted for you",
   "An Outbox of emails, posts and quotes drafted for you to send",
   "A handbook for your first hire, and a weekly scan for opportunities",
   "Meetings where the whole room answers at once",
