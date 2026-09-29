@@ -31,6 +31,12 @@ ENV NEXT_PUBLIC_TOUR_CAPTIONS_URL=$NEXT_PUBLIC_TOUR_CAPTIONS_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
+# Brotli and gzip copies of every script and stylesheet, at the highest levels,
+# written once here. Caddy serves /_next/static from disk and picks the .br, so
+# a visitor gets files about a seventh smaller than the app's on the fly gzip.
+# The server's deploy.sh copies them out to /srv/site/static before the swap.
+RUN node scripts/precompress.mjs .next/static
+
 
 FROM node:22-slim AS runner
 WORKDIR /app
