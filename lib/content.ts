@@ -63,11 +63,37 @@ export const answers = {
   intro: "Real replies from one workspace, cropped but not edited. None of the questions gives a number. The heads already knew the business has 61 clients, wants 150, and can’t hire until one plan reaches 40 clients.",
 };
 
+/* Agentic mode, the part where the heads stop suggesting and start doing.
+   Every line here is something the panel does today, off by default and
+   switched on per business. */
+export const agentic = {
+  headline: "Agentic mode: they do the work",
+  items: [
+    {
+      title: "Hand a task over",
+      body: "Give a task to its head. It works it straight away, then marks it done or tells you exactly what it needs from you.",
+    },
+    {
+      title: "No advice left lying around",
+      body: "Scheduled briefings file the tasks they recommend. When a meeting ends, the Chief of Staff puts what was agreed on the board.",
+    },
+    {
+      title: "Heads ask each other",
+      body: "A marketing answer can include Finance’s view of the margin, without you carrying the question across.",
+    },
+    {
+      title: "Decisions noted for you",
+      body: "Settle something or give a figure in passing, and it goes on the record every head reads.",
+    },
+  ],
+  note: "Off until you turn it on. Every change a head makes is listed with an Undo button beside it. Any head can be kept asking first, rewriting a finished document always asks, and it all stops at your monthly budget.",
+};
+
 export const steps = [
   { n: "01", title: "Add your API key", body: "One key from Anthropic, OpenAI, Google or DeepSeek. Encrypted, and never shown again." },
   { n: "02", title: "Describe your business", body: "Spend about ten minutes writing down what your business does. Without it, the answers are generic." },
   { n: "03", title: "Ask", body: "One head in its own thread, or the whole room at once." },
-  { n: "04", title: "Keep it", body: "Answers become tasks, files and decisions. Export any of it to Word." },
+  { n: "04", title: "Let them work", body: "Answers become tasks, files and decisions. Turn on agentic mode and the heads file and work them too." },
 ];
 
 export const capabilities = [

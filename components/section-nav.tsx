@@ -20,6 +20,7 @@ import { usePathname } from "next/navigation";
  */
 /* In page order, so the links read top to bottom the way the page does. */
 const sections = [
+  { label: "Agentic", id: "agentic" },
   { label: "Security", id: "security" },
   { label: "Pricing", id: "pricing" },
   { label: "FAQ", id: "faq" },

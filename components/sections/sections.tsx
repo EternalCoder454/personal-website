@@ -7,6 +7,7 @@ import { FaqList } from "@/components/faq-list";
 import { conversations, hasProof, proof, screenshots, screenUrl, site, srcSetFor } from "@/lib/site";
 import { TourFrame } from "@/components/tour";
 import {
+  agentic,
   answers,
   beta,
   builder,
@@ -93,7 +94,7 @@ export function Hero() {
           <p className="t-body mt-7 max-w-[52ch] text-pretty text-on-surface-variant md:text-[18px]">
             Eight department heads in one private workspace: Marketing, Finance, Legal, Operations
             and four more. They all read the same profile of your business before they answer. Ask
-            one, or ask all of them at once and see where they disagree.
+            one, or ask all of them at once. Turn on agentic mode and they do the work as well.
           </p>
         </StaggerItem>
 
@@ -311,6 +312,31 @@ export function Room() {
         ones you don’t need. Each
         one can run on a different model.
       </p>
+    </Section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+export function Agentic() {
+  return (
+    <Section id="agentic">
+      <Heading>{agentic.headline}</Heading>
+
+      <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
+        {agentic.items.map((item) => (
+          <StaggerItem key={item.title} className="border-t border-outline-variant pt-5">
+            <dt className="t-title text-on-surface">{item.title}</dt>
+            <dd className="t-body-sm mt-2 max-w-[46ch] text-pretty text-on-surface-variant">
+              {item.body}
+            </dd>
+          </StaggerItem>
+        ))}
+      </Stagger>
+
+      <Reveal className="mt-14 border-l-2 border-primary py-1 pl-6">
+        <p className="t-body-sm max-w-[58ch] text-pretty text-on-surface-variant">{agentic.note}</p>
+      </Reveal>
     </Section>
   );
 }

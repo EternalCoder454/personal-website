@@ -1,4 +1,5 @@
 import {
+  Agentic,
   Answers,
   Builder,
   Close,
@@ -66,6 +67,7 @@ export default function MusterPage() {
         <Answers />
         <Proof />
         <Room />
+        <Agentic />
         <Fit />
         <Steps />
         <Trust />
