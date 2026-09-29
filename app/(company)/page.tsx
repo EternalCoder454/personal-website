@@ -8,7 +8,7 @@ export const metadata: Metadata = { openGraph: og("/") };
 
 /* The only light page on the site, so the browser chrome follows it. */
 export const viewport: Viewport = {
-  themeColor: "#e4e9e9",
+  themeColor: "#d0d6d5",
   colorScheme: "light",
 };
 
