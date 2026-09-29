@@ -32,7 +32,7 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px 80px",
-          backgroundColor: "#f5f7f7",
+          backgroundColor: "#e4e9e9",
           color: "#0f1516",
           fontFamily: "sans-serif",
         }}

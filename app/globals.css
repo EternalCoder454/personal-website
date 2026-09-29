@@ -332,10 +332,10 @@ summary {
  * Scoped to .co so none of it reaches the Muster pages.
  * ------------------------------------------------------------------------- */
 .co {
-  --co-bg: #f5f7f7;
+  --co-bg: #e4e9e9;
   --co-ink: #0f1516;
   --co-muted: #4a5759;
-  --co-line: #d9e0e1;
+  --co-line: #c9d2d3;
   --co-bright: #62c6da;
   color-scheme: light;
   min-height: 100dvh;
@@ -348,7 +348,7 @@ summary {
    would flash it. Browsers without :has() keep the dark ground, which is the
    old behaviour rather than a broken one. */
 html:has(.co) {
-  background: #f5f7f7;
+  background: #e4e9e9;
 }
 
 .co-shell {
