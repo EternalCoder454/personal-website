@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-const ADDRESS = "zachary@eterneon.net";
 
 /* Same rule as the server: same-site paths under /quickscript only. */
 function safeNext(next: string): string {
@@ -39,7 +38,7 @@ const button =
 
 export function LoginForm({ next }: { next: string }) {
   const [step, setStep] = useState<"email" | "password">("email");
-  const [email, setEmail] = useState(ADDRESS);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);

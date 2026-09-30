@@ -16,7 +16,18 @@ import { siteUrl } from "@/lib/site";
  * below live in one server instance, like the waitlist limiter.
  */
 
-export const ALLOWED_EMAIL = "zachary@eterneon.net";
+/**
+ * Who may sign in: the owner, and his boss so QuickScript can be taken over.
+ * A password is only ever emailed to the matching entry here, never to what
+ * somebody typed, and a password signs in only the person it was sent to.
+ */
+export const ALLOWED_EMAILS: readonly string[] = ["zachary@eterneon.net", "james@skorheim.com"];
+
+/** The canonical allowed address for this input, or null. */
+export function allowedAddress(input: string): string | null {
+  const email = input.trim().toLowerCase();
+  return ALLOWED_EMAILS.find((address) => address === email) ?? null;
+}
 export const SESSION_COOKIE = "qs_session";
 export const CHALLENGE_COOKIE = "qs_challenge";
 export const CHALLENGE_TTL_S = 10 * 60;
@@ -25,7 +36,7 @@ export const MAX_TRIES = 5;
 
 const ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // no 0 O 1 I L
 
-type Challenge = { typ: "c"; id: string; exp: number; h: string };
+type Challenge = { typ: "c"; id: string; sub: string; exp: number; h: string };
 type Session = { typ: "s"; jti: string; sub: string; iat: number; exp: number };
 
 type State = {
@@ -90,15 +101,15 @@ export function generatePassword(): string {
 const normalisePassword = (input: string) =>
   input.toUpperCase().replace(/[\s-]/g, "");
 
-export function newChallenge(password: string, secret: string) {
+export function newChallenge(password: string, secret: string, sub: string) {
   const id = randomBytes(12).toString("base64url");
   const exp = now() + CHALLENGE_TTL_S;
   const plain = normalisePassword(password);
-  return { id, exp, cookie: sign({ typ: "c", id, exp, h: digest(id, plain, secret) }, secret) };
+  return { id, exp, cookie: sign({ typ: "c", id, sub, exp, h: digest(id, plain, secret) }, secret) };
 }
 
 export type VerifyResult =
-  | { ok: true }
+  | { ok: true; sub: string }
   | { ok: false; reason: "expired" | "locked" | "wrong"; left?: number };
 
 function sweep() {
@@ -120,6 +131,8 @@ export function verifyChallenge(
     typeof c.id !== "string" ||
     typeof c.exp !== "number" ||
     typeof c.h !== "string" ||
+    typeof c.sub !== "string" ||
+    !ALLOWED_EMAILS.includes(c.sub) ||
     c.exp <= now() ||
     state.used.has(c.id)
   ) {
@@ -133,7 +146,7 @@ export function verifyChallenge(
   if (want.length === got.length && timingSafeEqual(want, got)) {
     state.used.set(c.id, c.exp);
     state.tries.delete(c.id);
-    return { ok: true, id: c.id };
+    return { ok: true, sub: c.sub, id: c.id };
   }
 
   const next = count + 1;
@@ -146,13 +159,10 @@ export function verifyChallenge(
   return { ok: false, reason: "wrong", left: MAX_TRIES - next, id: c.id };
 }
 
-export function newSession(secret: string): string {
+export function newSession(secret: string, sub: string): string {
   const iat = now();
   const jti = randomBytes(16).toString("base64url");
-  return sign(
-    { typ: "s", jti, sub: ALLOWED_EMAIL, iat, exp: iat + SESSION_TTL_S },
-    secret,
-  );
+  return sign({ typ: "s", jti, sub, iat, exp: iat + SESSION_TTL_S }, secret);
 }
 
 /** The session behind a cookie value, or null. Also null with no secret. */
@@ -161,7 +171,7 @@ export function readSession(cookieValue: string | undefined): Session | null {
   if (
     !s ||
     s.typ !== "s" ||
-    s.sub !== ALLOWED_EMAIL ||
+    !ALLOWED_EMAILS.includes(s.sub) ||
     typeof s.exp !== "number" ||
     typeof s.jti !== "string"
   ) {

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import {
-  ALLOWED_EMAIL,
+  allowedAddress,
   CHALLENGE_COOKIE,
   CHALLENGE_TTL_S,
   clientIp,
@@ -20,7 +20,7 @@ const json = (body: object, status = 200) =>
   NextResponse.json(body, { status, headers: { "cache-control": "no-store" } });
 
 /** "sent", "rejected" (a definite non-2xx), or "unknown" (timeout, network). */
-async function send(password: string): Promise<"sent" | "rejected" | "unknown"> {
+async function send(password: string, to: string): Promise<"sent" | "rejected" | "unknown"> {
   const key = process.env.RESEND_API_KEY;
   if (!key) {
     if (process.env.NODE_ENV !== "production") {
@@ -38,7 +38,7 @@ async function send(password: string): Promise<"sent" | "rejected" | "unknown"> 
       },
       body: JSON.stringify({
         from: process.env.RESEND_FROM || "Eterneon <hello@eterneon.net>",
-        to: [ALLOWED_EMAIL],
+        to: [to],
         ...quickscriptPasswordEmail(password),
       }),
       signal: AbortSignal.timeout(8000),
@@ -58,20 +58,22 @@ export async function POST(request: Request) {
   let email = "";
   try {
     const body = (await request.json()) as { email?: unknown };
-    if (typeof body.email === "string") email = body.email.trim().toLowerCase();
+    if (typeof body.email === "string") email = body.email;
   } catch {
     return json({ error: "bad_request" }, 400);
   }
 
-  /* Same answer for every other address, and nothing is sent. */
-  if (email !== ALLOWED_EMAIL) return json({ ok: true });
+  /* Same answer for every other address, and nothing is sent. The address
+     mailed is the list's own entry, never the typed string. */
+  const to = allowedAddress(email);
+  if (!to) return json({ ok: true });
 
   const ip = clientIp(request);
   const wait = rateLimit(ip);
   if (wait !== null) return json({ error: "rate_limited", wait }, 429);
 
   const password = generatePassword();
-  const sent = await send(password);
+  const sent = await send(password, to);
   if (sent !== "sent") {
     /* A timeout may still have delivered, so only a definite refusal,
        or no key at all, gives the slot back. */
@@ -83,7 +85,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const challenge = newChallenge(password, secret);
+  const challenge = newChallenge(password, secret, to);
   const response = json({ ok: true });
   response.cookies.set(CHALLENGE_COOKIE, challenge.cookie, {
     ...cookieBase,

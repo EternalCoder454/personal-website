@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
   }
 
   const response = json({ ok: true });
-  response.cookies.set(SESSION_COOKIE, newSession(secret), {
+  response.cookies.set(SESSION_COOKIE, newSession(secret, result.sub), {
     ...cookieBase,
     maxAge: SESSION_TTL_S,
   });
