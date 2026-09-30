@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Cta } from "@/components/cta";
 import { HeroStack } from "@/components/hero-stack";
 import { Zoomable } from "@/components/lightbox";
-import { CountUp, Reveal, Stagger, StaggerItem } from "@/components/motion";
+import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { FaqList } from "@/components/faq-list";
 import { conversations, hasProof, proof, screenshots, screenUrl, site, srcSetFor } from "@/lib/site";
 import { TourFrame } from "@/components/tour";
@@ -93,9 +93,8 @@ export function Hero() {
 
         <StaggerItem>
           <p className="t-body mt-7 max-w-[52ch] text-pretty text-on-surface-variant md:text-[18px]">
-            Eight department heads in one private workspace: Marketing, Finance, Legal, Operations
-            and four more. They all read the same profile of your business before they answer. Ask
-            one, or ask all of them at once. Turn on agentic mode and they do the work as well.
+            Eight department heads in one private workspace, all reading the same profile of your
+            business. Ask one or all at once, and turn on agentic mode so they do the work too.
           </p>
         </StaggerItem>
 
@@ -155,9 +154,14 @@ export function Problem() {
   return (
     <Section>
       <Heading>{problem.headline}</Heading>
-      <p className="t-body mt-8 max-w-[58ch] text-pretty text-on-surface-variant md:text-[18px]">
-        {problem.body}
-      </p>
+      {problem.body.map((para, i) => (
+        <p
+          key={para}
+          className={`t-body max-w-[58ch] text-pretty text-on-surface-variant md:text-[18px] ${i === 0 ? "mt-8" : "mt-6"}`}
+        >
+          {para}
+        </p>
+      ))}
       <p className="t-body mt-6 max-w-[58ch] text-pretty text-on-surface md:text-[18px]">
         {problem.kicker}
       </p>
@@ -225,7 +229,7 @@ export function Answers() {
                   className="h-auto w-full"
                 />
               </span>
-              <span className="t-label mt-4 block text-primary">Read the whole reply</span>
+              <span className="t-label mt-4 block text-primary">Full reply</span>
             </Zoomable>
             <p className="t-body-sm mt-2 text-pretty text-on-surface-variant">{shot.caption}</p>
           </li>
@@ -244,7 +248,7 @@ export function Proof() {
 
   return (
     <Section>
-      <Heading>What it actually looks like</Heading>
+      <Heading>Screenshots</Heading>
 
       {screenshots.length > 0 ? (
         <ul className="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
@@ -308,10 +312,8 @@ export function Room() {
       </Stagger>
 
       <p className="t-body-sm mt-14 max-w-[58ch] text-pretty text-on-surface-muted">
-        Every head reads your company profile, the decisions you have recorded and your key
-        figures before it answers. Rename them, rewrite what they know, add your own or delete the
-        ones you don’t need. Each
-        one can run on a different model.
+        Each head reads your profile, decisions and key figures first. Rename, rewrite, add or
+        delete heads, or run each on another model.
       </p>
     </Section>
   );
@@ -379,7 +381,7 @@ export function Kinds() {
 export function Steps() {
   return (
     <Section>
-      <Heading>Setup takes about twenty minutes</Heading>
+      <Heading>Setup in about twenty minutes</Heading>
 
       <Stagger as="ol" className="mt-14 grid gap-x-14 gap-y-12 sm:grid-cols-2">
         {steps.map((step) => (
@@ -430,7 +432,7 @@ export function Offer() {
         {costs.map((cost) => (
           <StaggerItem key={cost.label} className="border-t border-outline-variant pt-5">
             <dt className="t-headline text-[clamp(28px,3.4vw,40px)] text-on-surface tabular-nums">
-              <CountUp value={cost.amount} prefix="$" decimals={cost.decimals} />
+              ${cost.amount.toFixed(cost.decimals)}
             </dt>
             <dd className="t-body-sm mt-3 text-pretty text-on-surface-variant">{cost.label}</dd>
           </StaggerItem>
@@ -450,76 +452,43 @@ export function Offer() {
 /* ------------------------------------------------------------------ */
 
 export function Trust() {
+  const groups = [
+    { title: "Security", items: trust },
+    { title: "Limits", items: straight },
+  ];
+
   return (
     <Section id="security">
-      <Heading>Security and your data</Heading>
+      <Heading>Security and limits</Heading>
 
-      <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
-        {trust.map((item) => (
-          <StaggerItem key={item.title} className="border-t border-outline-variant pt-8">
-            <dt className="t-title text-on-surface">
-              {/* Inside the dt, not beside it: this is a definition list,
-                  and a bare image between the group and its dt is invalid
-                  HTML. Decorative, so alt is empty. The files carry
-                  role="img" and an aria-label repeating the title, which
-                  would have a screen reader say each card's name twice. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={item.icon}
-                alt=""
-                width={40}
-                height={40}
-                loading="lazy"
-                decoding="async"
-                className="mb-5 block h-10 w-10"
-              />
-              {item.title}
-            </dt>
-            <dd className="t-body-sm mt-2 max-w-[46ch] text-pretty text-on-surface-variant">
-              {item.body}
-            </dd>
-          </StaggerItem>
-        ))}
-      </Stagger>
-    </Section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-
-export function Straight() {
-  return (
-    <Section>
-      <Heading>What to know before you start</Heading>
-
-      <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
-        {straight.map((item) => (
-          <StaggerItem key={item.title} className="border-t border-outline-variant pt-8">
-            <dt className="t-title text-on-surface">
-              {/* Same layout as the security cards, and the same reasons:
-                  inside the dt to stay valid HTML, alt empty because the
-                  title under it already says it. The icons are drawn in
-                  the muted grey rather than cyan on purpose. These are the
-                  limits, and in the accent colour they would read as more
-                  selling points next to the guarantees above them. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={item.icon}
-                alt=""
-                width={40}
-                height={40}
-                loading="lazy"
-                decoding="async"
-                className="mb-5 block h-10 w-10"
-              />
-              {item.title}
-            </dt>
-            <dd className="t-body-sm mt-2 max-w-[46ch] text-pretty text-on-surface-variant">
-              {item.body}
-            </dd>
-          </StaggerItem>
-        ))}
-      </Stagger>
+      {groups.map((group) => (
+        <div key={group.title} className="mt-14">
+          <h3 className="t-title text-on-surface">{group.title}</h3>
+          <Stagger as="dl" className="mt-6 grid gap-x-14 gap-y-8 sm:grid-cols-2">
+            {group.items.map((item) => (
+              <StaggerItem key={item.title} className="border-t border-outline-variant pt-5">
+                <dt className="t-title text-on-surface">
+                  {/* Inside the dt to stay valid HTML; decorative, so alt is empty. */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.icon}
+                    alt=""
+                    width={40}
+                    height={40}
+                    loading="lazy"
+                    decoding="async"
+                    className="mb-5 block h-10 w-10"
+                  />
+                  {item.title}
+                </dt>
+                <dd className="t-body-sm mt-2 max-w-[46ch] text-pretty text-on-surface-variant">
+                  {item.body}
+                </dd>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+      ))}
     </Section>
   );
 }
@@ -593,7 +562,7 @@ export function Fit() {
 export function Faq() {
   return (
     <Section id="faq">
-      <Heading>Frequently asked questions</Heading>
+      <Heading>Questions</Heading>
 
       <FaqList faqs={faqs} />
     </Section>
@@ -640,8 +609,7 @@ export function Close() {
         Ask for a workspace
       </h2>
       <p className="t-body mt-7 max-w-[50ch] text-pretty text-on-surface-variant md:text-[18px]">
-        We invite a few businesses at a time. Leave your email and we’ll send an invitation when
-        the next set opens.
+        We invite a few businesses at a time. Leave your email for the next set.
       </p>
       <div className="mt-10">
         <Cta />

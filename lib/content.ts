@@ -12,14 +12,14 @@ export type Head = { name: string; note: string };
 
 /** The seeded room. Businesses rename, rewrite, add and remove these. */
 export const heads: Head[] = [
-  { name: "Chief of Staff", note: "Reads the other seven and tells you where they disagree." },
-  { name: "Marketing", note: "Positioning, campaigns, and how you describe what you sell." },
-  { name: "Finance", note: "Pricing, margin, runway, and the math behind a decision to spend." },
-  { name: "Legal", note: "Contracts, terms, and the clauses that could cost you money." },
-  { name: "Operations", note: "Suppliers, workflow, hiring, and the processes that keep breaking." },
-  { name: "Engineering", note: "Architecture, estimates, and the long-term cost of a technical choice." },
-  { name: "Design", note: "Interfaces, brand, and whether a screen makes sense to the person using it." },
-  { name: "Social Media", note: "Which channels are worth your time, and which ones are not." },
+  { name: "Chief of Staff", note: "Flags where the other seven disagree." },
+  { name: "Marketing", note: "Positioning and campaigns." },
+  { name: "Finance", note: "Pricing, margin, runway." },
+  { name: "Legal", note: "Contracts, terms, costly clauses." },
+  { name: "Operations", note: "Suppliers, workflow, hiring." },
+  { name: "Engineering", note: "Architecture, estimates, technical cost." },
+  { name: "Design", note: "Interfaces and brand." },
+  { name: "Social Media", note: "Which channels are worth your time." },
 ];
 
 export const problem = {
@@ -31,7 +31,10 @@ export const problem = {
      three: the contract review number turned the paragraph into a price
      list. The last sentence is the second bad option, the free one most
      readers have already tried. */
-  body: "A fractional finance lead runs $1,500 to $3,000 a month. A lawyer averages $422 an hour in California. So you guess at the contract, put off the forecast, and set a price because it felt about right. Or you ask a chatbot that has never heard of your business.",
+  body: [
+    "A fractional finance lead runs $1,500 to $3,000 a month, and a lawyer averages $422 an hour in California.",
+    "So you guess at the contract, put off the forecast and price by feel, or ask a chatbot that has never heard of your business.",
+  ],
   /* A reader seeing two exact prices on a page about Finance and Legal
      will ask where they came from, so the page says and links to it.
      Both pages were read before linking, and each states its figure
@@ -41,17 +44,17 @@ export const problem = {
      tier starts at $3M revenue, so it does not back the range here.
      Strings are plain text, objects are links. */
   sources: [
-    "Where the numbers come from: the lawyer rate is ",
-    { text: "Clio’s 2025 average for California", href: "https://www.clio.com/resources/legal-trends/compare-lawyer-rates/ca/" },
-    ", and the finance range is ",
-    { text: "2026 fractional CFO pricing for businesses under $1M in revenue", href: "https://mbaccountinggroup.com/fractional-cfo-cost-small-business/" },
-    ".",
+    "Sources: ",
+    { text: "Clio, 2025 California average", href: "https://www.clio.com/resources/legal-trends/compare-lawyer-rates/ca/" },
+    " for the lawyer rate, ",
+    { text: "2026 fractional CFO pricing, businesses under $1M in revenue", href: "https://mbaccountinggroup.com/fractional-cfo-cost-small-business/" },
+    " for the finance range.",
   ] as Array<string | { text: string; href: string }>,
   /* No price here. The beta offer has its own section with the cards and
      the model usage caveat, and saying $9.99 here as well read as a pitch
      before the problem had finished landing. */
   kicker: "Muster is a company of AI department heads you can ask instead.",
-  caveat: "It doesn’t replace those people, and it says so. It gets you most of the way in minutes, so when you do pay for an hour, you already know what to ask.",
+  caveat: "It doesn’t replace those people; it gets you most of the way in minutes, so you know what to ask when you pay for an hour.",
 };
 
 /* Straight after the problem, because it is the answer to its last
@@ -60,33 +63,21 @@ export const problem = {
    quote came from the workspace. The replies are cropped, not edited. */
 export const answers = {
   headline: "Four heads, one business",
-  intro: "Real replies from one workspace, cropped but not edited. None of the questions gives a number. The heads already knew the business has 61 clients, wants 150, and can’t hire until one plan reaches 40 clients.",
+  intro: "Real replies, cropped, not edited. No question gives a number, yet the heads knew the business has 61 clients, wants 150, and can’t hire until one plan reaches 40.",
 };
 
 /* Agentic mode, the part where the heads stop suggesting and start doing.
    Every line here is something the panel does today, off by default and
    switched on per business. */
 export const agentic = {
-  headline: "Agentic mode: they do the work",
+  headline: "Agentic mode",
   items: [
-    {
-      title: "Hand a task over",
-      body: "Give a task to its head. It works it straight away, then marks it done or tells you exactly what it needs from you.",
-    },
-    {
-      title: "No advice left lying around",
-      body: "Scheduled briefings file the tasks they recommend. When a meeting ends, the Chief of Staff puts what was agreed on the board.",
-    },
-    {
-      title: "Heads ask each other",
-      body: "A marketing answer can include Finance’s view of the margin, without you carrying the question across.",
-    },
-    {
-      title: "Decisions noted for you",
-      body: "Settle something or give a figure in passing, and it goes on the record every head reads.",
-    },
+    { title: "Hand a task over", body: "The head works it, then marks it done or says what it needs." },
+    { title: "Advice filed as tasks", body: "Briefings file their recommendations, and the Chief of Staff boards what a meeting agrees." },
+    { title: "Heads ask each other", body: "A marketing answer can include Finance’s view of the margin." },
+    { title: "Decisions noted", body: "Decisions and figures given in passing go on the record every head reads." },
   ],
-  note: "Off until you turn it on. Every change a head makes is listed with an Undo button beside it. Any head can be kept asking first, rewriting a finished document always asks, and it all stops at your monthly budget.",
+  note: "Off until you turn it on. Every change has Undo. Any head can be kept asking first, rewriting a finished document always asks, and it stops at your monthly budget.",
 };
 
 /* The kinds of business Muster is set up for, from the panel's kits. Every
@@ -95,88 +86,83 @@ export const agentic = {
 export const kinds = {
   headline: "Built for your kind of business",
   groups: [
-    { title: "Trades and home services", body: "Gardeners and landscapers, painters and decorators, cleaners, builders, plumbers, electricians and HVAC." },
+    { title: "Trades and home services", body: "Gardeners and landscapers, painters and decorators, cleaners, builders, plumbers, electricians, HVAC." },
     { title: "Professional services", body: "Law firms, accountants and bookkeepers, consultants and coaches, agencies, estate agents." },
-    { title: "Shops and hospitality", body: "Online shops, shops with a counter, cafés, restaurants and food trucks." },
-    { title: "Health and personal care", body: "Salons and barbers, health practices, fitness studios and personal trainers." },
-    { title: "Creative and digital", body: "Photographers, videographers and designers, software and app businesses." },
+    { title: "Shops and hospitality", body: "Online shops, counter shops, cafés, restaurants, food trucks." },
+    { title: "Health and personal care", body: "Salons and barbers, health practices, fitness studios, personal trainers." },
+    { title: "Creative and digital", body: "Photographers, videographers, designers, software and app businesses." },
   ],
   examples: [
     {
       who: "A painter",
-      gets: "A Quote a Job playbook that prices preparation as its own line, a Monday Job Board, a lead-paint check on older houses, and quiet quotes followed up for you.",
+      gets: "Quote a Job (preparation priced as its own line), Monday Job Board, lead-paint check on older houses, quote follow-up.",
     },
     {
       who: "A law firm",
-      gets: "Conflict Check, Fee Proposal and Month-End Billing and Collections, a Weekly Matter Review, and heads that keep client details out and never work out a court deadline.",
+      gets: "Conflict Check, Fee Proposal, Month-End Billing and Collections, Weekly Matter Review; heads keep client details out and never work out a court deadline.",
     },
   ],
-  note: "Pick yours when you start, or change it later. You see what it adds before it is added, and anything you renamed or rewrote is left alone.",
+  note: "Pick yours at the start or change it later. You see what it adds first, and your edits are left alone.",
 };
 
 export const steps = [
-  { n: "01", title: "Add your API key", body: "One key from Anthropic, OpenAI, Google or DeepSeek. Encrypted, and never shown again." },
-  { n: "02", title: "Describe your business", body: "Spend about ten minutes writing down what your business does. Without it, the answers are generic." },
-  { n: "03", title: "Ask", body: "One head in its own thread, or the whole room at once." },
-  { n: "04", title: "Let them work", body: "Answers become tasks, files and decisions. Turn on agentic mode and the heads file and work them too." },
+  { n: "01", title: "Add your API key", body: "Anthropic, OpenAI, Google or DeepSeek." },
+  { n: "02", title: "Describe your business", body: "About ten minutes, or answers are generic." },
+  { n: "03", title: "Ask", body: "One head, or the whole room at once." },
+  { n: "04", title: "Let them work", body: "Answers become tasks, files and decisions; agentic mode works them too." },
 ];
 
 export const capabilities = [
-  "A growth goal, planned into tasks and checked every week",
-  "Your numbers read nightly from Stripe, Shopify or a Google Sheet",
-  "Enquiries from your website form, with the reply drafted for you",
-  "An Outbox of emails, posts and quotes drafted for you to send",
-  "A handbook for your first hire, and a weekly scan for opportunities",
-  "Meetings where the whole room answers at once",
-  "A shared library and a task board that every head can see",
-  "Scheduled briefings, and a record of the decisions you have made",
-  "An internal wiki, a private inbox, and an optional calendar link",
+  "A growth goal, planned into tasks and checked weekly",
+  "Nightly numbers from Stripe, Shopify or a Google Sheet",
+  "Website enquiries with drafted replies",
+  "An Outbox of drafted emails, posts and quotes",
+  "A first-hire handbook, a weekly opportunity scan",
+  "Meetings where the whole room answers",
+  "Shared library and task board",
+  "Scheduled briefings, decision record",
+  "Internal wiki, private inbox, optional calendar link",
   "Optional web search, built in or through Perplexity",
 ];
 
 export const beta = {
   headline: "Test it during the beta and keep it free",
-  body: "You pay nothing during the beta. When we launch, every workspace that tested with us stays free for life, with three seats at no cost.",
+  body: "Nothing to pay during the beta. Every workspace that tests with us stays free for life, with three seats.",
   /* Answers "free for life, including the AI?" at the price, where the
      question comes up. */
-  caveat: "Free for life covers the workspace. The AI is yours: you bring your own key, your provider bills you directly, and we never mark it up.",
+  caveat: "Free for life covers the workspace, not the AI: bring your own key, your provider bills you, we never mark it up.",
 };
 
-/* amount and decimals drive the count-up. */
+/* Shown as plain figures. */
 export const costs = [
-  { amount: 0, decimals: 0, label: "Beta testers, for life. Three seats included." },
-  { amount: 9.99, decimals: 2, label: "A month at launch, for everyone else." },
-  { amount: 3.99, decimals: 2, label: "Each extra seat, past the three you keep." },
+  { amount: 0, decimals: 0, label: "Beta testers, for life, three seats." },
+  { amount: 9.99, decimals: 2, label: "A month at launch, everyone else." },
+  { amount: 3.99, decimals: 2, label: "Each seat past the three." },
 ];
 
 export const trust = [
   {
     icon: "/data-isolation.svg",
     title: "Your data is yours alone",
-    body: "Your data is kept separate from every other business. Every release checks that, in the code and against the live database.",
+    body: "Kept separate from every other business, and checked every release, in the code and against the live database.",
   },
   {
     icon: "/encrypted-key.svg",
     title: "Your API key is encrypted",
-    /* No cipher name: nobody this page is for knows what AES-256-GCM
-       means. And not "even we can't see it": the server has to decrypt
-       the key to call the provider, so that would be a promise the
-       product cannot keep. "Never shown again" is the true one. */
-    body: "It is encrypted the moment you save it, and Muster never shows it again, not even to you.",
+    /* No cipher name, and not "even we can't see it": the server has to
+       decrypt the key to call the provider. "Never shown again" is the
+       true promise. */
+    body: "Encrypted on save, never shown again, not even to you.",
   },
   {
     icon: "/invite-only.svg",
     title: "Access is by invitation only",
-    body: "You sign in with Google, and only invited people can get in. Remove someone and their access ends on their next request.",
+    body: "Only invited people get in. Removal ends access on their next request.",
   },
   {
     icon: "/approval.svg",
-    /* Was "Nothing happens without your approval". True until agentic mode
-       shipped, and still the default, so the default leads and the choice
-       follows. The rewrite exception is named because it is the one thing
-       a buyer would worry about: work being overwritten with no copy. */
     title: "You decide what runs on its own",
-    body: "By default, every action is suggested first and waits for you to approve it. Turn on agentic mode and the heads act as they go, then tell you what they did. Rewriting a finished document always asks first.",
+    body: "Actions wait for your approval unless you turn on agentic mode.",
   },
 ];
 
@@ -184,18 +170,13 @@ export const straight = [
   {
     icon: "/api-key.svg",
     title: "You need an API key",
-    /* Says what a key is first. A contractor or a shop owner reading
-       this has no reason to know, and "API key" with no explanation is
-       the one piece of developer language left on the page. */
-    body: "An API key is your own pay-as-you-go account with an AI company, so you pay only for what you use. Without one, the heads can’t answer. Signing up with Anthropic, OpenAI, Google or DeepSeek takes a few minutes, and you only do it once.",
+    /* Says what a key is first: the one piece of developer language left. */
+    body: "Your own pay-as-you-go account with an AI company. Without one the heads can’t answer; signing up takes a few minutes, once.",
   },
   {
     icon: "/hidden-screens.svg",
-    /* Was "Permissions hide screens, not data", which is accurate and
-       reads like a developer's note. The advice is the useful part, so it
-       leads, and the candid admission stays in plain words. */
     title: "Only invite people you trust",
-    body: "Everyone in a workspace can get to the same business information. Hiding a screen from someone doesn’t stop a determined person reading it. If someone must never see something, give them their own workspace.",
+    body: "Hiding a screen doesn’t stop a determined reader. Anyone who must never see something needs their own workspace.",
   },
   {
     icon: "/google-signin.svg",
@@ -205,74 +186,44 @@ export const straight = [
   {
     icon: "/not-advice.svg",
     title: "It is not professional advice",
-    body: "The Legal and Finance heads help you think. They don’t replace a lawyer or an accountant, and we say so inside the product too.",
+    body: "Legal and Finance help you think. They don’t replace a lawyer or an accountant.",
   },
 ];
 
-/** A blank line between paragraphs, without wrecking the indentation here. */
-const paras = (...parts: string[]) => parts.join("\n\n");
-
 export const faqs = [
   {
-    /* Was two questions. The general chatbot and the AI employee tools
-       are different incumbents, but a reader weighing either is asking
-       the same thing, and ten questions in a list is a wall. */
     q: "Why not just use ChatGPT?",
-    a: paras(
-      "Because one assistant knows nothing about your business and forgets the conversation when you close the tab. You re-explain what you sell, who you sell it to, and what you already decided, every time you open it.",
-      "This is eight of them. Each runs a department, keeps its own history with you, and remembers what you decided. They all read the same company profile before they answer, so a pricing question reaches Finance already knowing your margins. And you can put them in a room: ask all eight the same thing and the Chief of Staff reads the seven answers and tells you where they disagree.",
-      /* The sharper version of the objection. Worded around the work that
-         lands on the reader, not around what ChatGPT lacks: its features
-         change often, and a claim about them could be wrong next month. */
-      "You could set up eight custom GPTs, and then you would be the one keeping them in step: pasting the same background into each, remembering what one told you when you ask another, and copying answers into your own notes. Here the heads share one profile and one record of your decisions, answer the same question side by side, and turn answers into tasks and decisions your team can see.",
-      "The AI employee tools are a different shape again. Those hire you a digital worker to do a task, and most of them meter you with a credit allowance that resets each month. These answer questions where being wrong costs money, on a key you own, with nothing marked up and nothing metered.",
-    ),
+    a: "One assistant knows nothing about your business and forgets when you close the tab. Muster is eight heads with their own history, sharing one profile and one record of your decisions, and the Chief of Staff flags where they disagree.",
+  },
+  {
+    /* Worded around the work that lands on the reader: other tools'
+       features change often. */
+    q: "What about custom GPTs or AI employee tools?",
+    a: "Custom GPTs leave you pasting the same background into each. AI employee tools hire you a digital worker and mostly meter a monthly credit allowance. Muster runs on your own key, nothing marked up or metered.",
   },
   {
     q: "What does the beta cost, and what’s the catch?",
-    a: paras(
-      "Nothing, now or later. Test with us and your workspace stays free for life with three seats. A fourth seat and beyond is $3.99 a month each, same as everyone. No credit card at any point in the beta, and when there is eventually something to pay, Stripe handles it and your card details never reach us.",
-      "The catch is that you are using an unfinished product and telling us where it breaks. That is worth more to us than $9.99 a month. The offer sticks to the workspace, so it survives you adding and removing people.",
-    ),
+    a: "Testers keep three seats free for life, and each further seat is $3.99 a month. No credit card during the beta, and Stripe handles later payment, so card details never reach us. The catch: it is unfinished, and the offer stays with the workspace.",
   },
   {
     q: "Does the price include the AI?",
-    a: "No. You bring your own API key and your provider bills you directly, with nothing added by us. We never mark up your usage and never meter it.",
+    a: "No. You bring your own API key, your provider bills you directly, and we never mark up or meter usage.",
   },
   {
     q: "How long does setup take?",
-    a: "About twenty minutes. Most of it is writing a page about your business, which is the part that makes the answers good.",
+    a: "About twenty minutes, mostly writing a page about your business. That page makes the answers good.",
   },
   {
-    /* Was two questions, one about other businesses and one about
-       colleagues. Both are "who can see this", and merging them puts
-       the permissions caveat inline instead of pointing up the page. */
     q: "Who can see my data?",
-    a: paras(
-      "No other business, ever. Your data is kept separate from every other workspace, and we check that separation in the code and against the live database.",
-      "Inside your own workspace you set it per person: which heads they can work with, and which of eleven areas they can open. One limit worth knowing, and it is in the list above too: hiding a screen from someone doesn’t stop a determined person reading it. Anyone who must never see something needs their own workspace.",
-    ),
+    a: "No other business, ever. Inside your workspace you set, per person, which heads they can work with and which of eleven areas they can open. Screen hiding has a limit, listed under Security and limits.",
   },
   {
-    /* Was "What happens if Eterneon shuts down?". The answer was good
-       and the question was not: it plants the doubt it then settles,
-       and a reader deciding whether to trust a one person business does
-       not need the idea handed to them. Same facts, asked the way a
-       careful buyer would actually ask it. */
     q: "How do I get my data out?",
-    a: paras(
-      "One click. Your whole workspace exports as a single file: every conversation, file, task, decision and wiki page. No ticket, no waiting, no export fee.",
-      "Your AI access sits outside that entirely, because the key is yours. You signed up with Anthropic, OpenAI, Google or DeepSeek directly, and that relationship does not run through us.",
-      "The source is published as well, so none of this is a black box you could be shut out of.",
-    ),
+    a: "One click exports your whole workspace as one file: every conversation, file, task, decision and wiki page, with no ticket or fee. Your AI access sits outside that, on your key, and the source is published.",
   },
   {
     q: "Is Muster itself built with AI?",
-    a: paras(
-      "Yes, a good deal of it. It would be odd to sell you a room of AI department heads and then claim I write every line by hand.",
-      "The part that matters is what happens next. Every release runs a test suite, an audit that reads every database query to check that one business cannot see another, and a check against the live database for anything left behind where it should not be. The source is published, so you can read it rather than take my word for it.",
-      "AI helps me build it faster. It does not decide what ships.",
-    ),
+    a: "Yes, a good deal of it, but AI does not decide what ships. Every release runs tests, an audit of every database query for cross-business access, and a live-database check for leftovers. The source is published.",
   },
 ];
 
@@ -287,14 +238,10 @@ export const faqs = [
 export const builder = {
   headline: "Who’s behind this",
   body: [
-    "I’m Zachary, based in California. Eterneon is a one person business, and that is the honest version: there is no team behind a logo.",
-    "I work as an administrative assistant at an accounting practice, so I spend my days around small businesses and the things that go wrong in them. Not as their accountant. As the person who sees which questions they were never asked in time.",
-    /* Was "this doesn't have to pay my rent", which is honest and reads
-       as a hobby that could wait out a busy month, at a job where tax
-       season is a busy month. Same facts, ordered so the day job is the
-       reason it lasts rather than a sign it matters less. */
+    "I’m Zachary, based in California. Eterneon is a one person business, with no team behind a logo.",
+    "I work as an administrative assistant at an accounting practice: not their accountant, but the person who sees which questions small businesses were never asked in time.",
     "The day job pays my bills, so Eterneon doesn’t have to. That’s why it can be $9.99, and why it won’t be shut down for growing slowly.",
-    "Every release is in the changelog inside Muster, and the source is published so you can read it. Your whole workspace exports in one click, as one file. And because the API key is yours, your AI access is a direct relationship with your provider that does not depend on me being here.",
+    "Every release is in the changelog inside Muster.",
   ],
   /* Split so "email me" can carry the address. The section promises a
      reply and then made the reader go looking for where to send it. */
@@ -317,19 +264,19 @@ export const fit = {
   forYou: {
     label: "It’s for you if",
     items: [
-      "Four people cover nine jobs, and nobody was hired to do half of them.",
-      "You are still working out what to charge, and why that number and not another.",
-      "You have run the same way for twenty years and now have questions you never used to.",
-      "Nobody outside your trade has heard of you, and the businesses people have heard of depend on you.",
+      "Four people cover nine jobs, none hired for half of them.",
+      "You are still working out what to charge, and why.",
+      "Twenty years of the same routine, now new questions.",
+      "Unknown outside your trade, relied on by businesses people know.",
     ],
   },
   notForYou: {
     label: "Not for you if",
     items: [
-      "You already employ a finance team, a legal team and a marketing team.",
+      "You already employ finance, legal and marketing teams.",
       "You need an answer you can hold a professional to.",
-      "You want it to run the business while nobody is looking.",
+      "You want it to run the business unwatched.",
     ],
-    note: "If you have those people, ask them. They know your business better than any of this will.",
+    note: "If you have those people, ask them. They know your business better.",
   },
 };

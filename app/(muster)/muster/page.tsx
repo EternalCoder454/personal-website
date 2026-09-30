@@ -11,7 +11,6 @@ import {
   Problem,
   Room,
   Steps,
-  Straight,
   Proof,
   Trust,
 } from "@/components/sections/sections";
@@ -73,7 +72,6 @@ export default function MusterPage() {
         <Fit />
         <Steps />
         <Trust />
-        <Straight />
         <Builder />
         <Offer />
         <Faq />
