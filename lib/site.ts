@@ -175,29 +175,11 @@ export const srcSetFor = (shot: Pick<Screenshot, "src" | "width">) => {
   ].join(", ");
 };
 
-/** The three that stack behind the headline. */
+/** The dashboard capture: the hero here and the company home. */
 export const heroShots: Screenshot[] = [
   {
     src: "/screens/dashboard.webp",
     alt: "The dashboard, showing open tasks, recorded decisions, recent conversations, spend and context per head.",
-    caption: "",
-    width: 1500,
-    height: 819,
-    fullWidth: 2600,
-    fullHeight: 1420,
-  },
-  {
-    src: "/screens/tasks.webp",
-    alt: "The task list, filtered by head, with columns for head, title, project, priority, status, due date and owner.",
-    caption: "",
-    width: 1500,
-    height: 819,
-    fullWidth: 2600,
-    fullHeight: 1420,
-  },
-  {
-    src: "/screens/wiki.webp",
-    alt: "The internal wiki, explaining what Muster is and how to ask a department for something useful.",
     caption: "",
     width: 1500,
     height: 819,

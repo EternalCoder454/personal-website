@@ -65,7 +65,8 @@ export const answers = {
 
 /* Agentic mode, the part where the heads stop suggesting and start doing.
    Every line here is something the panel does today, off by default and
-   switched on per business. */
+   switched on per business. The items are in the order a task travels:
+   handed over, a colleague consulted, the outcome recorded, the rest filed. */
 export const agentic = {
   headline: "Agentic mode: they do the work",
   items: [
@@ -74,16 +75,16 @@ export const agentic = {
       body: "Give a task to its head. It works it straight away, then marks it done or tells you exactly what it needs from you.",
     },
     {
-      title: "No advice left lying around",
-      body: "Scheduled briefings file the tasks they recommend. When a meeting ends, the Chief of Staff puts what was agreed on the board.",
-    },
-    {
       title: "Heads ask each other",
       body: "A marketing answer can include Finance’s view of the margin, without you carrying the question across.",
     },
     {
       title: "Decisions noted for you",
       body: "Settle something or give a figure in passing, and it goes on the record every head reads.",
+    },
+    {
+      title: "No advice left lying around",
+      body: "Scheduled briefings file the tasks they recommend. When a meeting ends, the Chief of Staff puts what was agreed on the board.",
     },
   ],
   note: "Off until you turn it on. Every change a head makes is listed with an Undo button beside it. Any head can be kept asking first, rewriting a finished document always asks, and it all stops at your monthly budget.",
@@ -104,7 +105,7 @@ export const kinds = {
   examples: [
     {
       who: "A painter",
-      gets: "A Quote a Job playbook that prices preparation as its own line, a Monday Job Board, a lead-paint check on older houses, and quiet quotes followed up for you.",
+      gets: "Quote a Job, a playbook that prices preparation as its own line, a Monday Job Board, a lead-paint check on older houses, and quiet quotes followed up for you.",
     },
     {
       who: "A law firm",
@@ -151,12 +152,10 @@ export const costs = [
 
 export const trust = [
   {
-    icon: "/data-isolation.svg",
     title: "Your data is yours alone",
     body: "Your data is kept separate from every other business. Every release checks that, in the code and against the live database.",
   },
   {
-    icon: "/encrypted-key.svg",
     title: "Your API key is encrypted",
     /* No cipher name: nobody this page is for knows what AES-256-GCM
        means. And not "even we can't see it": the server has to decrypt
@@ -165,12 +164,10 @@ export const trust = [
     body: "It is encrypted the moment you save it, and Muster never shows it again, not even to you.",
   },
   {
-    icon: "/invite-only.svg",
     title: "Access is by invitation only",
     body: "You sign in with Google, and only invited people can get in. Remove someone and their access ends on their next request.",
   },
   {
-    icon: "/approval.svg",
     /* Was "Nothing happens without your approval". True until agentic mode
        shipped, and still the default, so the default leads and the choice
        follows. The rewrite exception is named because it is the one thing
@@ -182,7 +179,6 @@ export const trust = [
 
 export const straight = [
   {
-    icon: "/api-key.svg",
     title: "You need an API key",
     /* Says what a key is first. A contractor or a shop owner reading
        this has no reason to know, and "API key" with no explanation is
@@ -190,7 +186,6 @@ export const straight = [
     body: "An API key is your own pay-as-you-go account with an AI company, so you pay only for what you use. Without one, the heads can’t answer. Signing up with Anthropic, OpenAI, Google or DeepSeek takes a few minutes, and you only do it once.",
   },
   {
-    icon: "/hidden-screens.svg",
     /* Was "Permissions hide screens, not data", which is accurate and
        reads like a developer's note. The advice is the useful part, so it
        leads, and the candid admission stays in plain words. */
@@ -198,12 +193,10 @@ export const straight = [
     body: "Everyone in a workspace can get to the same business information. Hiding a screen from someone doesn’t stop a determined person reading it. If someone must never see something, give them their own workspace.",
   },
   {
-    icon: "/google-signin.svg",
     title: "Google sign-in only",
     body: "No email and password, no SSO, no Microsoft.",
   },
   {
-    icon: "/not-advice.svg",
     title: "It is not professional advice",
     body: "The Legal and Finance heads help you think. They don’t replace a lawyer or an accountant, and we say so inside the product too.",
   },
