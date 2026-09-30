@@ -24,7 +24,7 @@ export const PROVIDERS: { id: Provider; label: string }[] = [
 /** Suggested ids per provider. The field stays free text. */
 export const MODEL_OPTIONS: Record<Provider, string[]> = {
   gemini: ["gemini-flash-latest"],
-  claude: ["claude-sonnet-5-5", "claude-haiku-4-5-20251001"],
+  claude: ["claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-4-5"],
 };
 
 export function defaultModel(provider: Provider): ModelChoice {

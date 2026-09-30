@@ -5,7 +5,9 @@ localhost only (`QUICKSCRIPT_BACKEND_URL`, for example `http://127.0.0.1:<port>`
 and never faces the internet. The browser calls same-origin
 `/api/quickscript/<path>`; the catch-all route in `app/api/quickscript/[...path]`
 checks the Next session and forwards the request to Go, returning its status and
-JSON. With `QUICKSCRIPT_BACKEND_URL` unset it answers 503
+JSON. Every forwarded request carries the header `X-QuickScript-Token`, equal to
+`QUICKSCRIPT_BACKEND_TOKEN` on both sides; Go refuses anything without it. With
+`QUICKSCRIPT_BACKEND_URL` or the token unset it answers 503
 `{"error": "backend not connected"}`. The page uses the in-memory mock unless
 `NEXT_PUBLIC_QUICKSCRIPT_LIVE` is `1`. No backend URL reaches the browser.
 

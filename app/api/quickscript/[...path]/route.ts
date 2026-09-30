@@ -24,7 +24,8 @@ async function forward(
   }
 
   const backend = process.env.QUICKSCRIPT_BACKEND_URL;
-  if (!backend) return json({ error: "backend not connected" }, 503);
+  const token = process.env.QUICKSCRIPT_BACKEND_TOKEN;
+  if (!backend || !token) return json({ error: "backend not connected" }, 503);
 
   const { path } = await ctx.params;
   if (path.some((p) => p === ".." || p === ".")) {
@@ -44,7 +45,12 @@ async function forward(
     const hasBody = request.method !== "GET" && request.method !== "HEAD";
     const res = await fetch(url, {
       method: request.method,
-      headers: hasBody ? { "content-type": "application/json" } : undefined,
+      // The Go server refuses any request without this, so nothing else on
+      // the machine can drive it.
+      headers: {
+        "x-quickscript-token": token,
+        ...(hasBody ? { "content-type": "application/json" } : {}),
+      },
       body: hasBody ? await request.text() : undefined,
       cache: "no-store",
       redirect: "manual",

@@ -152,7 +152,7 @@ function initialSettings(): Settings {
     automatic: { enabled: true, sendTo: "host@example.com", maxScripts: 3, onlyIfChecksPass: true, minStrength: "good" },
     models: {
       ranking: { provider: "gemini", model: "gemini-flash-latest" },
-      drafts: { provider: "claude", model: "claude-sonnet-5-5" },
+      drafts: { provider: "claude", model: "claude-opus-5-5" },
       publishPack: { provider: "gemini", model: "gemini-flash-latest" },
     },
     seedWords: [
@@ -197,7 +197,7 @@ function initialSettings(): Settings {
 }
 
 function initialState(): State {
-  const claude = { provider: "claude" as const, model: "claude-sonnet-5-5" };
+  const claude = { provider: "claude" as const, model: "claude-opus-5-5" };
   const s1 = makeScript(
     SEEDS[0].q,
     "Approved",
@@ -282,7 +282,7 @@ function initialState(): State {
       `${at(12)} INFO collect irs ok topics=3`,
       `${at(12)} INFO collect inbox ok topics=2`,
       `${at(14)} INFO rank kept=10 deadline_boost=2 high_end_demoted=2`,
-      `${at(40)} INFO draft top=3 model=claude-sonnet-5-5`,
+      `${at(40)} INFO draft top=3 model=claude-opus-5-5`,
       `${at(95)} INFO mail sent=1 to=host`,
       `${at(96)} INFO weekly done`,
     ],
