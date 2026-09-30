@@ -87,7 +87,72 @@ export type WeekState = {
   driveReady: boolean;
   /** Lines from data/logs for the last run. */
   log: string[];
+  /** The last weekly run, scheduled or by hand. Absent when none has run. */
+  lastRun?: LastRun;
+  /** The last 6 weekly runs, newest first, the last one included. */
+  recentRuns: RunSummary[];
 };
+
+/** One cell of the recent runs strip. */
+export type RunSummary = {
+  /** RFC 3339 */
+  ranAt: string;
+  /** "good" sent what it should, "attention" held something back, "failed" stopped with an error, "missed" never started at its scheduled time. */
+  state: "good" | "attention" | "failed" | "missed";
+  sent: number;
+  held: number;
+}
+
+/** How strong a topic has to be for its script to go out by itself. */
+export type MinStrength = "strong" | "good";
+
+/** One script a run emailed, with the checks it passed or failed. */
+export type SentScript = {
+  slug: string;
+  topic: string;
+  /** The topic's score. The page turns it into Strong, Good or Weak. */
+  score: number;
+  checks: {
+    words: number;
+    lengthOk: boolean;
+    disclaimerOk: boolean;
+    /** Lines marked NOT VERIFIED. 0 means every number was found. */
+    unverifiedNumbers: number;
+  };
+};
+
+/** One script a run wrote but did not email, and why. */
+export type HeldScript = {
+  slug: string;
+  topic: string;
+  score: number;
+  /** Plain fragments, for example "2 numbers need checking". */
+  reasons: string[];
+};
+
+/** What one weekly run did. The same shape comes back from /run/weekly and /week. */
+export type LastRun = {
+  /** RFC 3339 */
+  ranAt: string;
+  /** The schedule started it, or a person pressed the button. */
+  trigger: "schedule" | "hand";
+  /** False when the run stopped with an error. */
+  ok: boolean;
+  /** Plain text of what went wrong, when ok is false. */
+  error?: string;
+  topicsFound: number;
+  topicsKept: number;
+  scriptsWritten: number;
+  /** The address the scripts went to. Empty when nothing was sent. */
+  sentTo: string;
+  sent: SentScript[];
+  held: HeldScript[];
+  /** The rule the run applied, in plain words. Same text as HOW_CHOSEN in logic.ts. */
+  rule: string;
+};
+
+/** The weekly run's result: the usual log line, and what the run did. */
+export type WeeklyResult = ActionResult & { run: LastRun };
 
 /** Posting log statuses, in order. Also the script status. */
 export const STATUSES = [
@@ -133,6 +198,12 @@ export type Script = {
   status: Status;
   /** Who the draft was last emailed to. */
   sentTo?: Recipient;
+  /** The score of the topic it answers. */
+  score?: number;
+  /** What the weekly run did with it. Absent when it has not been through a run. */
+  delivery?:
+    | { state: "sent"; /** The address. */ to: string; /** RFC 3339 */ at: string; /** True when the schedule sent it, false when a person pressed the button. */ automatic: boolean }
+    | { state: "held"; reasons: string[] };
   sources: string[];
   model: ModelChoice;
   /** RFC 3339 */
@@ -159,7 +230,22 @@ export type SourceSetting = {
   reason?: string;
 };
 
+/** The automatic run: find topics, write, keep the strongest, email them. */
+export type AutomaticSettings = {
+  /** False stops the schedule from sending. Default true. */
+  enabled: boolean;
+  /** Where the scripts go. Required. Defaults to people.hostEmail. */
+  sendTo: string;
+  /** The most scripts one run sends, 1 to 5. Default 3. In season the run sends 1. */
+  maxScripts: number;
+  /** Send only scripts that pass length, disclaimer and unchecked numbers. Default true. */
+  onlyIfChecksPass: boolean;
+  /** Default "good": Strong and Good topics. "strong": Strong only. */
+  minStrength: MinStrength;
+};
+
 export type Settings = {
+  automatic: AutomaticSettings;
   models: Record<Task, ModelChoice>;
   seedWords: string[];
   highEndWords: string[];

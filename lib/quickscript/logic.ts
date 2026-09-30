@@ -1,4 +1,4 @@
-import type { ModelChoice, PipelineStep, Provider, PublishPack, Role, Season, SeasonSetting, Settings, Status, Task } from "./types";
+import type { AutomaticSettings, HeldScript, KeyStatus, LastRun, ModelChoice, PipelineStep, Provider, PublishPack, Role, Season, SeasonSetting, Settings, Status, Task } from "./types";
 
 /* Everything that is computed on the client rather than asked of the server:
    the script checks, the season and the next run. The Go program runs its own
@@ -139,22 +139,49 @@ export function isoDate(d: Date): string {
 
 /* ---- display ---- */
 
+const dayMonth = (d: Date) =>
+  `${d.toLocaleDateString("en-US", { weekday: "short" })} ${d.getDate()} ${d.toLocaleDateString("en-US", { month: "short" })}`;
+
+/** A bare YYYY-MM-DD is read as local, not UTC, or it shows a day early. */
+const parseWhen = (iso: string | Date): Date => (typeof iso === "string" ? (/^\d{4}-\d{2}-\d{2}$/.test(iso) ? new Date(`${iso}T00:00:00`) : new Date(iso)) : iso);
+
+/** "Sun 27 Sep" */
 export function shortDate(iso: string): string {
-  // A bare YYYY-MM-DD is read as local, not UTC, or it shows a day early.
-  const d = /^\d{4}-\d{2}-\d{2}$/.test(iso) ? new Date(`${iso}T00:00:00`) : new Date(iso);
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return dayMonth(parseWhen(iso));
 }
 
+/** "Sun 27 Sep, 8:00 PM" */
 export function shortDateTime(iso: string | Date): string {
-  const d = typeof iso === "string" ? new Date(iso) : iso;
-  return `${d.toLocaleDateString("en-US", { month: "short", day: "numeric" })}, ${d.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  })}`;
+  const d = parseWhen(iso);
+  return `${dayMonth(d)}, ${d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`;
 }
 
+/** "Sun 4 Oct" */
 export function longDay(d: Date): string {
-  return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  return dayMonth(d);
+}
+
+/**
+ * Every time on the page goes through here: "3 days ago · Sun 27 Sep, 8:00 PM".
+ * Older than 4 weeks it is the date alone. A bare date has no time of day.
+ */
+export function whenLabel(iso: string | Date, now: Date = new Date()): string {
+  const d = parseWhen(iso);
+  const bare = typeof iso === "string" && /^\d{4}-\d{2}-\d{2}$/.test(iso);
+  const abs = bare ? dayMonth(d) : shortDateTime(d);
+  const mins = Math.round((now.getTime() - d.getTime()) / 60_000);
+  if (mins < 0 || mins > 28 * 1440) return abs;
+  let rel: string;
+  if (bare) {
+    const days = Math.round((new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() - d.getTime()) / 86_400_000);
+    rel = days <= 0 ? "today" : days === 1 ? "yesterday" : days < 14 ? `${days} days ago` : `${Math.floor(days / 7)} weeks ago`;
+  } else if (mins < 1) rel = "just now";
+  else if (mins < 60) rel = plural(mins, "minute", "minutes") + " ago";
+  else if (mins < 1440) rel = plural(Math.floor(mins / 60), "hour", "hours") + " ago";
+  else if (mins < 2880) rel = "yesterday";
+  else if (mins < 14 * 1440) rel = `${Math.floor(mins / 1440)} days ago`;
+  else rel = `${Math.floor(mins / 10080)} weeks ago`;
+  return `${rel} · ${abs}`;
 }
 
 export function timeLabel(hhmm: string): string {
@@ -177,6 +204,9 @@ const SOURCE_NAMES: Record<string, string> = {
 export function plainSource(name: string): string {
   return name.replace("YouTube Data API", "YouTube search");
 }
+
+/** A role as a label: the program is called QuickScript. */
+export const roleLabel = (r: Role): string => (r === "Program" ? "QuickScript" : r);
 
 export function roleName(r: Role): string {
   return r === "Program" ? "QuickScript" : `the ${r}`;
@@ -207,7 +237,7 @@ function describe(rest: string, kv: Record<string, string>): string | null {
   const w = rest.split(/\s+/);
   if (w[0] === "weekly" && w[1] === "start") {
     const to = kv.to ? ` to ${who(kv.to)}` : "";
-    return kv.dry_run === "true" ? `Practice run started. Nothing is sent. It would go${to || " nowhere"}` : `Weekly run started${kv.to ? `, sending${to}` : ""}`;
+    return kv.dry_run === "true" ? `Test run started. Nothing is sent. It would go${to || " nowhere"}` : `Weekly run started${kv.to ? `, sending${to}` : ""}`;
   }
   if (w[0] === "weekly" && w[1] === "done") return "Weekly run finished";
   if (w[0] === "topics" && w[1] === "start") return "Started looking for topics";
@@ -248,7 +278,8 @@ export function plainLogLine(line: string): string {
     const kv: Record<string, string> = {};
     for (const x of rest.matchAll(/(\w+)=(?:"([^"]*)"|(\S+))/g)) kv[x[1]] = x[2] ?? x[3];
     const text = describe(rest, kv) ?? cap(rest);
-    return level === "INFO" ? text : `Problem: ${lower(text)}`;
+    const named = Object.values(SOURCE_NAMES).some((n) => text.startsWith(n));
+    return level === "INFO" ? text : `Problem: ${named ? text : lower(text)}`;
   } catch {
     return line;
   }
@@ -345,4 +376,149 @@ export function nextStep(steps: PipelineStep[], season: Season): NextStep {
     if (left > 0) return { kind: "wait", text: `${l.lead} ${plural(left, l.one, l.many)}` };
   }
   return { kind: "done", text: "All done for this week" };
+}
+
+
+/* ---- the automatic run ---- */
+
+/** How the strongest scripts are chosen, in plain words. Settings and the Guide show the steps, and every run returns them joined as `rule`. */
+export const HOW_CHOSEN_STEPS = [
+  "Rank the topics by score.",
+  "Write scripts for the top ones, a few more than will be sent.",
+  "Keep only the scripts that pass every check (when that option is on) and whose topic is strong enough.",
+  "Put the highest scores first and email up to the number set here (1 in tax season).",
+  "Every other script is not sent, and it says why.",
+];
+export const HOW_CHOSEN = HOW_CHOSEN_STEPS.join(" ");
+
+/** Scripts written per run: the number to send and two spare, never more than 5. */
+export function scriptsToWrite(sendMax: number): number {
+  return Math.min(5, sendMax + 2);
+}
+
+/** The most scripts one run sends: the setting, or 1 in season. */
+export function sendLimit(auto: AutomaticSettings, season: Season): number {
+  return season === "inseason" ? 1 : Math.min(5, Math.max(1, Math.round(auto.maxScripts) || 1));
+}
+
+export const MIN_STRENGTH_LABEL: Record<AutomaticSettings["minStrength"], string> = {
+  strong: "Strong only",
+  good: "Strong and Good",
+};
+
+/** Why a script would be held back for its checks, as plain fragments. Empty when it passes. */
+export function checkProblems(text: string): string[] {
+  const c = checkScript(text);
+  const out: string[] = [];
+  if (!c.wordsOk) out.push(`length is ${c.words} words, it needs ${WORDS_MIN} to ${WORDS_MAX}`);
+  if (!c.disclaimerOk) out.push("disclaimer is missing");
+  if (c.flags.length > 0) out.push(`${plural(c.flags.length, "number needs", "numbers need")} checking`);
+  return out;
+}
+
+/**
+ * The rule. Takes this run's scripts and says which go out, highest score first,
+ * and which are held back and why. The Go program applies the same rule.
+ */
+export function chooseToSend<T extends { slug: string; score: number; text: string }>(
+  items: T[],
+  auto: AutomaticSettings,
+  limit: number,
+): { send: T[]; held: { item: T; reasons: string[] }[] } {
+  const ranked = [...items].sort((a, b) => b.score - a.score);
+  const send: T[] = [];
+  const held: { item: T; reasons: string[] }[] = [];
+  for (const item of ranked) {
+    const reasons: string[] = [];
+    const s = strength(item.score);
+    if (s === "Weak" || (auto.minStrength === "strong" && s !== "Strong")) {
+      reasons.push(`topic strength is ${s}, ${auto.minStrength === "strong" ? "only Strong is sent" : "Strong or Good is needed"}`);
+    }
+    if (auto.onlyIfChecksPass) reasons.push(...checkProblems(item.text));
+    if (reasons.length === 0 && send.length >= limit) reasons.push(`over the limit of ${limit} for one run`);
+    if (reasons.length === 0) send.push(item);
+    else held.push({ item, reasons });
+  }
+  return { send, held };
+}
+
+/** "Not sent, needs a fix: 2 numbers need checking" */
+export function heldLine(h: Pick<HeldScript, "reasons">): string {
+  return `Not sent, needs a fix: ${h.reasons.join(", ")}`;
+}
+
+/** "Sun 4 Oct, 8:00 PM" */
+export function nextRunLabel(d: Date): string {
+  return `${dayMonth(d)}, ${timeLabel(`${d.getHours()}:${d.getMinutes()}`)}`;
+}
+
+/** The most recent scheduled time at or before now. */
+export function lastScheduled(now: Date, schedule: Settings["schedule"]): Date {
+  const next = nextRun(now, schedule);
+  next.setDate(next.getDate() - 7);
+  return next;
+}
+
+const KEY_FOR: Record<Provider, keyof KeyStatus> = { gemini: "GEMINI_API_KEY", claude: "ANTHROPIC_API_KEY" };
+
+/** Labels of the providers the settings use whose key is not set on the server. */
+export function missingProviders(settings: Settings, keys: KeyStatus | undefined): string[] {
+  if (!keys) return [];
+  const used = new Set<Provider>(TASKS.map((t) => settings.models[t.id].provider));
+  return [...used].filter((p) => !keys[KEY_FOR[p]]).map(providerLabel);
+}
+
+export type AutoState = "good" | "attention" | "failed" | "missed";
+export type AutoStatus = { state: AutoState; title: string; text: string; plan: string };
+
+const STATE_TITLE: Record<AutoState, string> = { good: "All good", attention: "Needs attention", failed: "Failed", missed: "Didn't run" };
+
+/** The status card: what needs a person first, else the plain plan. The plan line is always there. */
+export function autoStatus(settings: Settings, keys: KeyStatus | undefined, lastRun: LastRun | undefined, now: Date): AutoStatus {
+  const a = settings.automatic;
+  const limit = sendLimit(a, seasonFor(now, settings.seasonOverride));
+  const to = a.sendTo.trim();
+  const next = nextRunLabel(nextRun(now, settings.schedule));
+  const plan = !to
+    ? `Next run ${next} · no address to send to`
+    : !a.enabled
+      ? `Next run ${next} · nothing is sent while automatic sending is off`
+      : `Next run ${next} · sends up to ${limit} to ${to}`;
+  const mk = (state: AutoState, text: string): AutoStatus => ({ state, title: STATE_TITLE[state], text, plan });
+  if (!to) return mk("attention", "No send-to address is set. Add one under Settings, Automatic sending, or nothing can be emailed.");
+  if (!a.enabled) return mk("attention", "Automatic sending is off. Turn it on under Settings, Automatic sending, or scripts wait until somebody sends them.");
+  const keyGone = missingProviders(settings, keys);
+  if (keyGone.length > 0) {
+    return mk("attention", `An API key is missing: ${keyGone.join(", ")}. Whoever runs the server must set it, and the next run will not work until they do.`);
+  }
+  if (lastRun && !lastRun.ok) {
+    return mk(
+      "failed",
+      `The last run failed${lastRun.error ? `: ${noStop(lastRun.error)}` : ""}. Open Run by hand below and press Do everything for this week. If it fails again, see the Guide.`,
+    );
+  }
+  if (!lastRun) {
+    return mk("good", `Automatic sending is on. Nothing has run yet; the first run is ${next}.`);
+  }
+  // A run takes a while, so a run is only called missed once its scheduled
+  // time is well past. Inside that window the previous week's is checked.
+  const GRACE = 45 * 60_000;
+  let due = lastScheduled(now, settings.schedule);
+  if (now.getTime() - due.getTime() < GRACE) due = new Date(due.getTime() - 7 * 86_400_000);
+  if (new Date(lastRun.ranAt).getTime() < due.getTime() - 5 * 60_000) {
+    return mk("missed", `Nothing ran at the last scheduled time, ${nextRunLabel(due)}. Open Run by hand below and press Do everything for this week. If it keeps happening, tell whoever runs the server.`);
+  }
+  // Go sends an empty list as null, so never assume the arrays are there.
+  const held = lastRun.held ?? [];
+  const sent = lastRun.sent ?? [];
+  if (held.length > 0) {
+    return mk(
+      "attention",
+      `${plural(held.length, "script was", "scripts were")} not sent and need${held.length === 1 ? "s" : ""} a fix. Last run below says why. Open the script on the Scripts tab, fix it, then send it to the Host.`,
+    );
+  }
+  if (sent.length === 0) {
+    return mk("attention", "The last run found nothing strong enough to send. Look at this week's topics below, or allow Good topics under Settings, Topic strength.");
+  }
+  return mk("good", `Automatic sending is on. The last run sent ${plural(sent.length, "script", "scripts")} to ${lastRun.sentTo || to}.`);
 }

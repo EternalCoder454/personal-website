@@ -2,8 +2,8 @@
 
 import { useId, useState } from "react";
 import { pickClient } from "@/lib/quickscript/client";
-import { defaultModel, MODEL_OPTIONS, PROVIDERS, plainSource, TASKS, WEEKDAYS } from "@/lib/quickscript/logic";
-import type { KeyStatus, Provider, SeasonSetting, Settings } from "@/lib/quickscript/types";
+import { defaultModel, HOW_CHOSEN_STEPS, MIN_STRENGTH_LABEL, MODEL_OPTIONS, nextRun, nextRunLabel, PROVIDERS, plainSource, TASKS, WEEKDAYS } from "@/lib/quickscript/logic";
+import type { KeyStatus, MinStrength, Provider, SeasonSetting, Settings } from "@/lib/quickscript/types";
 import { Btn, control, errorText, Field, InlineError, Loading, Panel, type Resource } from "./quickscript-ui";
 
 const client = pickClient();
@@ -32,7 +32,7 @@ function ChipList({
       <ul aria-labelledby={id} className="flex flex-wrap gap-2">
         {words.map((w) => (
           <li key={w} className="flex items-center border border-outline bg-surface-lowest">
-            <span className="px-2.5 py-1">{w}</span>
+            <span className="px-3 py-1">{w}</span>
             <button
               type="button"
               aria-label={`Remove ${w}`}
@@ -73,12 +73,12 @@ function Keys({ keys }: { keys: Resource<KeyStatus> }) {
     { name: "ANTHROPIC_API_KEY", label: "Claude (best writing, paid)" },
   ];
   return (
-    <Panel title="API keys">
+    <Panel title="API keys" inset>
       <p className="mb-3 text-on-surface-variant">Set on the server by whoever runs it. They cannot be changed here.</p>
       {keys.data ? (
         <dl className="flex flex-col gap-3">
           {rows.map((r) => (
-            <div key={r.name} className="flex flex-col gap-0.5 sm:flex-row sm:justify-between sm:gap-6">
+            <div key={r.name} className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:gap-6">
               <dt className="min-w-0">
                 {r.label} <span className="t-value text-on-surface-variant">{r.name}</span>
               </dt>
@@ -122,6 +122,18 @@ function Form({ initial, keys, onSaved }: { initial: Settings; keys: Resource<Ke
   const save = async () => {
     setError(null);
     const emails = Object.values(s.people);
+    if (!s.automatic.sendTo.trim()) {
+      setError("Automatic sending needs a send-to address");
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(s.automatic.sendTo.trim())) {
+      setError("The send-to address is not valid. Check the spelling and try saving again");
+      return;
+    }
+    if (!Number.isInteger(s.automatic.maxScripts) || s.automatic.maxScripts < 1 || s.automatic.maxScripts > 5) {
+      setError("Scripts per run must be a whole number from 1 to 5");
+      return;
+    }
     if (emails.some((e) => e.trim() !== "" && !/^\S+@\S+\.\S+$/.test(e.trim()))) {
       setError("An email address is not valid. Check the spelling and try saving again");
       return;
@@ -134,9 +146,16 @@ function Form({ initial, keys, onSaved }: { initial: Settings; keys: Resource<Ke
       setError("Tax year is not valid. Use a year such as 2026");
       return;
     }
+    // Where scripts go with nobody watching: say it back before it changes.
+    const to = s.automatic.sendTo.trim();
+    const turningOn = s.automatic.enabled && !initial.automatic.enabled;
+    const newAddress = s.automatic.enabled && to !== initial.automatic.sendTo.trim();
+    if ((turningOn || newAddress) && !window.confirm(`From the next run, QuickScript will email up to ${s.automatic.maxScripts} scripts every week to ${to} without asking. Save?`)) {
+      return;
+    }
     setBusy(true);
     try {
-      const out = await client.saveSettings(s);
+      const out = await client.saveSettings({ ...s, automatic: { ...s.automatic, sendTo: to } });
       setS(structuredClone(out));
       onSaved(out);
       setSaved(true);
@@ -148,8 +167,77 @@ function Form({ initial, keys, onSaved }: { initial: Settings; keys: Resource<Ke
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-6">
       <h2 className="text-xl font-medium">Everyday</h2>
+      <Panel title="Automatic sending">
+        <div className="flex flex-col gap-6">
+          <label className="flex min-h-11 cursor-pointer items-center gap-3">
+            <input
+              type="checkbox"
+              className="size-5 shrink-0 accent-[var(--color-primary)]"
+              checked={s.automatic.enabled}
+              onChange={(e) => edit((d) => void (d.automatic.enabled = e.target.checked))}
+            />
+            Send the strongest scripts by itself on each run
+          </label>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <Field label="Send to">
+              <input
+                type="email"
+                required
+                className={control}
+                value={s.automatic.sendTo}
+                onChange={(e) => edit((d) => void (d.automatic.sendTo = e.target.value))}
+              />
+            </Field>
+            <Field label="Scripts per run">
+              <input
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={5}
+                className={control}
+                value={Number.isNaN(s.automatic.maxScripts) ? "" : s.automatic.maxScripts}
+                onChange={(e) => edit((d) => void (d.automatic.maxScripts = e.target.value === "" ? NaN : Number(e.target.value)))}
+              />
+            </Field>
+            <Field label="Topic strength">
+              <select
+                className={control}
+                value={s.automatic.minStrength}
+                onChange={(e) => edit((d) => void (d.automatic.minStrength = e.target.value as MinStrength))}
+              >
+                {(Object.keys(MIN_STRENGTH_LABEL) as MinStrength[]).map((m) => (
+                  <option key={m} value={m}>
+                    {MIN_STRENGTH_LABEL[m]}
+                  </option>
+                ))}
+              </select>
+            </Field>
+          </div>
+          <label className="flex min-h-11 cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              className="mt-3 size-5 shrink-0 accent-[var(--color-primary)]"
+              checked={s.automatic.onlyIfChecksPass}
+              onChange={(e) => edit((d) => void (d.automatic.onlyIfChecksPass = e.target.checked))}
+            />
+            <span className="pt-3">Only send scripts that pass every check (length, disclaimer, no unchecked numbers)</span>
+          </label>
+          <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1">
+            <dt className="text-on-surface-variant">Next run</dt>
+            <dd>{nextRunLabel(nextRun(new Date(), s.schedule))}, set under Schedule below</dd>
+          </dl>
+          <div className="border-t border-outline-variant pt-4">
+            <h3 className="font-medium">How scripts are picked</h3>
+            <ol className="mt-2 flex max-w-3xl list-decimal flex-col gap-2 pl-5 leading-7">
+              {HOW_CHOSEN_STEPS.map((x) => (
+                <li key={x}>{x}</li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </Panel>
       <Panel title="Seed words and words that move a topic down">
         <div className="flex flex-col gap-6">
           <ChipList label="Seed words, what to search for" words={s.seedWords} onChange={(w) => edit((d) => void (d.seedWords = w))} />
@@ -161,16 +249,16 @@ function Form({ initial, keys, onSaved }: { initial: Settings; keys: Resource<Ke
         <ul className="divide-y divide-outline-variant border-y border-outline-variant">
           {s.sources.map((src, i) => (
             <li key={src.id}>
-              <label className="flex min-h-11 cursor-pointer items-start gap-3 py-2.5">
+              <label className="flex min-h-11 cursor-pointer items-start gap-3 py-3">
                 <input
                   type="checkbox"
-                  className="mt-0.5 size-5 shrink-0 accent-[var(--color-primary)]"
+                  className="mt-1 size-5 shrink-0 accent-[var(--color-primary)]"
                   checked={src.enabled}
                   onChange={(e) => edit((d) => void (d.sources[i].enabled = e.target.checked))}
                 />
                 <span>
                   {plainSource(src.name)}
-                  {src.reason && <span className="block text-sm text-on-surface-variant">Off: {src.reason}</span>}
+                  {src.reason && <span className="block text-sm text-on-surface-variant">Off. {src.reason}</span>}
                 </span>
               </label>
             </li>
@@ -193,7 +281,7 @@ function Form({ initial, keys, onSaved }: { initial: Settings; keys: Resource<Ke
       </Panel>
 
       <Panel title="Schedule, season and tax year">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Field label="Runs by itself on">
             <select className={control} value={s.schedule.day} onChange={(e) => edit((d) => void (d.schedule.day = Number(e.target.value)))}>
               {WEEKDAYS.map((w, i) => (
@@ -211,17 +299,6 @@ function Form({ initial, keys, onSaved }: { initial: Settings; keys: Resource<Ke
               onChange={(e) => edit((d) => void (d.schedule.time = e.target.value))}
             />
           </Field>
-          <Field label="Season">
-            <select
-              className={control}
-              value={s.seasonOverride}
-              onChange={(e) => edit((d) => void (d.seasonOverride = e.target.value as SeasonSetting))}
-            >
-              <option value="auto">Automatic (tax season Jan 15 to Apr 15)</option>
-              <option value="evergreen">Always off season</option>
-              <option value="inseason">Always tax season</option>
-            </select>
-          </Field>
           <Field label="Tax year">
             <input
               type="number"
@@ -230,6 +307,17 @@ function Form({ initial, keys, onSaved }: { initial: Settings; keys: Resource<Ke
               value={Number.isNaN(s.taxYear) ? "" : s.taxYear}
               onChange={(e) => edit((d) => void (d.taxYear = e.target.value === "" ? NaN : Number(e.target.value)))}
             />
+          </Field>
+          <Field label="Season" className="sm:col-span-2 lg:col-span-3">
+            <select
+              className={control}
+              value={s.seasonOverride}
+              onChange={(e) => edit((d) => void (d.seasonOverride = e.target.value as SeasonSetting))}
+            >
+              <option value="auto">Automatic (Jan 15 to Apr 15)</option>
+              <option value="evergreen">Always off season</option>
+              <option value="inseason">Always tax season</option>
+            </select>
           </Field>
         </div>
       </Panel>
@@ -244,16 +332,16 @@ function Form({ initial, keys, onSaved }: { initial: Settings; keys: Resource<Ke
       <details
         open={advOpen ?? needsAttention}
         onToggle={(e) => setAdvOpen(e.currentTarget.open)}
-        className="border border-outline-variant bg-surface-low"
+        className="bg-surface-low"
       >
-        <summary className="cursor-pointer px-4 py-3 text-xl font-medium sm:px-5">Advanced: models and keys</summary>
-        <div className="flex flex-col gap-5 p-4 pt-1 sm:p-5 sm:pt-1">
-      <Panel title="Models">
+        <summary className="cursor-pointer px-4 py-4 text-xl font-medium sm:px-6">Advanced: models and keys</summary>
+        <div className="flex flex-col gap-6 p-4 pt-1 sm:p-6 sm:pt-0">
+      <Panel title="Models" inset>
         <div className="flex flex-col gap-4">
           {TASKS.map((t) => (
             <fieldset key={t.id} className="grid gap-3 sm:grid-cols-[12rem_10rem_1fr] sm:items-end">
               <legend className="sr-only">{t.label}</legend>
-              <p className="font-medium sm:pb-2.5" aria-hidden="true">
+              <p className="font-medium sm:pb-3" aria-hidden="true">
                 {t.label}
               </p>
               <Field label={`${t.label}, which AI`}>

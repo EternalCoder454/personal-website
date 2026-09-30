@@ -2,6 +2,7 @@ import type {
   ActionResult,
   DraftRequest,
   KeyStatus,
+  LastRun,
   PostingRow,
   Provider,
   PublishPack,
@@ -9,6 +10,7 @@ import type {
   Script,
   Settings,
   WeekState,
+  WeeklyResult,
 } from "./types";
 import { mockClient } from "./mock";
 
@@ -22,8 +24,8 @@ import { mockClient } from "./mock";
  */
 export interface QuickScriptClient {
   getWeek(): Promise<WeekState>;
-  /** quickscript weekly: topics, draft, send. With dryRun nothing is written or sent. */
-  runWeekly(req: { dryRun: boolean; to: Recipient }): Promise<ActionResult>;
+  /** quickscript weekly: topics, draft, keep the strongest, send them. With dryRun nothing is written or sent. Returns what the run did. */
+  runWeekly(req: { dryRun: boolean; to: Recipient }): Promise<WeeklyResult>;
   /** quickscript topics */
   findTopics(): Promise<ActionResult>;
   /** quickscript draft --top N, or the chosen topics. */
@@ -51,6 +53,32 @@ export interface QuickScriptClient {
 export { mockClient };
 
 /** Same-origin only: the Next route forwards to the Go server. */
+/*
+ * Go encodes an empty slice as null. The page reads these lists straight
+ * away, so a week with nothing held back must not crash it: fill them in once
+ * here, as they arrive.
+ */
+function normaliseRun(run: LastRun | undefined | null): LastRun | undefined {
+  if (!run) return undefined;
+  return {
+    ...run,
+    sent: run.sent ?? [],
+    held: (run.held ?? []).map((h) => ({ ...h, reasons: h.reasons ?? [] })),
+  };
+}
+
+function normaliseWeek(week: WeekState): WeekState {
+  return {
+    ...week,
+    steps: week.steps ?? [],
+    topics: week.topics ?? [],
+    collectors: week.collectors ?? [],
+    log: week.log ?? [],
+    lastRun: normaliseRun(week.lastRun),
+    recentRuns: week.recentRuns ?? [],
+  };
+}
+
 export function httpClient(): QuickScriptClient {
   const base = "/api/quickscript";
 
@@ -83,8 +111,9 @@ export function httpClient(): QuickScriptClient {
   const slug = (s: string) => encodeURIComponent(s);
 
   return {
-    getWeek: () => call("GET", "/week"),
-    runWeekly: (req) => call("POST", "/run/weekly", req),
+    getWeek: () => call<WeekState>("GET", "/week").then(normaliseWeek),
+    runWeekly: (req) =>
+      call<WeeklyResult>("POST", "/run/weekly", req).then((r) => ({ ...r, run: normaliseRun(r.run) ?? r.run })),
     findTopics: () => call("POST", "/run/topics"),
     draft: (req) => call("POST", "/run/draft", req),
     sendDrafts: (req) => call("POST", "/run/send", req),

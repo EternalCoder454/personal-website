@@ -1,21 +1,21 @@
 "use client";
 
-import { timeLabel, WEEKDAYS } from "@/lib/quickscript/logic";
+import { HOW_CHOSEN_STEPS, timeLabel, WEEKDAYS } from "@/lib/quickscript/logic";
 import type { Settings } from "@/lib/quickscript/types";
 import { Panel } from "./quickscript-ui";
 
-const list = "flex list-disc flex-col gap-1.5 pl-5";
-const steps = "flex list-decimal flex-col gap-1.5 pl-5";
+const list = "flex list-disc flex-col gap-2 pl-5";
+const steps = "flex list-decimal flex-col gap-2 pl-5";
 
 /** One plain page for whoever takes over. No data to load, so it is always there. */
 export function GuideView({ settings }: { settings: Settings | undefined }) {
   const when = settings ? `${WEEKDAYS[settings.schedule.day]} at ${timeLabel(settings.schedule.time)}` : "Sunday at 8:00 PM";
   return (
-    <div className="flex max-w-3xl flex-col gap-5 leading-7">
+    <div className="flex max-w-3xl flex-col gap-6 leading-7">
       <Panel title="What QuickScript does">
         <p>
           QuickScript helps make a short tax video for the Tax Facts FAQs YouTube channel every week. It finds the tax questions people are asking,
-          writes draft scripts for the best ones, and emails them to the Host. Everything after that is done by people. It never publishes
+          writes draft scripts for the best ones, and emails the strongest to the address set in Settings, normally the Host. Everything after that is done by people. It never publishes
           anything by itself.
         </p>
       </Panel>
@@ -36,9 +36,15 @@ export function GuideView({ settings }: { settings: Settings | undefined }) {
 
       <Panel title="What runs by itself">
         <p>
-          Every {when} (set in Settings), QuickScript finds the week&apos;s topics, writes the scripts and emails them to the Host. Nothing has to be
-          clicked for that.
+          Every {when} (set in Settings), QuickScript does the whole first part on its own: it finds the week&apos;s topics, writes the scripts,
+          keeps only the strongest and emails those to the address under Settings, Automatic sending. Nothing has to be clicked for that.
         </p>
+        <p className="mt-3 font-medium">How scripts are picked:</p>
+        <ol className={`${steps} mt-1`}>
+          {HOW_CHOSEN_STEPS.map((x) => (
+            <li key={x}>{x}</li>
+          ))}
+        </ol>
         <p className="mt-3">A person has to do everything else:</p>
         <ul className={`${list} mt-1`}>
           <li>Approving the scripts</li>
@@ -50,8 +56,11 @@ export function GuideView({ settings }: { settings: Settings | undefined }) {
 
       <Panel title="Each week">
         <ol className={steps}>
-          <li>Open This week. The card at the top says what to do now. If the automatic run did not happen, press its button.</li>
-          <li>Open Scripts. Check the checks for each script, then send the ones that look right to the Host.</li>
+          <li>Normally there is nothing to press. The run happens by itself.</li>
+          <li>On Monday, open This week and read the card at the top. &quot;All good&quot; means the run is set and nothing is wrong. It also shows the next run and where the scripts go.</li>
+          <li>Under Last run, see what was sent and to whom, and which scripts were not sent and why. The Recent runs strip shows the last six runs.</li>
+          <li>If the card says Needs attention, Failed or Didn&apos;t run, it says what to do. Fix that first: add the send-to address or turn automatic sending on in Settings, ask whoever runs the server about a missing key, or open Run by hand on This week and press Do everything for this week after a failed run.</li>
+          <li>For a script that was not sent, open it on the Scripts tab, fix what it lists, then send it to the Host yourself.</li>
           <li>The Host replies Approved. Open Posting Log and update it from the sheet to see the new status.</li>
           <li>For each approved script, make the publish pack on the Scripts tab. The Producer uses it when uploading to YouTube.</li>
           <li>Watch the steps on This week. Each one says who it is waiting on. Nudge that person if it stays stuck.</li>

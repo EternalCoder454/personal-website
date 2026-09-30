@@ -27,19 +27,87 @@ export function Btn({
   return <button type={type} className={`${btnBase} ${look} ${className}`} {...props} />;
 }
 
+/* Three tonal levels, no card borders: the page, a card (surface-low) and an
+   inset inside a card (surface-container). Lines are only dividers inside a card. */
+export const CARD = "bg-surface-low";
+export const INSET = "bg-surface-container";
+
+export type MarkKind = "good" | "attention" | "failed" | "clock" | "dash";
+
+const MARK_TONE: Record<MarkKind, string> = {
+  good: "text-primary",
+  attention: "text-[#e5c07b]",
+  failed: "text-error",
+  clock: "text-on-surface-variant",
+  dash: "text-on-surface-variant",
+};
+
+/** A small shape that says the state without colour: tick, triangle, cross, clock, dash. */
+export function Mark({ kind, size = 16 }: { kind: MarkKind; size?: number }) {
+  const shape =
+    kind === "good" ? (
+      <path d="M3.5 8.5l3 3 6-7" />
+    ) : kind === "attention" ? (
+      <>
+        <path d="M8 2.2l6.3 11H1.7z" />
+        <path d="M8 6.6v3.2M8 11.6v.2" />
+      </>
+    ) : kind === "failed" ? (
+      <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" />
+    ) : kind === "clock" ? (
+      <>
+        <circle cx="8" cy="8" r="6" />
+        <path d="M8 4.6V8l2.2 1.4" />
+      </>
+    ) : (
+      <path d="M3.5 8h9" />
+    );
+  return (
+    <svg
+      aria-hidden="true"
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`shrink-0 ${MARK_TONE[kind]}`}
+    >
+      {shape}
+    </svg>
+  );
+}
+
+/** A shape and its word, side by side. */
+export function StateText({ kind, children, className = "" }: { kind: MarkKind; children: React.ReactNode; className?: string }) {
+  return (
+    <span className={`inline-flex items-start gap-2 ${className}`}>
+      <span className="mt-[5px]">
+        <Mark kind={kind} />
+      </span>
+      <span className="min-w-0">{children}</span>
+    </span>
+  );
+}
+
 export function Panel({
   title,
   actions,
   children,
   className = "",
+  inset = false,
 }: {
   title: string;
   actions?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
+  /** A panel inside another card: one step lighter, still no border. */
+  inset?: boolean;
 }) {
   return (
-    <section className={`border border-outline-variant bg-surface-low p-4 sm:p-5 ${className}`}>
+    <section className={`${inset ? INSET : CARD} p-4 sm:p-6 ${className}`}>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <h2 className="text-lg font-medium">{title}</h2>
         {actions}
@@ -59,7 +127,7 @@ export function Field({
   className?: string;
 }) {
   return (
-    <label className={`flex flex-col gap-1.5 text-sm text-on-surface-variant ${className}`}>
+    <label className={`flex flex-col gap-2 text-sm text-on-surface-variant ${className}`}>
       <span>{label}</span>
       {children}
     </label>
@@ -84,7 +152,7 @@ export function InlineError({ message, onRetry, help }: { message: string; onRet
   return (
     <div
       role="alert"
-      className="flex flex-wrap items-center gap-3 border border-error/60 bg-error-container px-3 py-2 text-sm text-error"
+      className="flex flex-wrap items-center gap-3 bg-error-container px-3 py-2 text-sm text-error"
     >
       <span>
         {message}
@@ -117,14 +185,18 @@ export function ActionStatus({
   message,
   detail,
   error,
+  compact = false,
 }: {
   busy: string | null;
   message: string | null;
   detail?: string | null;
   error: string | null;
+  /** Takes no room while there is nothing to say. */
+  compact?: boolean;
 }) {
+  const quiet = compact && !busy && !message && !detail && !error;
   return (
-    <div className="min-h-6 text-sm">
+    <div className={`text-sm ${compact ? (quiet ? "" : "mb-4") : "min-h-6"}`}>
       <div role="status" aria-live="polite" className="text-on-surface-variant">
         {busy ? `${busy}, please wait` : message}
       </div>

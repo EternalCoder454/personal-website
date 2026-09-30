@@ -1,25 +1,34 @@
 import type { QuickScriptClient } from "./client";
 import {
   DISCLAIMER,
+  HOW_CHOSEN,
+  checkScript,
+  chooseToSend,
   defaultModel,
+  heldLine,
   isoDate,
   mondayOf,
   providerLabel,
+  scriptsToWrite,
   seasonFor,
+  sendLimit,
   slugify,
 } from "./logic";
 import {
   STATUSES,
   type CollectorStatus,
+  type LastRun,
   type PipelineStep,
   type PostingRow,
   type PublishPack,
+  type RunSummary,
   type RankedTopic,
   type Recipient,
   type Script,
   type Settings,
   type Status,
   type WeekState,
+  type WeeklyResult,
 } from "./types";
 
 /* In-memory sample data. Nothing here is tax guidance: the scripts are
@@ -134,10 +143,13 @@ type State = {
   log: string[];
   driveReady: boolean;
   older: PostingRow[];
+  lastRun: LastRun | undefined;
+  recentRuns: RunSummary[];
 };
 
 function initialSettings(): Settings {
   return {
+    automatic: { enabled: true, sendTo: "host@example.com", maxScripts: 3, onlyIfChecksPass: true, minStrength: "good" },
     models: {
       ranking: { provider: "gemini", model: "gemini-flash-latest" },
       drafts: { provider: "claude", model: "claude-sonnet-5-5" },
@@ -170,7 +182,7 @@ function initialSettings(): Settings {
         id: "reddit",
         name: "Reddit",
         enabled: false,
-        reason: "Needs Reddit approval since Nov 2025",
+        reason: "Reddit needs to approve access first",
       },
     ],
     people: {
@@ -213,7 +225,14 @@ function initialState(): State {
     ["Tax year 2026: supported by sample IRS text"],
     3000,
   );
+  s1.score = SEEDS[0].score;
+  s2.score = SEEDS[1].score;
+  s3.score = SEEDS[2].score;
   const run = new Date(mondayOf(new Date()).getTime() - 4 * 3_600_000);
+  s1.delivery = { state: "sent", to: "host@example.com", at: new Date(run.getTime() + 95_000).toISOString(), automatic: true };
+  s2.sentTo = undefined;
+  s2.delivery = { state: "held", reasons: ["1 number needs checking"] };
+  s3.delivery = { state: "held", reasons: [`length is ${checkScript(s3.text).words} words, it needs 450 to 750`, "disclaimer is missing"] };
   const at = (sec: number) => {
     const d = new Date(run.getTime() + sec * 1000);
     const p = (n: number) => String(n).padStart(2, "0");
@@ -229,8 +248,32 @@ function initialState(): State {
       { id: "trends", name: "Google Trends", state: "cached", lastRun: run.toISOString(), note: "Cache from 2 days ago" },
       { id: "irs", name: "IRS calendar", state: "ok", lastRun: run.toISOString() },
       { id: "inbox", name: "Host question box", state: "ok", lastRun: run.toISOString() },
-      { id: "reddit", name: "Reddit", state: "off", note: "Needs Reddit approval since Nov 2025" },
+      { id: "reddit", name: "Reddit", state: "off", note: "Reddit needs to approve access first" },
     ],
+    recentRuns: [0, 1, 2, 3, 4, 5].map((i): RunSummary => {
+      const ranAt = new Date(run.getTime() - i * 7 * 86_400_000).toISOString();
+      const table: Pick<RunSummary, "state" | "sent" | "held">[] = [
+        { state: "attention", sent: 1, held: 2 },
+        { state: "good", sent: 3, held: 0 },
+        { state: "good", sent: 3, held: 0 },
+        { state: "failed", sent: 0, held: 0 },
+        { state: "good", sent: 2, held: 0 },
+        { state: "attention", sent: 2, held: 1 },
+      ];
+      return { ranAt, ...table[i] };
+    }),
+    lastRun: {
+      ranAt: run.toISOString(),
+      trigger: "schedule",
+      ok: true,
+      topicsFound: 41,
+      topicsKept: 10,
+      scriptsWritten: 3,
+      sentTo: "host@example.com",
+      sent: [sentItem(s1)],
+      held: [heldItem(s2), heldItem(s3)],
+      rule: HOW_CHOSEN,
+    },
     log: [
       `${at(0)} INFO weekly start dry_run=false to=host`,
       `${at(2)} INFO collect ytsuggest ok topics=28`,
@@ -240,7 +283,7 @@ function initialState(): State {
       `${at(12)} INFO collect inbox ok topics=2`,
       `${at(14)} INFO rank kept=10 deadline_boost=2 high_end_demoted=2`,
       `${at(40)} INFO draft top=3 model=claude-sonnet-5-5`,
-      `${at(95)} INFO mail sent=2 to=host`,
+      `${at(95)} INFO mail sent=1 to=host`,
       `${at(96)} INFO weekly done`,
     ],
     driveReady: false,
@@ -250,6 +293,25 @@ function initialState(): State {
       older("Do I have to report cash tips?", "Clipped", { Draft: 23, Approved: 21, Recorded: 19, Edited: 17, Scheduled: 16, Clipped: 13 }),
       older("How long should I keep tax records?", "Edited", { Draft: 16, Approved: 14, Recorded: 12, Edited: 10 }),
     ],
+  };
+}
+
+function sentItem(s: Script): LastRun["sent"][number] {
+  const c = checkScript(s.text);
+  return {
+    slug: s.slug,
+    topic: s.topic,
+    score: s.score ?? 0,
+    checks: { words: c.words, lengthOk: c.wordsOk, disclaimerOk: c.disclaimerOk, unverifiedNumbers: c.flags.length },
+  };
+}
+
+function heldItem(s: Script): LastRun["held"][number] {
+  return {
+    slug: s.slug,
+    topic: s.topic,
+    score: s.score ?? 0,
+    reasons: s.delivery?.state === "held" ? s.delivery.reasons : [],
   };
 }
 
@@ -352,9 +414,9 @@ function doDraft(ids: string[]): string {
     const seed = SEEDS.find((s) => slugify(s.q) === id);
     if (!seed) continue;
     const model = state.settings.models.drafts;
-    state.scripts.push(
-      makeScript(seed.q, "Draft", undefined, model, sampleBody(seed.q, 560), [`Tax year ${state.settings.taxYear}: supported by sample IRS text`], 0),
-    );
+    const made = makeScript(seed.q, "Draft", undefined, model, sampleBody(seed.q, 560), [`Tax year ${state.settings.taxYear}: supported by sample IRS text`], 0);
+    made.score = seed.score;
+    state.scripts.push(made);
   }
   const msg = fresh.length
     ? `Wrote ${fresh.length} ${fresh.length === 1 ? "script" : "scripts"} with ${providerLabel(state.settings.models.drafts.provider)}` +
@@ -382,23 +444,57 @@ export const mockClient: QuickScriptClient = {
       collectors: collectorsView(),
       driveReady: state.driveReady,
       log: state.log,
+      lastRun: state.lastRun,
+      recentRuns: state.recentRuns,
     });
   },
 
-  async runWeekly({ dryRun, to }) {
+  async runWeekly({ dryRun, to }): Promise<WeeklyResult> {
     await wait();
-    const n = seasonFor(new Date(), state.settings.seasonOverride) === "inseason" ? 1 : 3;
+    const auto = state.settings.automatic;
+    const limit = sendLimit(auto, seasonFor(new Date(), state.settings.seasonOverride));
+    const target = to === "host" ? state.settings.people.hostEmail : state.settings.people.testRecipient;
     if (dryRun) {
-      const l = `Practice run: it would find topics, write ${n} ${n === 1 ? "script" : "scripts"} and email ${n === 1 ? "it" : "them"} to ${to === "host" ? "the Host" : "you, as a test"}. Nothing was written or sent.`;
+      const l = `Test run: it would find topics, write ${scriptsToWrite(limit)} scripts and email up to ${limit} of the strongest to ${to === "host" ? "the Host" : "you, as a test"}. Nothing was written or sent.`;
       state.log = [line("INFO", `weekly start dry_run=true to=${to}`), line("INFO", l)];
-      return { log: l };
+      return {
+        log: l,
+        run: { ranAt: new Date().toISOString(), trigger: "hand", ok: true, topicsFound: 0, topicsKept: 0, scriptsWritten: 0, sentTo: "", sent: [], held: [], rule: HOW_CHOSEN },
+      };
     }
     doFind();
-    const d = doDraft(topRank(n));
-    const sent = state.scripts.filter((s) => s.status === "Draft" && !s.sentTo);
-    sent.forEach((s) => (s.sentTo = to));
-    state.log.push(line("INFO", `mail sent=${sent.length} to=${to}`));
-    return { log: `Weekly run finished. ${d} ${recipientLine(sent.length, to)}.` };
+    const before = state.scripts.length;
+    const d = doDraft(topRank(scriptsToWrite(limit)));
+    const pool = state.scripts
+      .filter((s) => s.status === "Draft" && !s.sentTo)
+      .map((s) => ({ s, slug: s.slug, score: s.score ?? 0, text: s.text }));
+    const { send, held } = chooseToSend(pool, auto, limit);
+    const at = new Date().toISOString();
+    for (const x of send) {
+      x.s.sentTo = to;
+      x.s.delivery = { state: "sent", to: target, at, automatic: false };
+    }
+    for (const h of held) h.item.s.delivery = { state: "held", reasons: h.reasons };
+    state.log.push(line("INFO", `mail sent=${send.length} to=${to}`));
+    const run: LastRun = {
+      ranAt: at,
+      trigger: "hand",
+      ok: true,
+      topicsFound: 41,
+      topicsKept: 10,
+      scriptsWritten: state.scripts.length - before,
+      sentTo: send.length ? target : "",
+      sent: send.map((x) => sentItem(x.s)),
+      held: held.map((h) => heldItem(h.item.s)),
+      rule: HOW_CHOSEN,
+    };
+    state.lastRun = run;
+    state.recentRuns = [
+      { ranAt: at, state: held.length ? "attention" : "good", sent: send.length, held: held.length } as RunSummary,
+      ...state.recentRuns,
+    ].slice(0, 6);
+    const heldText = held.length ? ` ${held.map((h) => `${h.item.s.topic} (${heldLine({ reasons: h.reasons }).toLowerCase()})`).join("; ")}.` : "";
+    return { log: `Weekly run finished. ${d} ${recipientLine(send.length, to)}.${heldText}`, run };
   },
 
   async findTopics() {
@@ -416,7 +512,10 @@ export const mockClient: QuickScriptClient = {
     await wait();
     const drafts = state.scripts.filter((s) => s.status === "Draft");
     if (!drafts.length) throw new Error("There are no scripts to send yet. Write scripts first");
-    drafts.forEach((s) => (s.sentTo = to));
+    drafts.forEach((s) => {
+      s.sentTo = to;
+      s.delivery = undefined;
+    });
     const msg = recipientLine(drafts.length, to);
     state.log = [...state.log, line("INFO", `mail sent=${drafts.length} to=${to}`)];
     return { log: `${msg}.` };
@@ -441,6 +540,7 @@ export const mockClient: QuickScriptClient = {
     const s = state.scripts.find((x) => x.slug === slug);
     if (!s) throw new Error("That script could not be found. Reload the page");
     s.sentTo = to;
+    s.delivery = undefined;
     return { log: `${recipientLine(1, to)}.` };
   },
 
@@ -505,6 +605,6 @@ export const mockClient: QuickScriptClient = {
 
   async getKeyStatus() {
     await wait();
-    return { GEMINI_API_KEY: true, ANTHROPIC_API_KEY: false };
+    return { GEMINI_API_KEY: true, ANTHROPIC_API_KEY: true };
   },
 };

@@ -51,7 +51,7 @@ export function QuickScriptConsole() {
   }, [reloadWeek, reloadScripts, reloadLog]);
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-8">
       <nav aria-label="Views">
         <ul className="grid grid-cols-5 border-b border-outline-variant">
           {VIEWS.map((v) => {
@@ -61,7 +61,7 @@ export function QuickScriptConsole() {
                 <Link
                   href={`/quickscript?view=${v.id}`}
                   aria-current={on ? "page" : undefined}
-                  className={`flex min-h-12 items-center justify-center border-b-2 px-1 text-center text-[13px] leading-tight sm:px-4 sm:text-[15px] ${
+                  className={`flex min-h-12 items-center justify-center border-b-2 px-1 text-center text-sm leading-tight sm:px-4 sm:text-base ${
                     on ? "border-primary font-medium text-on-surface" : "border-transparent text-on-surface-variant hover:text-on-surface"
                   }`}
                 >
@@ -74,7 +74,7 @@ export function QuickScriptConsole() {
       </nav>
 
       <div hidden={view !== "week"}>
-        <WeekView week={week} settings={settings} onChanged={onChanged} />
+        <WeekView week={week} settings={settings} keys={keys} onChanged={onChanged} />
       </div>
       <div hidden={view !== "scripts"}>
         <ScriptsView scripts={scripts} draftProvider={settings.data?.models.drafts.provider ?? "claude"} hostEmail={settings.data?.people.hostEmail || ""} onChanged={onChanged} />

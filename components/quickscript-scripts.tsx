@@ -7,10 +7,11 @@ import {
   checkScript,
   DISCLAIMER,
   defaultModel,
+  heldLine,
   MODEL_OPTIONS,
   PROVIDERS,
   providerLabel,
-  shortDateTime,
+  whenLabel,
   splitScript,
   STATUS_INFO,
   TITLE_MAX,
@@ -18,17 +19,23 @@ import {
   WORDS_MIN,
 } from "@/lib/quickscript/logic";
 import type { Provider, Recipient, Script } from "@/lib/quickscript/types";
-import { ActionStatus, Btn, NO_HOST_EMAIL, control, Empty, Field, InlineError, Loading, Panel, useAction, type Resource } from "./quickscript-ui";
+import { ActionStatus, Btn, Mark, StateText, NO_HOST_EMAIL, control, Empty, Field, InlineError, Loading, Panel, useAction, type Resource } from "./quickscript-ui";
 
 const client = pickClient();
 
 function sentLabel(s: Script): string {
-  return s.sentTo === "host" ? "Emailed to the Host" : s.sentTo === "me" ? "Emailed to you as a test" : "Not emailed yet";
+  const d = s.delivery;
+  if (d?.state === "held") return heldLine(d);
+  if (d?.state === "sent" && d.automatic) return `Sent automatically to ${d.to}`;
+  if (d?.state === "sent" && !s.sentTo) return `Emailed to ${d.to}`;
+  return s.sentTo === "host" ? "Emailed to the Host" : s.sentTo === "me" ? "Emailed to you as a test" : "Not sent yet";
 }
 
 /** What happens next for this script, in one sentence. */
 function nextFor(s: Script): string {
   if (s.status === "Draft") {
+    if (s.delivery?.state === "held") return "Next: it was not sent and needs a fix. Fix what is listed, then send it to the Host yourself";
+    if (s.delivery?.state === "sent" && s.sentTo !== "me") return "Next: the Host reads it and replies Approved";
     if (s.sentTo === "host") return "Next: the Host reads it and replies Approved";
     if (s.sentTo === "me") return "Next: send it to the Host. The Host reads it and replies Approved";
     return "Next: send it to the Host (or to yourself as a test first). The Host reads it and replies Approved";
@@ -46,7 +53,10 @@ function nextFor(s: Script): string {
 
 function Check({ ok, children }: { ok: boolean; children: React.ReactNode }) {
   return (
-    <li className="flex gap-2">
+    <li className={`flex items-start gap-2 px-2 py-1 ${ok ? "" : "bg-error-container/50"}`}>
+      <span className="mt-[5px]">
+        <Mark kind={ok ? "good" : "failed"} />
+      </span>
       <span className={ok ? "w-14 shrink-0 font-medium text-primary" : "w-14 shrink-0 font-medium text-error"}>{ok ? "OK" : "Check"}</span>
       <span>{children}</span>
     </li>
@@ -58,7 +68,7 @@ function Checks({ script }: { script: Script }) {
   return (
     <div className="flex flex-col gap-3">
       {c.flags.length > 0 && (
-        <div role="group" aria-label="Numbers not verified" className="border border-error/60 bg-error-container p-3">
+        <div role="group" aria-label="Numbers not verified" className="bg-error-container p-3">
           <p className="font-medium text-error">Numbers to check</p>
           <ul className="mt-1 list-disc pl-5 text-error">
             {c.flags.map((f, i) => (
@@ -67,7 +77,7 @@ function Checks({ script }: { script: Script }) {
           </ul>
         </div>
       )}
-      <ul className="flex flex-col gap-1.5" aria-label="Script checks">
+      <ul className="flex flex-col gap-2" aria-label="Script checks">
         <Check ok={c.wordsOk}>
           {c.wordsOk
             ? `Length is good: ${c.words} words (${WORDS_MIN} to ${WORDS_MAX})`
@@ -132,9 +142,9 @@ function Pack({ script }: { script: Script }) {
             const r = c.titles[i];
             const ok = r.lengthOk && r.questionOk;
             return (
-              <li key={i} className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+              <li key={i} className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
                 <span>{t}</span>
-                <span className={`text-sm ${ok ? "text-primary" : "font-medium text-error"}`}>
+                <StateText kind={ok ? "good" : "failed"} className={`text-sm ${ok ? "text-primary" : "font-medium text-error"}`}>
                   {ok
                     ? `Title is good: ${r.length} characters (under ${TITLE_MAX}), asks a question`
                     : `Title needs a fix: ${[
@@ -143,7 +153,7 @@ function Pack({ script }: { script: Script }) {
                       ]
                         .filter(Boolean)
                         .join(", and ")}`}
-                </span>
+                </StateText>
               </li>
             );
           })}
@@ -152,9 +162,9 @@ function Pack({ script }: { script: Script }) {
       <div>
         <p className="mb-1 text-sm text-on-surface-variant">Description</p>
         <p className="whitespace-pre-wrap">{pack.description}</p>
-        <p className={`mt-1 text-sm ${c.disclaimerOk ? "text-primary" : "font-medium text-error"}`}>
+        <StateText kind={c.disclaimerOk ? "good" : "failed"} className={`mt-1 text-sm ${c.disclaimerOk ? "text-primary" : "font-medium text-error"}`}>
           {c.disclaimerOk ? "Disclaimer is in the description" : "Disclaimer is missing from the description. Add it before using this"}
-        </p>
+        </StateText>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
@@ -164,9 +174,9 @@ function Pack({ script }: { script: Script }) {
         <div>
           <p className="mb-1 text-sm text-on-surface-variant">Thumbnail words</p>
           <p className="font-medium tracking-wide">{pack.thumbnailWords.join("  ")}</p>
-          <p className={`text-sm ${c.thumbnailOk ? "text-primary" : "font-medium text-error"}`}>
+          <StateText kind={c.thumbnailOk ? "good" : "failed"} className={`text-sm ${c.thumbnailOk ? "text-primary" : "font-medium text-error"}`}>
             {c.thumbnailOk ? "Thumbnail is good" : "Thumbnail needs a fix"}: {pack.thumbnailWords.length} words (3 to 5 works best)
-          </p>
+          </StateText>
         </div>
       </div>
     </div>
@@ -207,7 +217,7 @@ function Detail({
 
   return (
     <Panel title={script.topic}>
-      <dl className="mb-4 grid grid-cols-[auto_1fr] gap-x-5 gap-y-1 text-sm">
+      <dl className="mb-4 grid grid-cols-[auto_1fr] gap-x-6 gap-y-1">
         <dt className="text-on-surface-variant">Status</dt>
         <dd>
           {STATUS_INFO[script.status].label}. {sentLabel(script)}
@@ -219,7 +229,7 @@ function Detail({
           {providerLabel(script.model.provider)}, {script.model.model}
         </dd>
         <dt className="text-on-surface-variant">Drafted</dt>
-        <dd>{shortDateTime(script.createdAt)}</dd>
+        <dd>{whenLabel(script.createdAt)}</dd>
         <dt className="text-on-surface-variant">Sources</dt>
         <dd className="min-w-0">
           {script.sources.map((u, i) => {
@@ -330,9 +340,9 @@ export function ScriptsView({
   const selected = list.find((s) => s.slug === slug) ?? list[0];
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-6">
     {scripts.error && <InlineError message={scripts.error} onRetry={() => void onChanged()} />}
-    <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,320px)_1fr]">
+    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,320px)_1fr]">
       <Panel title="Scripts this week">
         <ul className="flex flex-col gap-1" aria-label="Scripts this week">
           {list.map((s) => {
@@ -347,8 +357,8 @@ export function ScriptsView({
                     detailRef.current?.focus();
                     detailRef.current?.scrollIntoView({ block: "start" });
                   }}
-                  className={`flex min-h-11 w-full flex-col items-start gap-0.5 border px-3 py-2 text-left ${
-                    on ? "border-primary bg-surface-container" : "border-outline-variant hover:bg-surface-container"
+                  className={`flex min-h-11 w-full flex-col items-start gap-1 border-l-2 px-3 py-2 text-left hover:bg-surface-container ${
+                    on ? "border-primary bg-surface-container" : "border-transparent"
                   }`}
                 >
                   <span>{s.topic}</span>
