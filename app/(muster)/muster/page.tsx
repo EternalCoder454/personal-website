@@ -1,6 +1,6 @@
 import {
+  Agentic,
   Answers,
-  Heads,
   Kinds,
   Builder,
   Close,
@@ -9,7 +9,9 @@ import {
   Hero,
   Offer,
   Problem,
+  Room,
   Steps,
+  Straight,
   Proof,
   Trust,
 } from "@/components/sections/sections";
@@ -65,11 +67,13 @@ export default function MusterPage() {
         <Problem />
         <Answers />
         <Proof />
-        <Heads />
+        <Room />
+        <Agentic />
         <Kinds />
         <Fit />
         <Steps />
         <Trust />
+        <Straight />
         <Builder />
         <Offer />
         <Faq />

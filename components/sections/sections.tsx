@@ -1,18 +1,10 @@
 import type { ReactNode } from "react";
 import { Cta } from "@/components/cta";
+import { HeroStack } from "@/components/hero-stack";
 import { Zoomable } from "@/components/lightbox";
 import { CountUp, Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { FaqList } from "@/components/faq-list";
-import {
-  conversations,
-  hasProof,
-  heroShots,
-  proof,
-  screenshots,
-  screenUrl,
-  site,
-  srcSetFor,
-} from "@/lib/site";
+import { conversations, hasProof, proof, screenshots, screenUrl, site, srcSetFor } from "@/lib/site";
 import { TourFrame } from "@/components/tour";
 import {
   agentic,
@@ -68,8 +60,6 @@ function Heading({ children }: { children: ReactNode }) {
 
 /* ------------------------------------------------------------------ */
 
-const heroShot = heroShots[0];
-
 export function Hero() {
   /* The top padding was trimmed when the wordmark moved into the sticky
      bar. The bar carries its own padding, so the old value stacked on
@@ -84,14 +74,19 @@ export function Hero() {
      heading never fixed it. */
   return (
     <header className="shell pt-4 pb-20 md:pt-8 md:pb-28 lg:flex lg:min-h-[calc(100svh-63px)] lg:flex-col lg:justify-center lg:py-16">
-      <div className="mt-20 grid items-start gap-16 md:mt-28 lg:mt-0 lg:w-full lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-center lg:gap-12">
+      <div className="mt-20 grid items-start gap-16 md:mt-28 lg:mt-0 lg:w-full lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-center lg:gap-10 xl:gap-14">
         <Stagger trigger="mount" step={0.09} delay={0.45}>
         <StaggerItem>
-          {/* No max-width: the grid column binds the line, not a ch cap.
-              Measured in the real face at the real size, a line holds
-              about sixteen characters, which is why the headline is short
-              enough to break on its own phrases. */}
-          <h1 className="t-display text-balance text-on-surface">
+          <p className="t-label text-primary">{site.product} · Private beta</p>
+        </StaggerItem>
+
+        <StaggerItem>
+          {/* No max-width. The old 16ch computed to 917px against a
+              column that is 583px, so it never bound anything: the grid
+              did. Measured in the real face at the real size, a line
+              holds about sixteen characters, which is why the headline
+              is short enough to break on its own phrases. */}
+          <h1 className="t-display mt-6 text-balance text-on-surface">
             AI advisors for small business
           </h1>
         </StaggerItem>
@@ -122,31 +117,32 @@ export function Hero() {
             {proof.businessesTesting} businesses are testing Muster right now.
           </p>
         ) : null}
+
+        {/* Three facts, scannable in about a second. The claims a person
+            wants settled before they hand over an address. */}
+        {/* Axis gaps only. A `gap-4` shorthand alongside a responsive
+            `gap-x` resolves by stylesheet order rather than by intent,
+            and the items ran together with no space at all. */}
+        {/* Short enough to sit on one line each in a third of the column.
+            The longer versions wrapped, which turned a scannable row into
+            three ragged blocks. */}
+        <StaggerItem className="mt-12 grid max-w-[52rem] gap-x-10 gap-y-3 border-t border-outline-variant pt-7 sm:grid-cols-3">
+          {[
+            "Free for life for testers",
+            "No credit card, ever",
+            "Your API key stays yours",
+          ].map((item) => (
+            <p key={item} className="t-body-sm text-on-surface-variant">
+              {item}
+            </p>
+          ))}
+        </StaggerItem>
         </Stagger>
 
-        {/* One flat capture, wide enough to read. Not rendered at all on a
-            phone, which is why the last size is 1px: below lg the wrapper
-            is display:none and the browser should take the smallest file
-            rather than fetch one it never paints. The widths are the
-            7/12 column of the shell at each breakpoint, less the gap. */}
-        <div className="hidden lg:block">
-          <Zoomable shot={heroShot}>
-            <span className="block overflow-hidden border border-outline bg-surface-lowest transition-colors duration-150 ease-[var(--ease-standard)] group-hover:border-on-surface-muted">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={screenUrl(heroShot.src)}
-                srcSet={srcSetFor(heroShot)}
-                sizes="(min-width: 2200px) 775px, (min-width: 1600px) 658px, (min-width: 1120px) 588px, (min-width: 1024px) calc((100vw - 112px) * 7 / 12), 1px"
-                alt={heroShot.alt}
-                width={heroShot.width}
-                height={heroShot.height}
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-                className="h-auto w-full"
-              />
-            </span>
-          </Zoomable>
+        {/* Fills the space the headline leaves on a wide screen, and is
+            not rendered at all on a phone. */}
+        <div className="lg:pt-4">
+          <HeroStack />
         </div>
       </div>
     </header>
@@ -229,9 +225,7 @@ export function Answers() {
                   className="h-auto w-full"
                 />
               </span>
-              <span className="t-body-sm mt-4 block text-on-surface underline decoration-outline underline-offset-4 transition-colors duration-100 group-hover:text-primary group-hover:decoration-primary">
-                Read the whole reply
-              </span>
+              <span className="t-label mt-4 block text-primary">Read the whole reply</span>
             </Zoomable>
             <p className="t-body-sm mt-2 text-pretty text-on-surface-variant">{shot.caption}</p>
           </li>
@@ -299,65 +293,49 @@ export function Proof() {
 
 /* ------------------------------------------------------------------ */
 
-export function Heads() {
-  /* What the heads are on the left, and agentic mode as an ordered
-     sequence on the right. The four items are the panel's own, in the
-     order a task travels: handed over, a colleague consulted, the outcome
-     recorded, and what is left over filed for next time. */
+export function Room() {
   return (
     <Section>
       <Heading>The eight heads you start with</Heading>
 
-      <div className="mt-14 grid gap-16 lg:grid-cols-2 lg:gap-20">
-        <div>
-          <Stagger as="dl">
-            {heads.map((head) => (
-              <StaggerItem
-                key={head.name}
-                className="grid gap-x-8 gap-y-1 border-t border-outline-variant py-4 sm:grid-cols-[9.5rem_minmax(0,1fr)]"
-              >
-                <dt className="t-title text-on-surface">{head.name}</dt>
-                <dd className="t-body-sm text-pretty text-on-surface-variant">{head.note}</dd>
-              </StaggerItem>
-            ))}
-          </Stagger>
+      <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+        {heads.map((head) => (
+          <StaggerItem key={head.name} className="border-t border-outline-variant pt-5">
+            <dt className="t-title text-on-surface">{head.name}</dt>
+            <dd className="t-body-sm mt-2 text-pretty text-on-surface-variant">{head.note}</dd>
+          </StaggerItem>
+        ))}
+      </Stagger>
 
-          <p className="t-body-sm mt-8 max-w-[58ch] text-pretty text-on-surface-muted">
-            Every head reads your company profile, the decisions you have recorded and your key
-            figures before it answers. Rename them, rewrite what they know, add your own or delete
-            the ones you don’t need. Each one can run on a different model.
-          </p>
-        </div>
+      <p className="t-body-sm mt-14 max-w-[58ch] text-pretty text-on-surface-muted">
+        Every head reads your company profile, the decisions you have recorded and your key
+        figures before it answers. Rename them, rewrite what they know, add your own or delete the
+        ones you don’t need. Each
+        one can run on a different model.
+      </p>
+    </Section>
+  );
+}
 
-        <div id="agentic">
-          <Reveal>
-            <h3 className="t-title text-on-surface">{agentic.headline}</h3>
-          </Reveal>
+/* ------------------------------------------------------------------ */
 
-          {/* role="list" because list-style:none drops the semantics in Safari.
-              A plain ol inside one Reveal: Stagger takes no role. */}
-          <Reveal className="mt-8">
-            <ol role="list" className="ml-3.5 border-l border-outline">
-              {agentic.items.map((item, index) => (
-                <li key={item.title} className="relative pb-9 pl-9 last:pb-0">
-                  <span
-                    aria-hidden="true"
-                    className="t-body-sm absolute top-0 -left-3.5 flex h-7 w-7 items-center justify-center rounded-full border border-outline bg-surface-lowest text-on-surface-variant"
-                  >
-                    {index + 1}
-                  </span>
-                  <h4 className="t-title pt-0.5 text-on-surface">{item.title}</h4>
-                  <p className="t-body-sm mt-2 max-w-[46ch] text-pretty text-on-surface-variant">
-                    {item.body}
-                  </p>
-                </li>
-              ))}
-            </ol>
-          </Reveal>
-        </div>
-      </div>
+export function Agentic() {
+  return (
+    <Section id="agentic">
+      <Heading>{agentic.headline}</Heading>
 
-      <Reveal className="mt-16 border-l-2 border-primary py-1 pl-6">
+      <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
+        {agentic.items.map((item) => (
+          <StaggerItem key={item.title} className="border-t border-outline-variant pt-5">
+            <dt className="t-title text-on-surface">{item.title}</dt>
+            <dd className="t-body-sm mt-2 max-w-[46ch] text-pretty text-on-surface-variant">
+              {item.body}
+            </dd>
+          </StaggerItem>
+        ))}
+      </Stagger>
+
+      <Reveal className="mt-14 border-l-2 border-primary py-1 pl-6">
         <p className="t-body-sm max-w-[58ch] text-pretty text-on-surface-variant">{agentic.note}</p>
       </Reveal>
     </Section>
@@ -367,30 +345,24 @@ export function Heads() {
 /* ------------------------------------------------------------------ */
 
 export function Kinds() {
-  /* The two examples lead because they are the concrete part. The five
-     groups are the same claim as a list a reader can check their own
-     trade against, so they sit below in one plain column. */
   return (
     <Section id="kinds">
       <Heading>{kinds.headline}</Heading>
 
-      <Stagger as="ul" className="mt-14 grid gap-x-14 gap-y-10 md:grid-cols-2">
-        {kinds.examples.map((example) => (
-          <StaggerItem as="li" key={example.who} className="border-t border-outline-variant pt-5">
-            <h3 className="t-title text-on-surface">{example.who} gets</h3>
-            <p className="t-body-sm mt-2 max-w-[52ch] text-pretty text-on-surface-variant">{example.gets}</p>
+      <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        {kinds.groups.map((group) => (
+          <StaggerItem key={group.title} className="border-t border-outline-variant pt-5">
+            <dt className="t-title text-on-surface">{group.title}</dt>
+            <dd className="t-body-sm mt-2 max-w-[40ch] text-pretty text-on-surface-variant">{group.body}</dd>
           </StaggerItem>
         ))}
       </Stagger>
 
-      <Stagger as="dl" className="mt-16">
-        {kinds.groups.map((group) => (
-          <StaggerItem
-            key={group.title}
-            className="grid gap-x-10 gap-y-1 border-t border-outline-variant py-4 md:grid-cols-[15rem_minmax(0,1fr)]"
-          >
-            <dt className="t-title text-on-surface">{group.title}</dt>
-            <dd className="t-body-sm max-w-[62ch] text-pretty text-on-surface-variant">{group.body}</dd>
+      <Stagger as="ul" className="mt-14 grid gap-x-14 gap-y-8 md:grid-cols-2">
+        {kinds.examples.map((example) => (
+          <StaggerItem as="li" key={example.who}>
+            <p className="t-label text-primary">{example.who} gets</p>
+            <p className="t-body-sm mt-2 max-w-[52ch] text-pretty text-on-surface-variant">{example.gets}</p>
           </StaggerItem>
         ))}
       </Stagger>
@@ -422,7 +394,7 @@ export function Steps() {
       </Stagger>
 
       <Reveal className="mt-16 border-t border-outline-variant pt-8">
-        <p className="t-title text-on-surface">Also included</p>
+        <p className="t-label text-primary">Also included</p>
       </Reveal>
 
       <Stagger as="ul" className="mt-6 grid gap-x-14 gap-y-4 sm:grid-cols-2">
@@ -478,35 +450,76 @@ export function Offer() {
 /* ------------------------------------------------------------------ */
 
 export function Trust() {
-  /* Two plain lists side by side, no icons: what is protected, and what
-     the reader should know going in. The limits sit next to the
-     guarantees on purpose, so neither reads as the fine print of the
-     other. */
-  const columns = [
-    { headline: "Security and your data", items: trust },
-    { headline: "What to know before you start", items: straight },
-  ];
-
   return (
     <Section id="security">
-      <div className="grid gap-20 lg:grid-cols-2 lg:gap-16">
-        {columns.map((column) => (
-          <div key={column.headline}>
-            <Heading>{column.headline}</Heading>
+      <Heading>Security and your data</Heading>
 
-            <Stagger as="dl" className="mt-10">
-              {column.items.map((item) => (
-                <StaggerItem key={item.title} className="border-t border-outline-variant py-5">
-                  <dt className="t-title text-on-surface">{item.title}</dt>
-                  <dd className="t-body-sm mt-2 max-w-[46ch] text-pretty text-on-surface-variant">
-                    {item.body}
-                  </dd>
-                </StaggerItem>
-              ))}
-            </Stagger>
-          </div>
+      <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
+        {trust.map((item) => (
+          <StaggerItem key={item.title} className="border-t border-outline-variant pt-8">
+            <dt className="t-title text-on-surface">
+              {/* Inside the dt, not beside it: this is a definition list,
+                  and a bare image between the group and its dt is invalid
+                  HTML. Decorative, so alt is empty. The files carry
+                  role="img" and an aria-label repeating the title, which
+                  would have a screen reader say each card's name twice. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={item.icon}
+                alt=""
+                width={40}
+                height={40}
+                loading="lazy"
+                decoding="async"
+                className="mb-5 block h-10 w-10"
+              />
+              {item.title}
+            </dt>
+            <dd className="t-body-sm mt-2 max-w-[46ch] text-pretty text-on-surface-variant">
+              {item.body}
+            </dd>
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
+    </Section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+export function Straight() {
+  return (
+    <Section>
+      <Heading>What to know before you start</Heading>
+
+      <Stagger as="dl" className="mt-14 grid gap-x-14 gap-y-10 sm:grid-cols-2">
+        {straight.map((item) => (
+          <StaggerItem key={item.title} className="border-t border-outline-variant pt-8">
+            <dt className="t-title text-on-surface">
+              {/* Same layout as the security cards, and the same reasons:
+                  inside the dt to stay valid HTML, alt empty because the
+                  title under it already says it. The icons are drawn in
+                  the muted grey rather than cyan on purpose. These are the
+                  limits, and in the accent colour they would read as more
+                  selling points next to the guarantees above them. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={item.icon}
+                alt=""
+                width={40}
+                height={40}
+                loading="lazy"
+                decoding="async"
+                className="mb-5 block h-10 w-10"
+              />
+              {item.title}
+            </dt>
+            <dd className="t-body-sm mt-2 max-w-[46ch] text-pretty text-on-surface-variant">
+              {item.body}
+            </dd>
+          </StaggerItem>
+        ))}
+      </Stagger>
     </Section>
   );
 }
