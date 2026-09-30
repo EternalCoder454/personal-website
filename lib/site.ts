@@ -216,8 +216,8 @@ export const heroShots: Screenshot[] = [
  * the others alone.
  */
 export const contentUpdated = {
-  home: "2026-09-27",
-  muster: "2026-09-27",
+  home: "2026-09-30",
+  muster: "2026-09-30",
   privacy: "2026-09-27",
   terms: "2026-09-27",
 } as const;
