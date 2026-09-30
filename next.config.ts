@@ -100,6 +100,15 @@ const nextConfig: NextConfig = {
         source: "/api/:path*",
         headers: [{ key: "Cache-Control", value: "no-store, max-age=0" }],
       },
+      /* The private console is never cached, by the browser or a proxy. */
+      {
+        source: "/quickscript",
+        headers: [{ key: "Cache-Control", value: "no-store" }],
+      },
+      {
+        source: "/quickscript/:path*",
+        headers: [{ key: "Cache-Control", value: "no-store" }],
+      },
       /* Screenshots and brand assets change only when we replace them,
          and Next serves /public with must-revalidate by default, which
          costs a round trip per asset on every repeat visit. A day of

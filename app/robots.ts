@@ -25,7 +25,7 @@ const trainingCrawlers = [
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
-      { userAgent: "*", allow: "/", disallow: "/api/" },
+      { userAgent: "*", allow: "/", disallow: ["/api/", "/quickscript"] },
       ...trainingCrawlers.map((userAgent) => ({ userAgent, disallow: "/" })),
     ],
     sitemap: `${siteUrl}/sitemap.xml`,

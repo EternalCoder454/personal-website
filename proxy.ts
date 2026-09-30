@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { perfEnabled, record } from "@/lib/perf";
+import { SESSION_COOKIE, readSession, safeNext } from "@/lib/quickscript/auth";
 
 /**
  * The only hook that fires when somebody loads a page.
@@ -23,6 +24,42 @@ import { perfEnabled, record } from "@/lib/perf";
  * this file. Nothing else depends on it.
  */
 export default function proxy(request: NextRequest) {
+  /* QuickScript is private. Runs before the perf return so the guard
+     holds whether or not PERF_TOKEN is set. */
+  const raw = request.nextUrl.pathname;
+  let malformed = false;
+  let path = raw;
+  try {
+    path = decodeURIComponent(raw);
+  } catch {
+    malformed = true; /* cannot be read, so treat it as guarded */
+  }
+  path = path.replace(/\/{2,}/g, "/").toLowerCase();
+  const bare = path.length > 1 ? path.replace(/\/$/, "") : path;
+  const guarded = malformed || /^\/(api\/)?quickscript(\/|$)/.test(path);
+  const open =
+    !malformed &&
+    (bare === "/quickscript/login" ||
+      bare === "/api/quickscript/login/request" ||
+      bare === "/api/quickscript/login/verify");
+  if (guarded && !open) {
+    if (!readSession(request.cookies.get(SESSION_COOKIE)?.value)) {
+      const noStore = { "cache-control": "no-store" };
+      if (malformed || path.startsWith("/api/")) {
+        return NextResponse.json(
+          { error: "unauthorized" },
+          { status: 401, headers: noStore },
+        );
+      }
+      const login = request.nextUrl.clone();
+      const next = safeNext(raw + request.nextUrl.search);
+      login.pathname = "/quickscript/login";
+      login.search = "";
+      if (next !== "/quickscript") login.searchParams.set("next", next);
+      return NextResponse.redirect(login, { headers: noStore });
+    }
+  }
+
   if (!perfEnabled) return NextResponse.next();
 
   const t0 = performance.now();
