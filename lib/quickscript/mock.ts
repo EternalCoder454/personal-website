@@ -110,12 +110,12 @@ type Seed = { q: string; sources: string[]; score: number; deadline?: boolean; h
 const SEEDS: Seed[] = [
   { q: "Can I deduct my home office?", sources: ["YouTube suggestions", "Google Trends"], score: 91.4 },
   { q: "Do I need to make estimated tax payments?", sources: ["YouTube suggestions", "Host question box"], score: 86.2, deadline: true },
-  { q: "What should I do when I get an IRS notice?", sources: ["Google Trends", "YouTube Data API"], score: 82.7 },
+  { q: "What should I do when I get an IRS notice?", sources: ["Google Trends", "YouTube search"], score: 82.7 },
   { q: "How do I file a tax extension?", sources: ["IRS calendar", "Google Trends"], score: 79.9, deadline: true },
   { q: "What is the difference between a W-2 and a 1099?", sources: ["YouTube suggestions"], score: 74.3 },
   { q: "Can I deduct mileage for gig work?", sources: ["YouTube suggestions", "Host question box"], score: 71.8 },
   { q: "How is side hustle income taxed?", sources: ["Google Trends"], score: 68.5 },
-  { q: "Why is my tax refund late?", sources: ["YouTube Data API"], score: 61.0 },
+  { q: "Why is my tax refund late?", sources: ["YouTube search"], score: 61.0 },
   { q: "Do I need a trust to protect my rental property?", sources: ["Google Trends"], score: 44.6, highEnd: true },
   { q: "Is there gift tax when I help my kids with a house?", sources: ["YouTube suggestions"], score: 39.2, highEnd: true },
 ];
@@ -162,7 +162,7 @@ function initialSettings(): Settings {
     highEndWords: ["trust", "estate", "gift tax"],
     sources: [
       { id: "ytsuggest", name: "YouTube suggestions", enabled: true },
-      { id: "youtube", name: "YouTube Data API", enabled: true },
+      { id: "youtube", name: "YouTube search", enabled: true },
       { id: "trends", name: "Google Trends", enabled: true },
       { id: "irs", name: "IRS calendar", enabled: true },
       { id: "inbox", name: "Host question box", enabled: true },
@@ -225,7 +225,7 @@ function initialState(): State {
     topicIds: SEEDS.map((s) => slugify(s.q)),
     collectors: [
       { id: "ytsuggest", name: "YouTube suggestions", state: "ok", lastRun: run.toISOString() },
-      { id: "youtube", name: "YouTube Data API", state: "failed", lastRun: run.toISOString(), note: "Daily quota used" },
+      { id: "youtube", name: "YouTube search", state: "failed", lastRun: run.toISOString(), note: "Daily quota used" },
       { id: "trends", name: "Google Trends", state: "cached", lastRun: run.toISOString(), note: "Cache from 2 days ago" },
       { id: "irs", name: "IRS calendar", state: "ok", lastRun: run.toISOString() },
       { id: "inbox", name: "Host question box", state: "ok", lastRun: run.toISOString() },
@@ -331,8 +331,8 @@ function postingRows(): PostingRow[] {
 /* ---- actions ---- */
 
 function recipientLine(n: number, to: Recipient): string {
-  const who = to === "host" ? `Host (${state.settings.people.hostEmail})` : `you (${state.settings.people.testRecipient})`;
-  return `Sent ${n} ${n === 1 ? "draft" : "drafts"} to ${who}`;
+  const who = to === "host" ? `the Host (${state.settings.people.hostEmail})` : `you (${state.settings.people.testRecipient}), as a test`;
+  return `Emailed ${n} ${n === 1 ? "script" : "scripts"} to ${who}`;
 }
 
 function doFind(): string {
@@ -342,7 +342,7 @@ function doFind(): string {
   );
   const l = "collect done sources=5 topics=41 kept=10";
   state.log = [line("INFO", "topics start"), line("INFO", l), line("INFO", "rank deadline_boost=2 high_end_demoted=2")];
-  return "Found 41 topics, kept the 10 best";
+  return "Found 41 topics and kept the 10 best. They are under This week's topics.";
 }
 
 function doDraft(ids: string[]): string {
@@ -357,10 +357,11 @@ function doDraft(ids: string[]): string {
     );
   }
   const msg = fresh.length
-    ? `Drafted ${fresh.length} ${fresh.length === 1 ? "script" : "scripts"} with ${state.settings.models.drafts.model}` +
-      (skipped ? `, ${skipped} already drafted` : "")
-    : "Nothing new to draft, all chosen topics already have a script";
-  state.log = [...state.log, line("INFO", `draft ${msg.toLowerCase()}`)];
+    ? `Wrote ${fresh.length} ${fresh.length === 1 ? "script" : "scripts"} with ${providerLabel(state.settings.models.drafts.provider)}` +
+      (skipped ? `. ${skipped} already had a script` : "") +
+      ". Read them on the Scripts tab."
+    : "Nothing new to write. Every chosen topic already has a script.";
+  if (fresh.length) state.log = [...state.log, line("INFO", `draft top=${fresh.length} model=${state.settings.models.drafts.model}`)];
   return msg;
 }
 
@@ -388,7 +389,7 @@ export const mockClient: QuickScriptClient = {
     await wait();
     const n = seasonFor(new Date(), state.settings.seasonOverride) === "inseason" ? 1 : 3;
     if (dryRun) {
-      const l = `Dry run: would find topics, draft ${n}, and send to ${to === "host" ? "the Host" : "you"}. Nothing written.`;
+      const l = `Practice run: it would find topics, write ${n} ${n === 1 ? "script" : "scripts"} and email ${n === 1 ? "it" : "them"} to ${to === "host" ? "the Host" : "you, as a test"}. Nothing was written or sent.`;
       state.log = [line("INFO", `weekly start dry_run=true to=${to}`), line("INFO", l)];
       return { log: l };
     }
@@ -396,8 +397,8 @@ export const mockClient: QuickScriptClient = {
     const d = doDraft(topRank(n));
     const sent = state.scripts.filter((s) => s.status === "Draft" && !s.sentTo);
     sent.forEach((s) => (s.sentTo = to));
-    state.log.push(line("INFO", `mail ${recipientLine(sent.length, to).toLowerCase()}`));
-    return { log: `Weekly run finished. ${d}. ${recipientLine(sent.length, to)}` };
+    state.log.push(line("INFO", `mail sent=${sent.length} to=${to}`));
+    return { log: `Weekly run finished. ${d} ${recipientLine(sent.length, to)}.` };
   },
 
   async findTopics() {
@@ -414,19 +415,19 @@ export const mockClient: QuickScriptClient = {
   async sendDrafts({ to }) {
     await wait();
     const drafts = state.scripts.filter((s) => s.status === "Draft");
-    if (!drafts.length) throw new Error("No drafts to send this week");
+    if (!drafts.length) throw new Error("There are no scripts to send yet. Write scripts first");
     drafts.forEach((s) => (s.sentTo = to));
     const msg = recipientLine(drafts.length, to);
-    state.log = [...state.log, line("INFO", `mail ${msg.toLowerCase()}`)];
-    return { log: msg };
+    state.log = [...state.log, line("INFO", `mail sent=${drafts.length} to=${to}`)];
+    return { log: `${msg}.` };
   },
 
   async setupDrive() {
     await wait();
-    if (state.driveReady) return { log: "Drive was already set up" };
+    if (state.driveReady) return { log: "The shared Drive folder already exists. Nothing to do." };
     state.driveReady = true;
-    const msg = "Created QuickScript folder, five subfolders and the Posting Log, shared with Host and Clipper";
-    state.log = [...state.log, line("INFO", `drive ${msg.toLowerCase()}`)];
+    const msg = "Created the QuickScript folder with its five subfolders and the Posting Log, shared with the Host and Clipper.";
+    state.log = [...state.log, line("INFO", "drive created the QuickScript folder and the Posting Log")];
     return { log: msg };
   },
 
@@ -438,30 +439,30 @@ export const mockClient: QuickScriptClient = {
   async sendScript(slug, to) {
     await wait();
     const s = state.scripts.find((x) => x.slug === slug);
-    if (!s) throw new Error("Script not found");
+    if (!s) throw new Error("That script could not be found. Reload the page");
     s.sentTo = to;
-    return { log: recipientLine(1, to) };
+    return { log: `${recipientLine(1, to)}.` };
   },
 
   async redraft(slug, { provider, model }) {
     await wait();
     const i = state.scripts.findIndex((x) => x.slug === slug);
-    if (i === -1) throw new Error("Script not found");
+    if (i === -1) throw new Error("That script could not be found. Reload the page");
     const old = state.scripts[i];
-    if (old.status !== "Draft") throw new Error("Only a draft can be redrafted");
+    if (old.status !== "Draft") throw new Error("Only a script still waiting for approval can be written again");
     const mc = model.trim() ? { provider, model: model.trim() } : defaultModel(provider);
     state.scripts[i] = {
       ...makeScript(old.topic, "Draft", undefined, mc, sampleBody(old.topic, 600), ["Tax year 2026: supported by sample IRS text"], 0),
       slug: old.slug,
     };
-    return { log: `Redrafted with ${providerLabel(provider)} (${mc.model}), no flagged numbers` };
+    return { log: `Wrote the script again with ${providerLabel(provider)} (${mc.model}). No numbers need checking.` };
   },
 
   async makePack(slug) {
     await wait();
     const s = state.scripts.find((x) => x.slug === slug);
-    if (!s) throw new Error("Script not found");
-    if (s.status === "Draft") throw new Error("Only an approved script can have a publish pack");
+    if (!s) throw new Error("That script could not be found. Reload the page");
+    if (s.status === "Draft") throw new Error("The publish pack can only be made after the Host approves the script");
     const pack: PublishPack = {
       titles: [s.topic, `${s.topic.replace(/\?$/, "")} in ${s.taxYear}?`, `Quick answer: ${s.topic}`],
       description: [
@@ -488,7 +489,7 @@ export const mockClient: QuickScriptClient = {
   async syncSheet() {
     await wait();
     const n = postingRows().length;
-    return { log: `Read ${n} rows from the Posting Log, saved Approved scripts to testdata/approved` };
+    return { log: `Read ${n} rows from the Posting Log and saved the approved scripts.` };
   },
 
   async getSettings() {

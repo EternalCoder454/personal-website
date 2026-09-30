@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { pickClient } from "@/lib/quickscript/client";
-import { shortDate } from "@/lib/quickscript/logic";
+import { roleName, shortDate, STATUS_INFO } from "@/lib/quickscript/logic";
 import { STATUSES, STATUS_SETTER, type PostingRow, type Status } from "@/lib/quickscript/types";
 import { ActionStatus, Btn, control, Empty, Field, InlineError, Loading, useAction, type Resource } from "./quickscript-ui";
 
@@ -25,7 +25,7 @@ function DocLink({ row }: { row: PostingRow }) {
       href={row.docUrl}
       target="_blank"
       rel="noreferrer noopener"
-      aria-label={`Open the Doc for ${row.topic}`}
+      aria-label={`Open the script Doc for ${row.topic}`}
       className="text-primary underline underline-offset-4"
     >
       Doc
@@ -42,27 +42,27 @@ export function LogView({ log, onChanged }: { log: Resource<PostingRow[]>; onCha
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-end gap-3">
-        <Field label="Status" className="w-full sm:w-64">
+        <Field label="Show" className="w-full sm:w-64">
           <select className={control} value={filter} onChange={(e) => setFilter(e.target.value as Status | "all")}>
-            <option value="all">All statuses</option>
+            <option value="all">All rows</option>
             {STATUSES.map((s) => (
               <option key={s} value={s}>
-                {s}, set by {STATUS_SETTER[s]}
+                {STATUS_INFO[s].label}, set by {STATUS_SETTER[s]}. {STATUS_INFO[s].waiting}
               </option>
             ))}
           </select>
         </Field>
-        <Btn variant="primary" disabled={a.busy !== null} onClick={() => void a.run("Sync from Sheet", () => client.syncSheet())}>
-          Sync from Sheet
+        <Btn variant="primary" disabled={a.busy !== null} onClick={() => void a.run("Reading the Posting Log sheet", () => client.syncSheet(), "Could not read the Posting Log sheet")}>
+          Update from the Posting Log sheet
         </Btn>
       </div>
-      <ActionStatus busy={a.busy} message={a.message} error={a.error} />
+      <ActionStatus busy={a.busy} message={a.message} detail={a.detail} error={a.error} />
 
       {log.error && <InlineError message={log.error} onRetry={() => void onChanged()} />}
       {!log.data ? (
         log.error ? null : <Loading what="the posting log" />
       ) : rows.length === 0 ? (
-        <Empty>{filter === "all" ? "The posting log is empty." : `No rows with status ${filter}.`}</Empty>
+        <Empty>{filter === "all" ? "The Posting Log is empty." : `No rows are at "${STATUS_INFO[filter].label}".`}</Empty>
       ) : (
         <>
           {/* Wide screens get the Sheet's columns. */}
@@ -74,7 +74,7 @@ export function LogView({ log, onChanged }: { log: Resource<PostingRow[]>; onCha
                     Topic
                   </th>
                   <th scope="col" className="px-3 py-2 font-medium">
-                    Status
+                    Where it is now
                   </th>
                   {DATE_COLUMNS.map((c) => (
                     <th key={c.status} scope="col" className="px-3 py-2 font-medium whitespace-nowrap">
@@ -92,9 +92,10 @@ export function LogView({ log, onChanged }: { log: Resource<PostingRow[]>; onCha
                     <th scope="row" className="min-w-56 px-3 py-2.5 font-normal">
                       {r.topic}
                     </th>
-                    <td className="px-3 py-2.5 whitespace-nowrap">
-                      {r.status}
-                      <span className="block text-xs text-on-surface-muted">{STATUS_SETTER[r.status]}</span>
+                    <td className="min-w-56 px-3 py-2.5">
+                      {STATUS_INFO[r.status].label}
+                      <span className="block text-sm text-on-surface-variant">{STATUS_INFO[r.status].waiting}</span>
+                      <span className="block text-xs text-on-surface-muted">Status set by {roleName(STATUS_SETTER[r.status])}</span>
                     </td>
                     {DATE_COLUMNS.map((c) => (
                       <td key={c.status} className="px-3 py-2.5 whitespace-nowrap text-on-surface-variant">
@@ -116,9 +117,10 @@ export function LogView({ log, onChanged }: { log: Resource<PostingRow[]>; onCha
               <li key={r.slug} className="py-3">
                 <p>{r.topic}</p>
                 <p className="mt-0.5 text-sm">
-                  {r.status}
-                  <span className="text-on-surface-muted">, set by {STATUS_SETTER[r.status]}</span>
-                  {" · "}
+                  {STATUS_INFO[r.status].label}. {STATUS_INFO[r.status].waiting}
+                </p>
+                <p className="text-xs text-on-surface-muted">Status set by {roleName(STATUS_SETTER[r.status])}</p>
+                <p className="mt-0.5 text-sm">
                   <DocLink row={r} />
                 </p>
                 <p className="mt-1 text-sm text-on-surface-variant">

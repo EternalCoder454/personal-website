@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { plainLogLine } from "@/lib/quickscript/logic";
 import type { ActionResult } from "@/lib/quickscript/types";
 
 /* Small pieces shared by the four QuickScript views. Plain controls on the
@@ -64,16 +66,33 @@ export function Field({
   );
 }
 
-export function InlineError({ message, onRetry }: { message: string; onRetry?: () => void }) {
+/** The line that follows every failed action. */
+function GuideHelp() {
+  return (
+    <>
+      {" "}
+      Try again in an hour. If it keeps failing, use the manual steps in the{" "}
+      <Link href="/quickscript?view=guide" className="underline underline-offset-4">
+        Guide
+      </Link>
+      .
+    </>
+  );
+}
+
+export function InlineError({ message, onRetry, help }: { message: string; onRetry?: () => void; help?: boolean }) {
   return (
     <div
       role="alert"
       className="flex flex-wrap items-center gap-3 border border-error/60 bg-error-container px-3 py-2 text-sm text-error"
     >
-      <span>{message}</span>
+      <span>
+        {message}
+        {help && <GuideHelp />}
+      </span>
       {onRetry && (
         <button type="button" onClick={onRetry} className="underline underline-offset-4">
-          Retry
+          Try again
         </button>
       )}
     </div>
@@ -93,19 +112,42 @@ export function Empty({ children }: { children: React.ReactNode }) {
 }
 
 /** Result line of the last action, or its error, or the action in progress. */
-export function ActionStatus({ busy, message, error }: { busy: string | null; message: string | null; error: string | null }) {
+export function ActionStatus({
+  busy,
+  message,
+  detail,
+  error,
+}: {
+  busy: string | null;
+  message: string | null;
+  detail?: string | null;
+  error: string | null;
+}) {
   return (
     <div className="min-h-6 text-sm">
       <div role="status" aria-live="polite" className="text-on-surface-variant">
-        {busy ? `${busy}, working` : message}
+        {busy ? `${busy}, please wait` : message}
       </div>
-      {error && <InlineError message={error} />}
+      {detail && !busy && (
+        <details className="mt-1 text-on-surface-muted">
+          <summary className="cursor-pointer py-1">Show details</summary>
+          <p className="t-value break-words">{detail}</p>
+        </details>
+      )}
+      {error && <InlineError message={error} help={/could not reach|server had a problem/i.test(error)} />}
     </div>
   );
 }
 
+/** What to say when a send to the Host cannot go because no address is set. */
+export const NO_HOST_EMAIL = "No Host email is set. Add it in Settings.";
+
 export function errorText(e: unknown): string {
-  return e instanceof Error ? e.message : "Something went wrong";
+  const m = e instanceof Error ? e.message : "";
+  if (!m) return "Something went wrong";
+  const code = /^Server answered (\d+)$/.exec(m);
+  if (code) return `The server had a problem (error ${code[1]})`;
+  return m;
 }
 
 /** Runs one action at a time for one view: busy label, result line, error. */
@@ -113,18 +155,24 @@ export function useAction(after?: () => void | Promise<void>) {
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [detail, setDetail] = useState<string | null>(null);
 
+  /** label is what is happening ("Finding this week's topics"), failed is what could not be done ("Could not find this week's topics"). */
   const run = useCallback(
-    async (label: string, fn: () => Promise<ActionResult | string | void>) => {
+    async (label: string, fn: () => Promise<ActionResult | string | void>, failed?: string) => {
       setBusy(label);
       setError(null);
       setMessage(null);
+      setDetail(null);
       try {
         const r = await fn();
-        setMessage(typeof r === "string" ? r : r ? r.log : `${label}, done`);
+        const raw = typeof r === "string" ? r : r ? r.log : "";
+        const plain = raw ? plainLogLine(raw) : "Done";
+        setMessage(plain);
+        setDetail(raw && plain !== raw ? raw : null);
         await after?.();
       } catch (e) {
-        setError(errorText(e));
+        setError(`${failed ?? "That did not work"}: ${errorText(e).replace(/[.\s]+$/, "")}.`);
       } finally {
         setBusy(null);
       }
@@ -132,7 +180,21 @@ export function useAction(after?: () => void | Promise<void>) {
     [after],
   );
 
-  return { busy, message, error, run, setMessage };
+  /** Shows a plain result and clears any earlier detail or error. */
+  const say = useCallback((m: string) => {
+    setMessage(m);
+    setDetail(null);
+    setError(null);
+  }, []);
+
+  /** Shows a refusal, for example a missing address, without running anything. */
+  const fail = useCallback((m: string) => {
+    setMessage(null);
+    setDetail(null);
+    setError(m);
+  }, []);
+
+  return { busy, message, detail, error, run, setMessage, say, fail };
 }
 
 export type Resource<T> = {

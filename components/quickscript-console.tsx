@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { pickClient } from "@/lib/quickscript/client";
+import { GuideView } from "./quickscript-guide";
 import { LogView } from "./quickscript-log";
 import { ScriptsView } from "./quickscript-scripts";
 import { SettingsView } from "./quickscript-settings";
@@ -23,11 +24,12 @@ const VIEWS = [
   { id: "scripts", label: "Scripts" },
   { id: "log", label: "Posting log" },
   { id: "settings", label: "Settings" },
+  { id: "guide", label: "Guide" },
 ] as const;
 
 /**
- * The four views. The active one comes from ?view=, and the tabs are plain
- * links, so a view can be bookmarked and the back button works. All four stay
+ * The five views. The active one comes from ?view=, and the tabs are plain
+ * links, so a view can be bookmarked and the back button works. All five stay
  * mounted and the inactive ones are hidden, so an unsaved settings edit
  * survives a trip to another tab.
  */
@@ -51,7 +53,7 @@ export function QuickScriptConsole() {
   return (
     <div className="flex flex-col gap-5">
       <nav aria-label="Views">
-        <ul className="grid grid-cols-4 border-b border-outline-variant">
+        <ul className="grid grid-cols-5 border-b border-outline-variant">
           {VIEWS.map((v) => {
             const on = v.id === view;
             return (
@@ -59,7 +61,7 @@ export function QuickScriptConsole() {
                 <Link
                   href={`/quickscript?view=${v.id}`}
                   aria-current={on ? "page" : undefined}
-                  className={`flex min-h-12 items-center justify-center border-b-2 px-1 text-center text-sm whitespace-nowrap sm:px-4 sm:text-[15px] ${
+                  className={`flex min-h-12 items-center justify-center border-b-2 px-1 text-center text-[13px] leading-tight sm:px-4 sm:text-[15px] ${
                     on ? "border-primary font-medium text-on-surface" : "border-transparent text-on-surface-variant hover:text-on-surface"
                   }`}
                 >
@@ -75,13 +77,16 @@ export function QuickScriptConsole() {
         <WeekView week={week} settings={settings} onChanged={onChanged} />
       </div>
       <div hidden={view !== "scripts"}>
-        <ScriptsView scripts={scripts} draftProvider={settings.data?.models.drafts.provider ?? "claude"} onChanged={onChanged} />
+        <ScriptsView scripts={scripts} draftProvider={settings.data?.models.drafts.provider ?? "claude"} hostEmail={settings.data?.people.hostEmail || ""} onChanged={onChanged} />
       </div>
       <div hidden={view !== "log"}>
         <LogView log={log} onChanged={onChanged} />
       </div>
       <div hidden={view !== "settings"}>
         <SettingsView settings={settings} keys={keys} />
+      </div>
+      <div hidden={view !== "guide"}>
+        <GuideView settings={settings.data} />
       </div>
     </div>
   );
