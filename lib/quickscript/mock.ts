@@ -59,7 +59,7 @@ const FILLER = [
   "The wording here only exists so the word count and the other checks have something to read.",
   "A real script would name the tax year near the start and keep each sentence short.",
   "It would avoid jargon, or explain a term the first time it appears.",
-  "The host would check every number against the IRS page before recording.",
+  "The Creator would check every number against the IRS page before recording.",
 ];
 
 function sampleBody(topic: string, target: number, extra: string[] = []): string {
@@ -119,11 +119,11 @@ type Seed = { q: string; sources: string[]; score: number; deadline?: boolean; h
 
 const SEEDS: Seed[] = [
   { q: "Can I deduct my home office?", sources: ["YouTube suggestions", "Google Trends"], score: 91.4 },
-  { q: "Do I need to make estimated tax payments?", sources: ["YouTube suggestions", "Host question box"], score: 86.2, deadline: true },
+  { q: "Do I need to make estimated tax payments?", sources: ["YouTube suggestions", "Creator's question box"], score: 86.2, deadline: true },
   { q: "What should I do when I get an IRS notice?", sources: ["Google Trends", "YouTube search"], score: 82.7 },
   { q: "How do I file a tax extension?", sources: ["IRS calendar", "Google Trends"], score: 79.9, deadline: true },
   { q: "What is the difference between a W-2 and a 1099?", sources: ["YouTube suggestions"], score: 74.3 },
-  { q: "Can I deduct mileage for gig work?", sources: ["YouTube suggestions", "Host question box"], score: 71.8 },
+  { q: "Can I deduct mileage for gig work?", sources: ["YouTube suggestions", "Creator's question box"], score: 71.8 },
   { q: "How is side hustle income taxed?", sources: ["Google Trends"], score: 68.5 },
   { q: "Why is my tax refund late?", sources: ["YouTube search"], score: 61.0 },
   { q: "Do I need a trust to protect my rental property?", sources: ["Google Trends"], score: 44.6, highEnd: true },
@@ -178,7 +178,7 @@ function initialSettings(): Settings {
       { id: "youtube", name: "YouTube search", enabled: true },
       { id: "trends", name: "Google Trends", enabled: true },
       { id: "irs", name: "IRS calendar", enabled: true },
-      { id: "inbox", name: "Host question box", enabled: true },
+      { id: "inbox", name: "Creator's question box", enabled: true },
       {
         id: "reddit",
         name: "Reddit",
@@ -248,7 +248,7 @@ function initialState(): State {
       { id: "youtube", name: "YouTube search", state: "failed", lastRun: run.toISOString(), note: "Daily quota used" },
       { id: "trends", name: "Google Trends", state: "cached", lastRun: run.toISOString(), note: "Cache from 2 days ago" },
       { id: "irs", name: "IRS calendar", state: "ok", lastRun: run.toISOString() },
-      { id: "inbox", name: "Host question box", state: "ok", lastRun: run.toISOString() },
+      { id: "inbox", name: "Creator's question box", state: "ok", lastRun: run.toISOString() },
       { id: "reddit", name: "Reddit", state: "off", note: "Reddit needs to approve access first" },
     ],
     recentRuns: [0, 1, 2, 3, 4, 5].map((i): RunSummary => {
@@ -363,7 +363,7 @@ function steps(): PipelineStep[] {
   return [
     { key: "topics", label: "Topics", who: "Program", state: state.topicIds.length ? "done" : "todo" },
     of("drafts", "Drafts", "Program", total),
-    of("sent", "Sent to Host", "Program", count((s) => s.sentTo === "host")),
+    of("sent", "Sent to Creator", "Program", count((s) => s.sentTo === "host")),
     of("approved", "Approved", "Host", count((s) => rank(s) >= 1)),
     of("recorded", "Recorded", "Host", count((s) => rank(s) >= 2)),
     of("edited", "Edited", "Producer", count((s) => rank(s) >= 3)),
@@ -394,7 +394,7 @@ function postingRows(): PostingRow[] {
 /* ---- actions ---- */
 
 function recipientLine(n: number, to: Recipient): string {
-  const who = to === "host" ? `the Host (${state.settings.people.hostEmail})` : `you (${state.settings.people.testRecipient}), as a test`;
+  const who = to === "host" ? `the Creator (${state.settings.people.hostEmail})` : `you (${state.settings.people.testRecipient}), as a test`;
   return `Emailed ${n} ${n === 1 ? "script" : "scripts"} to ${who}`;
 }
 
@@ -456,7 +456,7 @@ export const mockClient: QuickScriptClient = {
     const limit = sendLimit(auto, seasonFor(new Date(), state.settings.seasonOverride));
     const target = to === "host" ? state.settings.people.hostEmail : state.settings.people.testRecipient;
     if (dryRun) {
-      const l = `Test run: it would find topics, write ${scriptsToWrite(limit)} scripts and email up to ${limit} of the strongest to ${to === "host" ? "the Host" : "you, as a test"}. Nothing was written or sent.`;
+      const l = `Test run: it would find topics, write ${scriptsToWrite(limit)} scripts and email up to ${limit} of the strongest to ${to === "host" ? "the Creator" : "you, as a test"}. Nothing was written or sent.`;
       state.log = [line("INFO", `weekly start dry_run=true to=${to}`), line("INFO", l)];
       return {
         log: l,
@@ -526,7 +526,7 @@ export const mockClient: QuickScriptClient = {
     await wait();
     if (state.driveReady) return { log: "The shared Drive folder already exists. Nothing to do." };
     state.driveReady = true;
-    const msg = "Created the QuickScript folder with its five subfolders and the Posting Log, shared with the Host and Clipper.";
+    const msg = "Created the QuickScript folder with its five subfolders and the Posting Log, shared with the Creator and Clip maker.";
     state.log = [...state.log, line("INFO", "drive created the QuickScript folder and the Posting Log")];
     return { log: msg };
   },
@@ -563,7 +563,7 @@ export const mockClient: QuickScriptClient = {
     await wait();
     const s = state.scripts.find((x) => x.slug === slug);
     if (!s) throw new Error("That script could not be found. Reload the page");
-    if (s.status === "Draft") throw new Error("The publish pack can only be made after the Host approves the script");
+    if (s.status === "Draft") throw new Error("The publish pack can only be made after the Creator approves the script");
     const pack: PublishPack = {
       titles: [s.topic, `${s.topic.replace(/\?$/, "")} in ${s.taxYear}?`, `Quick answer: ${s.topic}`],
       description: [

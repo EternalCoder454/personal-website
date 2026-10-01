@@ -52,8 +52,8 @@ function NextCard({ week, settings, onChanged }: { week: WeekState; settings: Se
     } else if (step.kind === "send") {
       if (!host.trim()) return a.fail(NO_HOST_EMAIL);
       const n = step.total === null ? "the scripts" : step.total === 1 ? "the script" : `all ${step.total} scripts`;
-      if (!window.confirm(`Email ${n} to the Host (${host})? They will receive the email now.`)) return;
-      void a.run("Sending the scripts to the Host", () => client.sendDrafts({ to: "host" }), "Could not send the scripts");
+      if (!window.confirm(`Email ${n} to the Creator (${host})? They will receive the email now.`)) return;
+      void a.run("Sending the scripts to the Creator", () => client.sendDrafts({ to: "host" }), "Could not send the scripts");
     }
   };
 
@@ -95,7 +95,7 @@ function Controls({
       a.fail(NO_HOST_EMAIL);
       return false;
     }
-    return window.confirm(`${what} to the Host (${settings.people.hostEmail})? They will receive the email now.`);
+    return window.confirm(`${what} to the Creator (${settings.people.hostEmail})? They will receive the email now.`);
   };
 
   return (
@@ -105,7 +105,7 @@ function Controls({
           <Field label="Send scripts to" className="w-full sm:w-56">
             <select className={control} value={to} onChange={(e) => setTo(e.target.value as Recipient)}>
               <option value="me">Me (a test)</option>
-              <option value="host">The Host</option>
+              <option value="host">The Creator</option>
             </select>
           </Field>
 
@@ -477,7 +477,7 @@ function WeekScripts({ run }: { run: LastRun | undefined }) {
             <li key={s.slug} className="flex flex-col gap-1 py-3">
               <span className="text-lg">{s.topic}</span>
               <StateText kind="good" className="text-on-surface-variant">
-                Emailed to {run?.sentTo || "the Host"}
+                Emailed to {run?.sentTo || "the Creator"}
               </StateText>
             </li>
           ))}
@@ -519,11 +519,11 @@ function MakeNow({ settings, onChanged }: { settings: Settings; onChanged: () =>
           disabled={a.busy !== null}
           onClick={() => {
             if (!host) return a.fail(NO_HOST_EMAIL);
-            if (!window.confirm(`Make this week's scripts and email them to the Host (${host})? They will get the email in a few minutes.`)) return;
-            void a.run("Making this week's scripts and emailing the Host", () => client.runWeekly({ dryRun: false, to: "host" }), "Could not make this week's scripts");
+            if (!window.confirm(`Make this week's scripts and email them to the Creator (${host})? They will get the email in a few minutes.`)) return;
+            void a.run("Making this week's scripts and emailing the Creator", () => client.runWeekly({ dryRun: false, to: "host" }), "Could not make this week's scripts");
           }}
         >
-          Make scripts and email the Host
+          Make scripts and email the Creator
         </Btn>
         <Btn
           disabled={a.busy !== null}

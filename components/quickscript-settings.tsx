@@ -123,7 +123,7 @@ function Form({ initial, keys, onSaved }: { initial: Settings; keys: Resource<Ke
     setError(null);
     const emails = Object.values(s.people);
     if (!s.automatic.sendTo.trim()) {
-      setError("Add the Host's email, so the weekly scripts have somewhere to go");
+      setError("Add the Creator's email, so the weekly scripts have somewhere to go");
       return;
     }
     if (!/^\S+@\S+\.\S+$/.test(s.automatic.sendTo.trim())) {
@@ -169,7 +169,7 @@ function Form({ initial, keys, onSaved }: { initial: Settings; keys: Resource<Ke
   const now = new Date();
   const year = taxYearFor(now, s.taxYearOverride);
   const inSeason = seasonFor(now, s.seasonOverride) === "inseason";
-  // The weekly scripts go to the Host unless someone chose another address
+  // The weekly scripts go to the Creator unless someone chose another address
   // under More options: keep the two together while they match.
   const same = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
   const setHost = (v: string) =>
@@ -184,7 +184,7 @@ function Form({ initial, keys, onSaved }: { initial: Settings; keys: Resource<Ke
     <div className="flex max-w-3xl flex-col gap-6">
       <Panel title="Emails">
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="The Host's email (gets the scripts)">
+          <Field label="The Creator's email (gets the scripts)">
             <input type="email" className={control} value={s.people.hostEmail} onChange={(e) => setHost(e.target.value)} />
           </Field>
           <Field label="Your email (for test copies)">
@@ -355,7 +355,7 @@ function Form({ initial, keys, onSaved }: { initial: Settings; keys: Resource<Ke
           </Panel>
 
           <Panel title="Other people" inset>
-            <Field label="The Clipper's email" className="sm:max-w-sm">
+            <Field label="The Clip maker's email" className="sm:max-w-sm">
               <input type="email" className={control} value={s.people.clipperEmail} onChange={(e) => edit((d) => void (d.people.clipperEmail = e.target.value))} />
             </Field>
           </Panel>

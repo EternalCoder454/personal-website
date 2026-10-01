@@ -211,8 +211,8 @@ export function ActionStatus({
   );
 }
 
-/** What to say when a send to the Host cannot go because no address is set. */
-export const NO_HOST_EMAIL = "No Host email is set. Add it in Settings.";
+/** What to say when a send to the Creator cannot go because no address is set. */
+export const NO_HOST_EMAIL = "No Creator email is set. Add it in Settings.";
 
 export function errorText(e: unknown): string {
   const m = e instanceof Error ? e.message : "";

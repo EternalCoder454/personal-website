@@ -207,20 +207,24 @@ const SOURCE_NAMES: Record<string, string> = {
   youtube: "YouTube search",
   trends: "Google Trends",
   irs: "IRS calendar",
-  inbox: "Host question box",
+  inbox: "Creator's question box",
   reddit: "Reddit",
 };
 
 /** Source names as the program reports them, in the words used on this page. */
 export function plainSource(name: string): string {
-  return name.replace("YouTube Data API", "YouTube search");
+  // Settings saved before the rename still carry "Host question box".
+  return name.replace("YouTube Data API", "YouTube search").replace("Host question box", "Creator's question box");
 }
 
 /** A role as a label: the program is called QuickScript. */
-export const roleLabel = (r: Role): string => (r === "Program" ? "QuickScript" : r);
+/** The plain word for each role. The values on the wire stay Host, Producer and Clipper. */
+const ROLE_WORD: Record<Role, string> = { Program: "QuickScript", Host: "Creator", Producer: "Editor", Clipper: "Clip maker" };
+
+export const roleLabel = (r: Role): string => ROLE_WORD[r] ?? r;
 
 export function roleName(r: Role): string {
-  return r === "Program" ? "QuickScript" : `the ${r}`;
+  return r === "Program" ? "QuickScript" : `the ${ROLE_WORD[r] ?? r}`;
 }
 
 export const cap = (t: string) => (t ? t[0].toUpperCase() + t.slice(1) : t);
@@ -241,7 +245,7 @@ export function plainReason(raw: string): string {
   return noStop(raw) ? `${lower(noStop(raw))}. ${retry}` : `no reason was given. ${retry}`;
 }
 
-const who = (to: string | undefined) => (to === "host" ? "the Host" : to === "me" ? "you, as a test" : (to ?? "someone"));
+const who = (to: string | undefined) => (to === "host" ? "the Creator" : to === "me" ? "you, as a test" : (to ?? "someone"));
 
 /** A known event as a sentence, or null when it is unknown or lacks a key it needs. */
 function describe(rest: string, kv: Record<string, string>): string | null {
@@ -304,12 +308,12 @@ export function strength(score: number): "Strong" | "Good" | "Weak" {
 /* ---- where a script is in its life ---- */
 
 export const STATUS_INFO: Record<Status, { label: string; waiting: string }> = {
-  Draft: { label: "Draft", waiting: "Waiting for the Host to approve it" },
-  Approved: { label: "Approved", waiting: "Waiting for the Host to record the video" },
-  Recorded: { label: "Recorded", waiting: "Waiting for the Producer to edit the video" },
-  Edited: { label: "Edited", waiting: "Waiting for the Producer to schedule the upload" },
-  Scheduled: { label: "Scheduled on YouTube", waiting: "Waiting for the Clipper to cut clips" },
-  Clipped: { label: "Clips made", waiting: "Waiting for the Clipper to use them in Meta Ads" },
+  Draft: { label: "Draft", waiting: "Waiting for the Creator to approve it" },
+  Approved: { label: "Approved", waiting: "Waiting for the Creator to record the video" },
+  Recorded: { label: "Recorded", waiting: "Waiting for the Editor to edit the video" },
+  Edited: { label: "Edited", waiting: "Waiting for the Editor to schedule the upload" },
+  Scheduled: { label: "Scheduled on YouTube", waiting: "Waiting for the Clip maker to cut clips" },
+  Clipped: { label: "Clips made", waiting: "Waiting for the Clip maker to use them in Meta Ads" },
   "In Meta Ads": { label: "Running in Meta Ads", waiting: "Nothing left to do" },
 };
 
@@ -356,26 +360,26 @@ export function nextStep(steps: PipelineStep[], season: Season): NextStep {
     if (total !== null && already > 0) {
       return {
         kind: "send",
-        text: `${plural(total, "script is", "scripts are")} written and ${already} already went to the Host. Sending again emails all ${total}.`,
-        button: `Send all ${total} to the Host`,
+        text: `${plural(total, "script is", "scripts are")} written and ${already} already went to the Creator. Sending again emails all ${total}.`,
+        button: `Send all ${total} to the Creator`,
         total,
         alreadySent: already,
       };
     }
     return {
       kind: "send",
-      text: total === null ? "The scripts are written. Next, email them to the Host to read." : `${plural(total, "script is", "scripts are")} written. Next, email ${total === 1 ? "it" : "them"} to the Host to read.`,
-      button: total === 1 ? "Send the script to the Host" : "Send the scripts to the Host",
+      text: total === null ? "The scripts are written. Next, email them to the Creator to read." : `${plural(total, "script is", "scripts are")} written. Next, email ${total === 1 ? "it" : "them"} to the Creator to read.`,
+      button: total === 1 ? "Send the script to the Creator" : "Send the scripts to the Creator",
       total,
       alreadySent: 0,
     };
   }
   const later: { key: PipelineStep["key"]; lead: string; one: string; many: string }[] = [
-    { key: "approved", lead: "Waiting for the Host to approve", one: "script", many: "scripts" },
-    { key: "recorded", lead: "Waiting for the Host to record", one: "video", many: "videos" },
-    { key: "edited", lead: "Waiting for the Producer to edit", one: "video", many: "videos" },
-    { key: "scheduled", lead: "Waiting for the Producer to schedule", one: "upload", many: "uploads" },
-    { key: "clipped", lead: "Waiting for the Clipper to cut clips for", one: "video", many: "videos" },
+    { key: "approved", lead: "Waiting for the Creator to approve", one: "script", many: "scripts" },
+    { key: "recorded", lead: "Waiting for the Creator to record", one: "video", many: "videos" },
+    { key: "edited", lead: "Waiting for the Editor to edit", one: "video", many: "videos" },
+    { key: "scheduled", lead: "Waiting for the Editor to schedule", one: "upload", many: "uploads" },
+    { key: "clipped", lead: "Waiting for the Clip maker to cut clips for", one: "video", many: "videos" },
   ];
   for (const l of later) {
     const st = by(l.key);
@@ -496,7 +500,7 @@ export function autoStatus(settings: Settings, keys: KeyStatus | undefined, last
       ? `Next run ${next} · nothing is sent while automatic sending is off`
       : `Next run ${next} · sends up to ${limit} to ${to}`;
   const mk = (state: AutoState, text: string): AutoStatus => ({ state, title: STATE_TITLE[state], text, plan });
-  if (!to) return mk("attention", "No send-to address is set. Add the Host's email in Settings, or nothing can be emailed.");
+  if (!to) return mk("attention", "No send-to address is set. Add the Creator's email in Settings, or nothing can be emailed.");
   if (!a.enabled) return mk("attention", "Automatic sending is off. Turn it on in Settings, or scripts wait until somebody sends them.");
   const keyGone = missingProviders(settings, keys);
   if (keyGone.length > 0) {
@@ -505,7 +509,7 @@ export function autoStatus(settings: Settings, keys: KeyStatus | undefined, last
   if (lastRun && !lastRun.ok) {
     return mk(
       "failed",
-      `The last run failed${lastRun.error ? `: ${noStop(lastRun.error)}` : ""}. Press Make scripts and email the Host below. If it fails again, see Help.`,
+      `The last run failed${lastRun.error ? `: ${noStop(lastRun.error)}` : ""}. Press Make scripts and email the Creator below. If it fails again, see Help.`,
     );
   }
   if (!lastRun) {
@@ -517,7 +521,7 @@ export function autoStatus(settings: Settings, keys: KeyStatus | undefined, last
   let due = lastScheduled(now, settings.schedule);
   if (now.getTime() - due.getTime() < GRACE) due = new Date(due.getTime() - 7 * 86_400_000);
   if (new Date(lastRun.ranAt).getTime() < due.getTime() - 5 * 60_000) {
-    return mk("missed", `Nothing ran at the last scheduled time, ${nextRunLabel(due)}. Press Make scripts and email the Host below. If it keeps happening, tell whoever runs the server.`);
+    return mk("missed", `Nothing ran at the last scheduled time, ${nextRunLabel(due)}. Press Make scripts and email the Creator below. If it keeps happening, tell whoever runs the server.`);
   }
   // Go sends an empty list as null, so never assume the arrays are there.
   const held = lastRun.held ?? [];
@@ -525,7 +529,7 @@ export function autoStatus(settings: Settings, keys: KeyStatus | undefined, last
   if (held.length > 0) {
     return mk(
       "attention",
-      `${plural(held.length, "script was", "scripts were")} not sent and need${held.length === 1 ? "s" : ""} a fix. The list below says why. Open it on the Scripts tab, fix it, then send it to the Host.`,
+      `${plural(held.length, "script was", "scripts were")} not sent and need${held.length === 1 ? "s" : ""} a fix. The list below says why. Open it on the Scripts tab, fix it, then send it to the Creator.`,
     );
   }
   if (sent.length === 0) {

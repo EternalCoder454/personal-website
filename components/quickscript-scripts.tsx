@@ -28,24 +28,24 @@ function sentLabel(s: Script): string {
   if (d?.state === "held") return heldLine(d);
   if (d?.state === "sent" && d.automatic) return `Sent automatically to ${d.to}`;
   if (d?.state === "sent" && !s.sentTo) return `Emailed to ${d.to}`;
-  return s.sentTo === "host" ? "Emailed to the Host" : s.sentTo === "me" ? "Emailed to you as a test" : "Not sent yet";
+  return s.sentTo === "host" ? "Emailed to the Creator" : s.sentTo === "me" ? "Emailed to you as a test" : "Not sent yet";
 }
 
 /** What happens next for this script, in one sentence. */
 function nextFor(s: Script): string {
   if (s.status === "Draft") {
-    if (s.delivery?.state === "held") return "Next: it was not sent and needs a fix. Fix what is listed, then send it to the Host yourself";
-    if (s.delivery?.state === "sent" && s.sentTo !== "me") return "Next: the Host reads it and replies Approved";
-    if (s.sentTo === "host") return "Next: the Host reads it and replies Approved";
-    if (s.sentTo === "me") return "Next: send it to the Host. The Host reads it and replies Approved";
-    return "Next: send it to the Host (or to yourself as a test first). The Host reads it and replies Approved";
+    if (s.delivery?.state === "held") return "Next: it was not sent and needs a fix. Fix what is listed, then send it to the Creator yourself";
+    if (s.delivery?.state === "sent" && s.sentTo !== "me") return "Next: the Creator reads it and replies Approved";
+    if (s.sentTo === "host") return "Next: the Creator reads it and replies Approved";
+    if (s.sentTo === "me") return "Next: send it to the Creator. The Creator reads it and replies Approved";
+    return "Next: send it to the Creator (or to yourself as a test first). The Creator reads it and replies Approved";
   }
   const after: Record<Exclude<Script["status"], "Draft">, string> = {
-    Approved: "Next: make the publish pack below. Then the Host records the video",
-    Recorded: "Next: the Producer edits the video",
-    Edited: "Next: the Producer schedules the upload on YouTube",
-    Scheduled: "Next: the Clipper cuts clips from the video",
-    Clipped: "Next: the Clipper uses the clips in Meta Ads",
+    Approved: "Next: make the publish pack below. Then the Creator records the video",
+    Recorded: "Next: the Editor edits the video",
+    Edited: "Next: the Editor schedules the upload on YouTube",
+    Scheduled: "Next: the Clip maker cuts clips from the video",
+    Clipped: "Next: the Clip maker uses the clips in Meta Ads",
     "In Meta Ads": "Nothing left to do. The clips are running in Meta Ads",
   };
   return after[s.status];
@@ -202,8 +202,8 @@ function Detail({
 
   const send = (to: Recipient) => {
     if (to === "host" && !hostEmail.trim()) return a.fail(NO_HOST_EMAIL);
-    if (to === "host" && !window.confirm(`Email this script to the Host (${hostEmail})? They will receive the email now.`)) return;
-    void a.run(to === "host" ? "Sending to the Host" : "Sending to you", () => client.sendScript(script.slug, to), "Could not send the script");
+    if (to === "host" && !window.confirm(`Email this script to the Creator (${hostEmail})? They will receive the email now.`)) return;
+    void a.run(to === "host" ? "Sending to the Creator" : "Sending to you", () => client.sendScript(script.slug, to), "Could not send the script");
   };
 
   const copy = async () => {
@@ -260,7 +260,7 @@ function Detail({
           Send to me (a test)
         </Btn>
         <Btn disabled={working} onClick={() => send("host")}>
-          Send to the Host
+          Send to the Creator
         </Btn>
         <Btn onClick={() => void copy()}>Copy the script</Btn>
         {approved && (

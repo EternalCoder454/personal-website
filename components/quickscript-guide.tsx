@@ -15,7 +15,7 @@ export function GuideView({ settings }: { settings: Settings | undefined }) {
       <Panel title="What QuickScript does">
         <p>
           QuickScript helps make a short tax video for the Tax Facts FAQs YouTube channel every week. It finds the tax questions people are asking,
-          writes draft scripts for the best ones, and emails the strongest to the address set in Settings, normally the Host. Everything after that is done by people. It never publishes
+          writes draft scripts for the best ones, and emails the strongest to the address set in Settings, normally the Creator. Everything after that is done by people. It never publishes
           anything by itself.
         </p>
       </Panel>
@@ -23,13 +23,13 @@ export function GuideView({ settings }: { settings: Settings | undefined }) {
       <Panel title="Who does what">
         <ul className={list}>
           <li>
-            <strong className="font-medium">Host:</strong> reads each script, checks every number, replies Approved, then records the videos on a phone.
+            <strong className="font-medium">Creator:</strong> reads each script, checks every number, replies Approved, then records the videos on a phone.
           </li>
           <li>
-            <strong className="font-medium">Producer:</strong> runs this console, edits each video and schedules the upload on YouTube.
+            <strong className="font-medium">Editor:</strong> runs this console, edits each video and schedules the upload on YouTube.
           </li>
           <li>
-            <strong className="font-medium">Clipper:</strong> cuts short clips from each video and uses them in Meta Ads.
+            <strong className="font-medium">Clip maker:</strong> cuts short clips from each video and uses them in Meta Ads.
           </li>
         </ul>
       </Panel>
@@ -37,7 +37,7 @@ export function GuideView({ settings }: { settings: Settings | undefined }) {
       <Panel title="What runs by itself">
         <p>
           Every {when} (set in Settings), QuickScript does the whole first part on its own: it finds the week&apos;s topics, writes the scripts,
-          keeps only the strongest and emails those to the Host&apos;s email in Settings. Nothing has to be clicked for that. The tax year and tax season
+          keeps only the strongest and emails those to the Creator&apos;s email in Settings. Nothing has to be clicked for that. The tax year and tax season
           follow the date by themselves too.
         </p>
         <p className="mt-3 font-medium">How scripts are picked:</p>
@@ -60,10 +60,10 @@ export function GuideView({ settings }: { settings: Settings | undefined }) {
           <li>Normally there is nothing to press. The run happens by itself.</li>
           <li>On Monday, open Home and read the box at the top. &quot;All good&quot; means the scripts went out and nothing is wrong.</li>
           <li>Under Latest scripts, see what was emailed and which scripts were not sent and why.</li>
-          <li>If the box says Needs attention, Failed or Didn&apos;t run, it says what to do. Most often: add the Host&apos;s email or turn on weekly sending in Settings, or press Make scripts and email the Host on Home after a failed run.</li>
-          <li>For a script that was not sent, open it on the Scripts tab, fix what it lists, then send it to the Host yourself.</li>
-          <li>The Host replies Approved. Open Videos and update it from the sheet to see the new status.</li>
-          <li>For each approved script, make the publish pack on the Scripts tab. The Producer uses it when uploading to YouTube.</li>
+          <li>If the box says Needs attention, Failed or Didn&apos;t run, it says what to do. Most often: add the Creator&apos;s email or turn on weekly sending in Settings, or press Make scripts and email the Creator on Home after a failed run.</li>
+          <li>For a script that was not sent, open it on the Scripts tab, fix what it lists, then send it to the Creator yourself.</li>
+          <li>The Creator replies Approved. Open Videos and update it from the sheet to see the new status.</li>
+          <li>For each approved script, make the publish pack on the Scripts tab. The Editor uses it when uploading to YouTube.</li>
           <li>To see who each step is waiting on, open More details on Home. Nudge that person if it stays stuck.</li>
         </ol>
       </Panel>
@@ -76,14 +76,14 @@ export function GuideView({ settings }: { settings: Settings | undefined }) {
         <ol className={`${steps} mt-2`}>
           <li>
             Topics: look up Google Trends (Rising, past 7 days), the YouTube search suggestions, and r/tax and r/personalfinance for questions that
-            repeat. Ask the Host for the three questions clients asked most, without names. Check the IRS tax calendar for deadlines. Paste
+            repeat. Ask the Creator for the three questions clients asked most, without names. Check the IRS tax calendar for deadlines. Paste
             the notes into a free AI chatbot and ask it to rank the 10 best topics. Pick 3.
           </li>
           <li>
             Scripts: open the IRS.gov page for each topic, paste its text into the chatbot with the script prompt from the Instruction Manual, and read the
-            result out loud. Save it in the Drive folder 1 Scripts and share it with the Host.
+            result out loud. Save it in the Drive folder 1 Scripts and share it with the Creator.
           </li>
-          <li>The Host checks every number against IRS.gov and marks the script Approved in the Posting Log.</li>
+          <li>The Creator checks every number against IRS.gov and marks the script Approved in the Posting Log.</li>
         </ol>
         <p className="mt-3">
           The program never publishes anything by itself. Nothing goes on YouTube or into an ad until a person does it, so a broken week costs time, not
