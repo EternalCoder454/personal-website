@@ -139,9 +139,9 @@ function GuideHelp() {
   return (
     <>
       {" "}
-      Try again in an hour. If it keeps failing, use the manual steps in the{" "}
+      Try again in an hour. If it keeps failing, use the manual steps in{" "}
       <Link href="/quickscript?view=guide" className="underline underline-offset-4">
-        Guide
+        Help
       </Link>
       .
     </>
@@ -217,6 +217,7 @@ export const NO_HOST_EMAIL = "No Host email is set. Add it in Settings.";
 export function errorText(e: unknown): string {
   const m = e instanceof Error ? e.message : "";
   if (!m) return "Something went wrong";
+  if (/backend not connected/i.test(m)) return "QuickScript is not switched on yet. Whoever looks after the server needs to start it";
   const code = /^Server answered (\d+)$/.exec(m);
   if (code) return `The server had a problem (error ${code[1]})`;
   return m;

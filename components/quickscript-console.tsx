@@ -20,11 +20,11 @@ const fetchSettings = () => client.getSettings();
 const fetchKeys = () => client.getKeyStatus();
 
 const VIEWS = [
-  { id: "week", label: "This week" },
+  { id: "week", label: "Home" },
   { id: "scripts", label: "Scripts" },
-  { id: "log", label: "Posting log" },
+  { id: "log", label: "Videos" },
   { id: "settings", label: "Settings" },
-  { id: "guide", label: "Guide" },
+  { id: "guide", label: "Help" },
 ] as const;
 
 /**

@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { pickClient } from "@/lib/quickscript/client";
-import { autoStatus, heldLine, longDay, nextRun, nextStep, cap, plainLogLine, plainReason, plainSource, roleLabel, roleName, seasonFor, shortDate, strength, timeLabel, WEEKDAYS, whenLabel } from "@/lib/quickscript/logic";
+import { autoStatus, heldLine, longDay, nextRun, nextStep, cap, plainLogLine, plainReason, plainSource, roleLabel, roleName, seasonFor, shortDate, strength, taxYearFor, timeLabel, WEEKDAYS, whenLabel } from "@/lib/quickscript/logic";
 import type { CollectorStatus, KeyStatus, LastRun, PipelineStep, RunSummary, RankedTopic, Recipient, Settings, WeekState } from "@/lib/quickscript/types";
 import { ActionStatus, Btn, CARD, Mark, NO_HOST_EMAIL, StateText, control, Empty, Field, InlineError, Loading, Panel, useAction, type MarkKind, type Resource } from "./quickscript-ui";
 
@@ -208,7 +209,10 @@ function Facts({ week, settings }: { week: WeekState; settings: Settings }) {
             {longDay(next)}, {timeLabel(settings.schedule.time)}
           </dd>
           <dt className="text-on-surface-variant">Tax year</dt>
-          <dd>{settings.taxYear}</dd>
+          <dd>
+            {taxYearFor(now, settings.taxYearOverride)}
+            {settings.taxYearOverride ? ", chosen in Settings" : ", set by the date"}
+          </dd>
           <dt className="text-on-surface-variant">Schedule</dt>
           <dd>
             Every {WEEKDAYS[settings.schedule.day]}, {timeLabel(settings.schedule.time)}
@@ -457,6 +461,87 @@ function LastRunCard({ run, log }: { run: LastRun | undefined; log: string[] }) 
   );
 }
 
+/** The latest run's scripts in plain words: what went out and what is waiting on a fix. Dated, so an old run is never taken for this week's. */
+function WeekScripts({ run }: { run: LastRun | undefined }) {
+  const sent = run?.sent ?? [];
+  const held = run?.held ?? [];
+  return (
+    <Panel title="Latest scripts">
+      {sent.length === 0 && held.length === 0 ? (
+        <Empty>No scripts yet. They are made by themselves on the day set in Settings.</Empty>
+      ) : (
+        <>
+        {run && <p className="text-on-surface-variant">Made {whenLabel(run.ranAt)}</p>}
+        <ul className="divide-y divide-outline-variant">
+          {sent.map((s) => (
+            <li key={s.slug} className="flex flex-col gap-1 py-3">
+              <span className="text-lg">{s.topic}</span>
+              <StateText kind="good" className="text-on-surface-variant">
+                Emailed to {run?.sentTo || "the Host"}
+              </StateText>
+            </li>
+          ))}
+          {held.map((h) => (
+            <li key={h.slug} className="flex flex-col gap-1 py-3">
+              <span className="text-lg">{h.topic}</span>
+              <StateText kind="attention" className="text-[#e5c07b]">
+                Not sent yet: {h.reasons.join(", ")}
+              </StateText>
+            </li>
+          ))}
+        </ul>
+        </>
+      )}
+      <p className="mt-4">
+        <Link href="/quickscript?view=scripts" className="underline underline-offset-4">
+          Read, fix or send a script
+        </Link>
+      </p>
+    </Panel>
+  );
+}
+
+/** The one button anybody needs when a week went wrong. */
+function MakeNow({ settings, onChanged }: { settings: Settings; onChanged: () => Promise<void> }) {
+  const a = useAction(onChanged);
+  const host = settings.people.hostEmail.trim();
+  const me = settings.people.testRecipient.trim();
+  const when = `every ${WEEKDAYS[settings.schedule.day]} at ${timeLabel(settings.schedule.time)}`;
+  return (
+    <Panel title="Make scripts now">
+      <p>
+        You do not normally need this. Scripts are made and emailed by themselves {when}. Use it if a week was missed or the last run failed. It takes a
+        few minutes.
+      </p>
+      <div className="mt-4 flex flex-wrap gap-3">
+        <Btn
+          variant="primary"
+          disabled={a.busy !== null}
+          onClick={() => {
+            if (!host) return a.fail(NO_HOST_EMAIL);
+            if (!window.confirm(`Make this week's scripts and email them to the Host (${host})? They will get the email in a few minutes.`)) return;
+            void a.run("Making this week's scripts and emailing the Host", () => client.runWeekly({ dryRun: false, to: "host" }), "Could not make this week's scripts");
+          }}
+        >
+          Make scripts and email the Host
+        </Btn>
+        <Btn
+          disabled={a.busy !== null}
+          onClick={() => {
+            if (!me) return a.fail("Your own email is not set. Add it in Settings.");
+            void a.run("Making this week's scripts and emailing you", () => client.runWeekly({ dryRun: false, to: "me" }), "Could not make this week's scripts");
+          }}
+        >
+          Email them only to me first
+        </Btn>
+      </div>
+      <div className="mt-4">
+        <ActionStatus busy={a.busy} message={a.message} detail={a.detail} error={a.error} compact />
+      </div>
+    </Panel>
+  );
+}
+
 export function WeekView({
   week,
   settings,
@@ -473,23 +558,23 @@ export function WeekView({
     return (
       <div className="flex flex-col gap-8">
         {err && <InlineError message={err} onRetry={() => void onChanged()} />}
-        <div className="flex flex-col gap-4">
-          <StatusCard settings={settings.data} keys={keys.data} lastRun={week.data.lastRun} />
-          <RecentRuns runs={week.data.recentRuns} />
-        </div>
-        <LastRunCard run={week.data.lastRun} log={week.data.log} />
-        <StepRow steps={week.data.steps} />
-        <div className="grid items-start gap-6 lg:grid-cols-[3fr_2fr]">
-          <Topics week={week.data} onChanged={onChanged} />
-          <div className="flex flex-col gap-6">
-            <Collectors items={week.data.collectors} />
-            <Facts week={week.data} settings={settings.data} />
-          </div>
-        </div>
+        <StatusCard settings={settings.data} keys={keys.data} lastRun={week.data.lastRun} />
+        <WeekScripts run={week.data.lastRun} />
+        <MakeNow settings={settings.data} onChanged={onChanged} />
         <details className={CARD}>
-          <summary className="cursor-pointer px-4 py-4 text-xl font-medium sm:px-6">Run by hand</summary>
-          <div className="flex flex-col gap-6 p-4 pt-0 sm:p-6 sm:pt-0">
-            <p>Only needed if the automatic run failed or something must be redone.</p>
+          <summary className="cursor-pointer px-4 py-4 text-lg font-medium sm:px-6">More details</summary>
+          <div className="flex flex-col gap-8 p-4 pt-0 sm:p-6 sm:pt-0">
+            <p className="text-on-surface-variant">For checking what happened, or doing one step at a time. Not needed in a normal week.</p>
+            <RecentRuns runs={week.data.recentRuns} />
+            <LastRunCard run={week.data.lastRun} log={week.data.log} />
+            <StepRow steps={week.data.steps} />
+            <div className="grid items-start gap-6 lg:grid-cols-[3fr_2fr]">
+              <Topics week={week.data} onChanged={onChanged} />
+              <div className="flex flex-col gap-6">
+                <Collectors items={week.data.collectors} />
+                <Facts week={week.data} settings={settings.data} />
+              </div>
+            </div>
             <NextCard week={week.data} settings={settings.data} onChanged={onChanged} />
             <Controls week={week.data} settings={settings.data} onChanged={onChanged} />
           </div>

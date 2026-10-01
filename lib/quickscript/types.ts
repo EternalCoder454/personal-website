@@ -258,7 +258,8 @@ export type Settings = {
     time: string;
   };
   seasonOverride: SeasonSetting;
-  taxYear: number;
+  /** 0 is automatic (see taxYearFor in logic.ts), otherwise a fixed year. */
+  taxYearOverride: number;
 };
 
 /** Whether each key is set in the server's environment. Never the key. */

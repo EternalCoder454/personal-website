@@ -2,6 +2,7 @@ import Link from "next/link";
 import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import { QuickScriptSignOut } from "@/components/quickscript-sign-out";
 import { hasQuickScriptSession } from "@/lib/quickscript/auth";
+import { usesSampleData } from "@/lib/quickscript/client";
 
 /**
  * QuickScript, the maintainer console. A route group of its own: no site
@@ -14,7 +15,6 @@ const sans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], 
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], display: "swap", variable: "--font-qs-mono" });
 
 export default async function QuickScriptLayout({ children }: { children: React.ReactNode }) {
-  const sample = process.env.NEXT_PUBLIC_QUICKSCRIPT_LIVE !== "1";
   const signedIn = await hasQuickScriptSession();
   return (
     <div
@@ -24,7 +24,7 @@ export default async function QuickScriptLayout({ children }: { children: React.
         <div className="shell flex h-12 items-center justify-between gap-3">
           <p className="flex min-w-0 items-baseline gap-3">
             <span className="font-medium">QuickScript</span>
-            {sample && <span className="truncate text-sm text-on-surface-variant">Sample data</span>}
+            {usesSampleData && <span className="truncate text-sm text-on-surface-variant">Sample data</span>}
           </p>
           <div className="flex shrink-0 items-center gap-4">
             {signedIn && <QuickScriptSignOut />}

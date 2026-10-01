@@ -116,6 +116,17 @@ export function seasonFor(date: Date, override: SeasonSetting): Season {
   return md >= 115 && md <= 415 ? "inseason" : "evergreen";
 }
 
+/**
+ * The tax year scripts are written for: the override when set, otherwise the
+ * return people are filing (last year) from Jan 1 through Apr 15, and the one
+ * they are planning for (this year) after. Same rule as Settings.TaxYearAt in Go.
+ */
+export function taxYearFor(date: Date, override: number): number {
+  if (override) return override;
+  const md = (date.getMonth() + 1) * 100 + date.getDate();
+  return md <= 415 ? date.getFullYear() - 1 : date.getFullYear();
+}
+
 export function nextRun(now: Date, schedule: Settings["schedule"]): Date {
   const [h, m] = schedule.time.split(":").map(Number);
   const d = new Date(now);
@@ -485,8 +496,8 @@ export function autoStatus(settings: Settings, keys: KeyStatus | undefined, last
       ? `Next run ${next} · nothing is sent while automatic sending is off`
       : `Next run ${next} · sends up to ${limit} to ${to}`;
   const mk = (state: AutoState, text: string): AutoStatus => ({ state, title: STATE_TITLE[state], text, plan });
-  if (!to) return mk("attention", "No send-to address is set. Add one under Settings, Automatic sending, or nothing can be emailed.");
-  if (!a.enabled) return mk("attention", "Automatic sending is off. Turn it on under Settings, Automatic sending, or scripts wait until somebody sends them.");
+  if (!to) return mk("attention", "No send-to address is set. Add the Host's email in Settings, or nothing can be emailed.");
+  if (!a.enabled) return mk("attention", "Automatic sending is off. Turn it on in Settings, or scripts wait until somebody sends them.");
   const keyGone = missingProviders(settings, keys);
   if (keyGone.length > 0) {
     return mk("attention", `An API key is missing: ${keyGone.join(", ")}. Whoever runs the server must set it, and the next run will not work until they do.`);
@@ -494,7 +505,7 @@ export function autoStatus(settings: Settings, keys: KeyStatus | undefined, last
   if (lastRun && !lastRun.ok) {
     return mk(
       "failed",
-      `The last run failed${lastRun.error ? `: ${noStop(lastRun.error)}` : ""}. Open Run by hand below and press Do everything for this week. If it fails again, see the Guide.`,
+      `The last run failed${lastRun.error ? `: ${noStop(lastRun.error)}` : ""}. Press Make scripts and email the Host below. If it fails again, see Help.`,
     );
   }
   if (!lastRun) {
@@ -506,7 +517,7 @@ export function autoStatus(settings: Settings, keys: KeyStatus | undefined, last
   let due = lastScheduled(now, settings.schedule);
   if (now.getTime() - due.getTime() < GRACE) due = new Date(due.getTime() - 7 * 86_400_000);
   if (new Date(lastRun.ranAt).getTime() < due.getTime() - 5 * 60_000) {
-    return mk("missed", `Nothing ran at the last scheduled time, ${nextRunLabel(due)}. Open Run by hand below and press Do everything for this week. If it keeps happening, tell whoever runs the server.`);
+    return mk("missed", `Nothing ran at the last scheduled time, ${nextRunLabel(due)}. Press Make scripts and email the Host below. If it keeps happening, tell whoever runs the server.`);
   }
   // Go sends an empty list as null, so never assume the arrays are there.
   const held = lastRun.held ?? [];
@@ -514,11 +525,11 @@ export function autoStatus(settings: Settings, keys: KeyStatus | undefined, last
   if (held.length > 0) {
     return mk(
       "attention",
-      `${plural(held.length, "script was", "scripts were")} not sent and need${held.length === 1 ? "s" : ""} a fix. Last run below says why. Open the script on the Scripts tab, fix it, then send it to the Host.`,
+      `${plural(held.length, "script was", "scripts were")} not sent and need${held.length === 1 ? "s" : ""} a fix. The list below says why. Open it on the Scripts tab, fix it, then send it to the Host.`,
     );
   }
   if (sent.length === 0) {
-    return mk("attention", "The last run found nothing strong enough to send. Look at this week's topics below, or allow Good topics under Settings, Topic strength.");
+    return mk("attention", "The last run found nothing strong enough to send. Open More details below to see this week's topics, or allow Good topics under Settings, More options.");
   }
   return mk("good", `Automatic sending is on. The last run sent ${plural(sent.length, "script", "scripts")} to ${lastRun.sentTo || to}.`);
 }

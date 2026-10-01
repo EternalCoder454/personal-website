@@ -130,7 +130,14 @@ export function httpClient(): QuickScriptClient {
   };
 }
 
-/** The mock unless NEXT_PUBLIC_QUICKSCRIPT_LIVE is "1". A flag, never a URL. */
+/**
+ * Sample data only in development, and only when NEXT_PUBLIC_QUICKSCRIPT_SAMPLE
+ * is "1". A production build always calls the backend, so the console never
+ * shows made-up scripts as if they were real. A flag, never a URL.
+ */
+export const usesSampleData =
+  process.env.NODE_ENV !== "production" && process.env.NEXT_PUBLIC_QUICKSCRIPT_SAMPLE === "1";
+
 export function pickClient(): QuickScriptClient {
-  return process.env.NEXT_PUBLIC_QUICKSCRIPT_LIVE === "1" ? httpClient() : mockClient;
+  return usesSampleData ? mockClient : httpClient();
 }

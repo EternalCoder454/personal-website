@@ -335,7 +335,7 @@ export function ScriptsView({
   }
   const list = scripts.data;
   if (list.length === 0) {
-    return <Empty>No scripts this week yet. Use What to do now on the This week tab.</Empty>;
+    return <Empty>No scripts this week yet. Use Make scripts now on the Home tab.</Empty>;
   }
   const selected = list.find((s) => s.slug === slug) ?? list[0];
 

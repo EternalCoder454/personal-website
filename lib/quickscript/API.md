@@ -8,8 +8,9 @@ checks the Next session and forwards the request to Go, returning its status and
 JSON. Every forwarded request carries the header `X-QuickScript-Token`, equal to
 `QUICKSCRIPT_BACKEND_TOKEN` on both sides; Go refuses anything without it. With
 `QUICKSCRIPT_BACKEND_URL` or the token unset it answers 503
-`{"error": "backend not connected"}`. The page uses the in-memory mock unless
-`NEXT_PUBLIC_QUICKSCRIPT_LIVE` is `1`. No backend URL reaches the browser.
+`{"error": "backend not connected"}`. The page always calls the backend, except
+in development with `NEXT_PUBLIC_QUICKSCRIPT_SAMPLE` set to `1`, where it uses the
+in-memory mock. No backend URL reaches the browser.
 
 The contract is the `QuickScriptClient` interface in `client.ts` and the types in
 `types.ts`. JSON uses lower camel case. Timestamps are RFC 3339, bare dates are
@@ -161,6 +162,10 @@ Rules for every response:
 - `Settings` is `config.yaml` as JSON: `automatic`, `models` per task (`ranking`, `drafts`,
   `publishPack`, each `{provider, model}`), `seedWords`, `highEndWords`, `sources`
   (id, name, enabled, reason), `people`, `schedule` (`day` 0 is Sunday, `time`
-  `HH:MM`), `seasonOverride` (`auto`, `evergreen`, `inseason`) and `taxYear`.
+  `HH:MM`), `seasonOverride` (`auto`, `evergreen`, `inseason`) and `taxYearOverride`: `0`
+  means automatic, which is last year from Jan 1 through Apr 15 (the return people
+  are filing) and this year after (the one they are planning for); any other value
+  is a fixed year, 2000 to 2100. A saved file with the old `taxYear` field loads as
+  automatic.
 - `/keys` reports only whether each variable is set in the server's environment.
   Keys are never sent to the page and never accepted from it.

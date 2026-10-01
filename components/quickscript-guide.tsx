@@ -37,7 +37,8 @@ export function GuideView({ settings }: { settings: Settings | undefined }) {
       <Panel title="What runs by itself">
         <p>
           Every {when} (set in Settings), QuickScript does the whole first part on its own: it finds the week&apos;s topics, writes the scripts,
-          keeps only the strongest and emails those to the address under Settings, Automatic sending. Nothing has to be clicked for that.
+          keeps only the strongest and emails those to the Host&apos;s email in Settings. Nothing has to be clicked for that. The tax year and tax season
+          follow the date by themselves too.
         </p>
         <p className="mt-3 font-medium">How scripts are picked:</p>
         <ol className={`${steps} mt-1`}>
@@ -57,13 +58,13 @@ export function GuideView({ settings }: { settings: Settings | undefined }) {
       <Panel title="Each week">
         <ol className={steps}>
           <li>Normally there is nothing to press. The run happens by itself.</li>
-          <li>On Monday, open This week and read the card at the top. &quot;All good&quot; means the run is set and nothing is wrong. It also shows the next run and where the scripts go.</li>
-          <li>Under Last run, see what was sent and to whom, and which scripts were not sent and why. The Recent runs strip shows the last six runs.</li>
-          <li>If the card says Needs attention, Failed or Didn&apos;t run, it says what to do. Fix that first: add the send-to address or turn automatic sending on in Settings, ask whoever runs the server about a missing key, or open Run by hand on This week and press Do everything for this week after a failed run.</li>
+          <li>On Monday, open Home and read the box at the top. &quot;All good&quot; means the scripts went out and nothing is wrong.</li>
+          <li>Under Latest scripts, see what was emailed and which scripts were not sent and why.</li>
+          <li>If the box says Needs attention, Failed or Didn&apos;t run, it says what to do. Most often: add the Host&apos;s email or turn on weekly sending in Settings, or press Make scripts and email the Host on Home after a failed run.</li>
           <li>For a script that was not sent, open it on the Scripts tab, fix what it lists, then send it to the Host yourself.</li>
-          <li>The Host replies Approved. Open Posting Log and update it from the sheet to see the new status.</li>
+          <li>The Host replies Approved. Open Videos and update it from the sheet to see the new status.</li>
           <li>For each approved script, make the publish pack on the Scripts tab. The Producer uses it when uploading to YouTube.</li>
-          <li>Watch the steps on This week. Each one says who it is waiting on. Nudge that person if it stays stuck.</li>
+          <li>To see who each step is waiting on, open More details on Home. Nudge that person if it stays stuck.</li>
         </ol>
       </Panel>
 

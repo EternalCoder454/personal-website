@@ -11,6 +11,7 @@ import {
   providerLabel,
   scriptsToWrite,
   seasonFor,
+  taxYearFor,
   sendLimit,
   slugify,
 } from "./logic";
@@ -192,7 +193,7 @@ function initialSettings(): Settings {
     },
     schedule: { day: 0, time: "20:00" },
     seasonOverride: "auto",
-    taxYear: 2026,
+    taxYearOverride: 0,
   };
 }
 
@@ -414,7 +415,7 @@ function doDraft(ids: string[]): string {
     const seed = SEEDS.find((s) => slugify(s.q) === id);
     if (!seed) continue;
     const model = state.settings.models.drafts;
-    const made = makeScript(seed.q, "Draft", undefined, model, sampleBody(seed.q, 560), [`Tax year ${state.settings.taxYear}: supported by sample IRS text`], 0);
+    const made = makeScript(seed.q, "Draft", undefined, model, sampleBody(seed.q, 560), [`Tax year ${taxYearFor(new Date(), state.settings.taxYearOverride)}: supported by sample IRS text`], 0);
     made.score = seed.score;
     state.scripts.push(made);
   }
